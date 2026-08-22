@@ -26,10 +26,12 @@ import { bjorklund, rotate } from './gen/euclid.js';
 let currentPatch = loadPatchFromHash() || loadPatchFromStorage() || createPatch();
 let master = null;
 
-const voices = [kick, snare, hat, bass, poly];
+// Voice lookup by name — allows dynamic reassignment via ring.voice field.
+const voiceMap = { kick, snare, hat, bass, poly };
 
-// Wrap each voice to check the Euclidean pattern and apply ring gain.
-function wrapVoice(voiceFn, ringIndex) {
+// Each ring's play function resolves the voice at play-time from ring.voice,
+// so reassigning ring.voice immediately changes what sound plays.
+function playRing(ringIndex) {
   return (ctx, destination, time, params) => {
     const ring = currentPatch.rings[ringIndex];
     if (!ring) return;
@@ -40,14 +42,16 @@ function wrapVoice(voiceFn, ringIndex) {
 
     if (ring.probability < 1.0 && Math.random() > ring.probability) return;
 
-    // Pass ring.gain as velocity so the voice's built-in multiplier scales by it.
-    // This is where the preset gain values actually affect output level.
+    // Resolve voice function dynamically from ring.voice
+    const voiceFn = voiceMap[ring.voice];
+    if (!voiceFn) return;
+
     voiceFn(ctx, destination, time, { ...params, velocity: ring.gain });
     pushEvent(ringIndex, params.step, time);
   };
 }
 
-const wrappedVoices = voices.map((v, i) => wrapVoice(v, i));
+const wrappedVoices = [0, 1, 2, 3, 4].map(i => playRing(i));
 
 // --- Patch persistence helper ---
 

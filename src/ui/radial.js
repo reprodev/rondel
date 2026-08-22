@@ -197,8 +197,7 @@ function render(ctx) {
   ctx.fill();
   ctx.globalAlpha = 1;
 
-  // Instrument labels — positioned at 315° (upper-left) to avoid playhead
-  const LABELS = ['Kick', 'Snare', 'Hat', 'Bass', 'Poly'];
+  // Instrument labels — reads ring.voice dynamically so reassignment is reflected.
   const labelAngle = 315;
   ctx.font = '11px system-ui, -apple-system, sans-serif';
   ctx.textAlign = 'center';
@@ -206,13 +205,16 @@ function render(ctx) {
 
   for (let r = 0; r < 5; r++) {
     const radius = innerRadius + (r + 1) * ringSpacing;
+    const ring = rings[r];
     const color = palette[r] || '#888';
     const isActive = activeVoices.has(r);
     const { x: lx, y: ly } = toCartesian(cx, cy, radius, labelAngle);
+    // Capitalize first letter of voice name for display
+    const label = ring.voice ? ring.voice.charAt(0).toUpperCase() + ring.voice.slice(1) : '';
 
     ctx.fillStyle = color;
     ctx.globalAlpha = isActive ? 0.7 : 0.25;
-    ctx.fillText(LABELS[r], lx, ly);
+    ctx.fillText(label, lx, ly);
     ctx.globalAlpha = 1;
   }
 
