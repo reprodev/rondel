@@ -39,7 +39,9 @@ export function play(ctx, destination, time, params) {
   // Amplitude envelope — gated
   const gain = ctx.createGain();
   gain.gain.value = 0;
-  attack(ctx, gain.gain, time, velocity, 0.002);          // 2ms attack
+  // 0.25 output gain keeps bass under the kick in the mix.
+  const level = 0.25 * velocity;
+  attack(ctx, gain.gain, time, level, 0.002);             // 2ms attack
   decay(ctx, gain.gain, time + duration, 0, 0.030);       // 30ms release at gate end
   
   // Routing
