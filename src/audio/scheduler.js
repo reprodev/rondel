@@ -16,9 +16,10 @@ let voicePlayers = [];
 let destination = null;
 let ctx = null;
 
+// Which voice indices are active — only these get scheduled.
+let activeVoices = new Set([0, 1, 2, 3, 4]);
+
 function onTick() {
-  // Schedule all events that fall within the lookahead window.
-  // The while loop handles catch-up after tab switches or GC pauses.
   while (nextNoteTime < ctx.currentTime + lookahead) {
     scheduleStep();
     advance();
@@ -33,7 +34,7 @@ function onVisibilityChange() {
 
 export function scheduleStep() {
   for (let i = 0; i < voicePlayers.length; i++) {
-    // Clamp to prevent scheduling in the past after long stalls.
+    if (!activeVoices.has(i)) continue;
     const t = Math.max(nextNoteTime, ctx.currentTime + 0.005);
     voicePlayers[i](ctx, destination, t, { step: currentStep, voice: i });
   }
@@ -52,6 +53,10 @@ export function start(options = {}) {
   stepsPerLoop = options.stepsPerLoop || 16;
   voicePlayers = options.voices || [];
   destination = options.dest || ctx.destination;
+
+  if (options.activeVoices !== undefined) {
+    activeVoices = new Set(options.activeVoices);
+  }
 
   secondsPerStep = (60 / bpm) / (stepsPerLoop / 4);
   nextNoteTime = ctx.currentTime + 0.1;
@@ -81,6 +86,10 @@ export function stop() {
 
   document.removeEventListener('visibilitychange', onVisibilityChange);
   isRunning = false;
+}
+
+export function setActiveVoices(indices) {
+  activeVoices = new Set(indices);
 }
 
 export function setBpm(newBpm) {
