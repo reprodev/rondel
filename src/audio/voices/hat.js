@@ -47,7 +47,9 @@ export function play(ctx, destination, time, params) {
 
   const gain = ctx.createGain();
   gain.gain.value = 0;
-  attack(ctx, gain.gain, time, velocity, 0.002);          // 2ms attack
+  // 0.3 base gain — hats are naturally quieter in a mix.
+  const level = 0.3 * velocity;
+  attack(ctx, gain.gain, time, level, 0.002);             // 2ms attack
   decay(ctx, gain.gain, time + 0.002, 0, decayTime);      // exponential decay
 
   noiseSrc.connect(hp).connect(bp).connect(gain).connect(destination);

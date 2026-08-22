@@ -27,7 +27,8 @@ export function play(ctx, destination, time, params) {
   const noiseGain = ctx.createGain();
   noiseGain.gain.value = 0;
   // Noise level inversely proportional to tone (more noise when tone is low)
-  const noiseLevel = velocity * (1 - tone * 0.6);
+  // 0.35 base gain keeps the snare present without overwhelming the mix.
+  const noiseLevel = 0.35 * velocity * (1 - tone * 0.6);
   attack(ctx, noiseGain.gain, time, noiseLevel, 0.005);
   decay(ctx, noiseGain.gain, time + 0.005, 0, 0.170);
 
@@ -42,7 +43,7 @@ export function play(ctx, destination, time, params) {
   const bodyGain = ctx.createGain();
   bodyGain.gain.value = 0;
   // Body level proportional to tone
-  const bodyLevel = velocity * (0.4 + tone * 0.5);
+  const bodyLevel = 0.35 * velocity * (0.4 + tone * 0.5);
   attack(ctx, bodyGain.gain, time, bodyLevel, 0.005);
   decay(ctx, bodyGain.gain, time + 0.005, 0, 0.110);
 

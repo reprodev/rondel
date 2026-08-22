@@ -22,9 +22,10 @@ export function play(ctx, destination, time, params) {
   osc.frequency.setValueAtTime(150, time);
   osc.frequency.exponentialRampToValueAtTime(45, time + 0.07);
 
-  // Amplitude envelope
+  // Amplitude envelope — 0.4 base gain ensures the kick cuts through the mix.
   gain.gain.value = 0;
-  attack(ctx, gain.gain, time, velocity, 0.004);       // 4ms attack
+  const level = 0.4 * velocity;
+  attack(ctx, gain.gain, time, level, 0.004);           // 4ms attack
   decay(ctx, gain.gain, time + 0.004, 0, 0.340);       // 340ms decay
 
   osc.connect(gain).connect(destination);
