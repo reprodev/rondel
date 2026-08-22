@@ -132,10 +132,29 @@
       padding: 0.8rem 1rem;
       margin-bottom: 0.8rem;
     }
-    .panel h2 {
+    .panel summary {
       font-size: 0.85rem;
-      margin-bottom: 0.5rem;
       color: #aaa;
+      cursor: pointer;
+      padding: 0.3rem 0;
+      margin-bottom: 0.5rem;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      user-select: none;
+    }
+    .panel summary::-webkit-details-marker { display: none; }
+    .panel summary::after {
+      content: '\25BC';
+      font-size: 0.6rem;
+      transition: transform 0.2s;
+    }
+    .panel:not([open]) summary::after {
+      transform: rotate(-90deg);
+    }
+    .panel summary:hover {
+      color: #e0e0e0;
     }
 
     .preset-bar {
@@ -245,8 +264,8 @@
         </select>
       </div>
 
-      <div class="panel">
-        <h2>Rings</h2>
+      <details class="panel" id="rings-panel" open>
+        <summary>Rings</summary>
         <div class="ring-controls">
           <div class="ring-row" data-ring="0">
             <input type="checkbox" data-voice="0" checked>
@@ -320,10 +339,10 @@
           </div>
         </div>
         <button id="btn-all">All</button>
-      </div>
+      </details>
 
-      <div class="panel">
-        <h2>Export WAV</h2>
+      <details class="panel" id="export-panel" open>
+        <summary>Export WAV</summary>
         <div class="export-durations">
           <button class="dur-btn" data-dur="15">15s</button>
           <button class="dur-btn" data-dur="30">30s</button>
@@ -333,7 +352,7 @@
         </div>
         <button id="btn-export" class="export-btn">Export WAV</button>
         <span id="export-status" class="export-status"></span>
-      </div>
+      </details>
     </aside>
 
     <main class="canvas-area">
@@ -440,6 +459,25 @@
         await start(createPatch());
         syncDropdowns();
       }
+    });
+
+    // Persist collapse state
+    const ringsPanel = document.getElementById('rings-panel');
+    const exportPanel = document.getElementById('export-panel');
+
+    function restoreCollapseState() {
+      const ringsOpen = localStorage.getItem('rondel-rings-open');
+      const exportOpen = localStorage.getItem('rondel-export-open');
+      if (ringsOpen !== null) ringsPanel.open = ringsOpen === 'true';
+      if (exportOpen !== null) exportPanel.open = exportOpen === 'true';
+    }
+    restoreCollapseState();
+
+    ringsPanel.addEventListener('toggle', () => {
+      localStorage.setItem('rondel-rings-open', ringsPanel.open);
+    });
+    exportPanel.addEventListener('toggle', () => {
+      localStorage.setItem('rondel-export-open', exportPanel.open);
     });
   </script>
 </body>
