@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scheduler Tests</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #1a1a1a;
+      color: #e0e0e0;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    h1 { color: #fff; margin-bottom: 1rem; font-size: 1.4rem; }
+    button {
+      background: #333;
+      color: #e0e0e0;
+      border: 1px solid #555;
+      padding: 0.5rem 1rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 3px;
+    }
+    button:hover { background: #444; }
+    button:active { background: #555; }
+    #log {
+      background: #111;
+      border: 1px solid #333;
+      padding: 1rem;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 300px;
+      border-radius: 3px;
+    }
+    .pass { color: #4ec96e; }
+    .fail { color: #e85454; }
+    .info { color: #6eb8e0; }
+  </style>
+</head>
+<body>
+  <h1>Scheduler Tests</h1>
+  <button id="btn-play">&#9654; Resume AudioContext</button>
+  <button id="btn-run">Run Tests</button>
+  <pre id="log"></pre>
+
+  <script type="module">
+    import { start, stop, isPlaying } from '../src/audio/scheduler.js';
+    import { getContext, ensureResumed } from '../src/audio/context.js';
+    import { attack, decay } from '../src/audio/env.js';
+
+    const logEl = document.getElementById('log');
+    const btnPlay = document.getElementById('btn-play');
+    const btnRun = document.getElementById('btn-run');
+
+    function log(msg, cls) {
+      const span = document.createElement('span');
+      if (cls) span.className = cls;
+      span.textContent = msg + '\n';
+      logEl.appendChild(span);
+    }
+    function pass(name) { log(`\u2713 ${name}`, 'pass'); }
+    function fail(name, err) { log(`\u2717 ${name}: ${err}`, 'fail'); }
+    function info(msg) { log(`  ${msg}`, 'info'); }
+
+    // Minimal test voice: short sine beep using env helpers
+    function testVoice(ctx, destination, time, params) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 440 + params.voice * 100; // slight pitch offset per voice
+      gain.gain.value = 0;
+
+      osc.connect(gain).connect(destination);
+
+      // Attack: 0→0.15 over 5ms (keep quiet since 5 voices play simultaneously)
+      attack(ctx, gain.gain, time, 0.15, 0.005);
+      // Decay: 0.15→0 over 45ms
+      decay(ctx, gain.gain, time + 0.005, 0, 0.045);
+
+      osc.start(time);
+      osc.stop(time + 0.06);
+
+      return time; // return scheduled time for verification
+    }
+
+    let scheduledTimes = [];  // collect all scheduled times for analysis
+    let tickCount = 0;
+
+    // Wrapper that records scheduled times
+    function recordingVoice(ctx, destination, time, params) {
+      // Only record from voice 0 to avoid 5x duplication
+      if (params.voice === 0) {
+        scheduledTimes.push({ time, step: params.step, ctxTime: ctx.currentTime });
+      }
+      testVoice(ctx, destination, time, params);
+    }
+
+    btnPlay.addEventListener('click', async () => {
+      await ensureResumed();
+      const ctx = getContext();
+      log(`AudioContext resumed (${ctx.state})`);
+    });
+
+    btnRun.addEventListener('click', async () => {
+      logEl.textContent = '';
+      log('Scheduler Tests\n');
+
+      const ctx = getContext();
+      if (ctx.state === 'suspended') {
+        await ensureResumed();
+      }
+
+      scheduledTimes = [];
+
+      // Test 1: Start scheduler
+      try {
+        const voices = Array(5).fill(recordingVoice);
+        start({ bpm: 120, stepsPerLoop: 16, voices, dest: ctx.destination });
+
+        if (isPlaying()) {
+          pass('Scheduler started');
+        } else {
+          fail('Scheduler started', 'isPlaying() returned false');
+          return;
+        }
+      } catch (e) {
+        fail('Scheduler started', e.message);
+        return;
+      }
+
+      info('Running for 10 seconds... listen for steady 120 BPM beeps');
+      info('(5 voices per step, slight pitch offset per voice)\n');
+
+      // Let it run for 10 seconds
+      await new Promise(r => setTimeout(r, 10000));
+
+      // Stop and analyze
+      stop();
+
+      // Test 2: Clock worker was running (notes were scheduled)
+      if (scheduledTimes.length > 0) {
+        pass(`Clock worker running (${scheduledTimes.length} steps scheduled)`);
+      } else {
+        fail('Clock worker running', 'no steps were scheduled');
+        return;
+      }
+
+      // Test 3: First note scheduled at a reasonable time
+      const first = scheduledTimes[0];
+      if (first.time > 0) {
+        pass(`First note scheduled at t=${first.time.toFixed(4)}s`);
+      } else {
+        fail('First note scheduled', `time=${first.time}`);
+      }
+
+      // Test 4: Regular intervals (~0.125s per step at 120 BPM, 16 steps)
+      // secondsPerStep = (60/120)/(16/4) = 0.5/4 = 0.125s
+      const expectedInterval = 0.125;
+      let intervalOk = true;
+      let maxDrift = 0;
+      const deltas = [];
+
+      for (let i = 1; i < scheduledTimes.length; i++) {
+        const delta = scheduledTimes[i].time - scheduledTimes[i - 1].time;
+        deltas.push(delta);
+        const drift = Math.abs(delta - expectedInterval);
+        if (drift > maxDrift) maxDrift = drift;
+        if (drift > 0.02) { // allow 20ms tolerance
+          intervalOk = false;
+        }
+      }
+
+      if (intervalOk) {
+        pass(`Notes at regular intervals (expected ${expectedInterval}s, max drift ${(maxDrift * 1000).toFixed(1)}ms)`);
+      } else {
+        fail('Notes at regular intervals', `max drift ${(maxDrift * 1000).toFixed(1)}ms exceeds 20ms tolerance`);
+      }
+
+      // Test 5: No scheduling in the past
+      let allFuture = true;
+      let worstPast = 0;
+      for (const entry of scheduledTimes) {
+        const margin = entry.time - entry.ctxTime;
+        if (margin < 0) {
+          allFuture = false;
+          if (margin < worstPast) worstPast = margin;
+        }
+      }
+
+      if (allFuture) {
+        pass('No scheduling in the past (all times >= ctx.currentTime)');
+      } else {
+        fail('No scheduling in the past', `worst case: ${(worstPast * 1000).toFixed(1)}ms behind`);
+      }
+
+      // Test 6: Loop ran for full duration without stall
+      const totalDuration = scheduledTimes[scheduledTimes.length - 1].time - scheduledTimes[0].time;
+      // 10 seconds at 0.125s/step = ~80 steps expected, so duration should be ~10s
+      if (totalDuration >= 9.0) {
+        pass(`Loop continued for ${totalDuration.toFixed(1)}s without stall`);
+      } else {
+        fail('Loop continued without stall', `only ${totalDuration.toFixed(1)}s of scheduled events`);
+      }
+
+      // Summary
+      info(`\nSummary: ${scheduledTimes.length} steps, ${totalDuration.toFixed(2)}s total`);
+      info(`Step interval: avg ${(deltas.reduce((a,b) => a+b, 0) / deltas.length * 1000).toFixed(1)}ms`);
+
+      log('\nDone.');
+    });
+  </script>
+</body>
+</html>
