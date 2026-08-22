@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rondel — AudioContext Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: monospace;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      padding: 2rem;
+    }
+    h1 { margin-bottom: 1rem; }
+    #state { margin-bottom: 1rem; }
+    #btn-play {
+      font-family: monospace;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      background: #333;
+      color: #e0e0e0;
+      border: 1px solid #555;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    #btn-play:hover { background: #444; }
+    #log {
+      background: #111;
+      padding: 1rem;
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rondel — AudioContext Test</h1>
+  <p id="state">Context state: <span>not created</span></p>
+  <button id="btn-play">&#9654; Play</button>
+  <pre id="log"></pre>
+
+  <script type="module">
+    import { getContext, ensureResumed, addResumeListener } from './src/audio/context.js';
+
+    const stateSpan = document.querySelector('#state span');
+    const logEl = document.getElementById('log');
+    const btn = document.getElementById('btn-play');
+
+    let lastState = null;
+
+    function log(msg) {
+      const ts = new Date().toLocaleTimeString('en-US', { hour12: false });
+      logEl.textContent += `[${ts}] ${msg}\n`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    addResumeListener(() => {
+      log('Context resumed!');
+    });
+
+    btn.addEventListener('click', async () => {
+      log('Play clicked — calling ensureResumed()');
+      await ensureResumed();
+      log('ensureResumed() resolved');
+    });
+
+    setInterval(() => {
+      let current = 'not created';
+      try {
+        const ctx = getContext();
+        current = ctx.state;
+      } catch (e) {
+        // context not available
+      }
+      stateSpan.textContent = current;
+      if (current !== lastState) {
+        log(`State changed: ${lastState} -> ${current}`);
+        lastState = current;
+      }
+    }, 500);
+  </script>
+</body>
+</html>
