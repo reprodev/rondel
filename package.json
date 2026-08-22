@@ -1,0 +1,19 @@
+{
+  "name": "rondel",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A circular instrument that plays around with you",
+  "main": "index.html",
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "generative",
+    "music",
+    "euclidean",
+    "web-audio",
+    "kiro"
+  ],
+  "author": "reprodev",
+  "license": "MIT"
+}
