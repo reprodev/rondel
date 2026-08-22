@@ -40,12 +40,25 @@
     .pass { color: #4ec96e; }
     .fail { color: #e85454; }
     .info { color: #6eb8e0; }
+    #flash {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      opacity: 0;
+      border-radius: 4px;
+      transition: opacity 0.02s;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
   <h1>Scheduler Tests</h1>
   <button id="btn-play">&#9654; Resume AudioContext</button>
   <button id="btn-run">Run Tests</button>
+  <div id="flash"></div>
   <pre id="log"></pre>
 
   <script type="module">
@@ -56,46 +69,59 @@
     const logEl = document.getElementById('log');
     const btnPlay = document.getElementById('btn-play');
     const btnRun = document.getElementById('btn-run');
+    const flashEl = document.getElementById('flash');
 
     function log(msg, cls) {
       const span = document.createElement('span');
       if (cls) span.className = cls;
       span.textContent = msg + '\n';
       logEl.appendChild(span);
+      logEl.scrollTop = logEl.scrollHeight;
     }
     function pass(name) { log(`\u2713 ${name}`, 'pass'); }
     function fail(name, err) { log(`\u2717 ${name}: ${err}`, 'fail'); }
     function info(msg) { log(`  ${msg}`, 'info'); }
 
-    // Minimal test voice: short sine beep using env helpers
+    // Visual flash — white square pulses for 100ms
+    function flash() {
+      flashEl.style.opacity = '1';
+      setTimeout(() => { flashEl.style.opacity = '0'; }, 100);
+    }
+
+    // Test voice with full diagnostics
     function testVoice(ctx, destination, time, params) {
+      console.log(`play() at t=${time.toFixed(4)}s, creating oscillator`);
+
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.value = 440 + params.voice * 100; // slight pitch offset per voice
+      osc.frequency.value = 440 + params.voice * 100;
       gain.gain.value = 0;
 
-      osc.connect(gain).connect(destination);
+      osc.connect(gain);
+      gain.connect(destination);
+      console.log(`connected, gain=${gain.gain.value}`);
 
-      // Attack: 0→0.15 over 5ms (keep quiet since 5 voices play simultaneously)
-      attack(ctx, gain.gain, time, 0.15, 0.005);
-      // Decay: 0.15→0 over 45ms
-      decay(ctx, gain.gain, time + 0.005, 0, 0.045);
+      // Attack: 0→0.5 over 5ms (punchy, audible)
+      attack(ctx, gain.gain, time, 0.5, 0.005);
+      // Decay: 0.5→0 over 10ms (punchy click)
+      decay(ctx, gain.gain, time + 0.005, 0, 0.01);
 
+      const stopTime = time + 0.015;
       osc.start(time);
-      osc.stop(time + 0.06);
+      osc.stop(stopTime);
+      console.log(`start(${time.toFixed(4)}), stop(${stopTime.toFixed(4)})`);
 
-      return time; // return scheduled time for verification
+      return time;
     }
 
-    let scheduledTimes = [];  // collect all scheduled times for analysis
-    let tickCount = 0;
+    let scheduledTimes = [];
 
-    // Wrapper that records scheduled times
+    // Wrapper that records scheduled times and triggers flash
     function recordingVoice(ctx, destination, time, params) {
-      // Only record from voice 0 to avoid 5x duplication
       if (params.voice === 0) {
         scheduledTimes.push({ time, step: params.step, ctxTime: ctx.currentTime });
+        flash();
       }
       testVoice(ctx, destination, time, params);
     }
@@ -108,7 +134,7 @@
 
     btnRun.addEventListener('click', async () => {
       logEl.textContent = '';
-      log('Scheduler Tests\n');
+      log('Scheduler Tests (with diagnostics)\n');
 
       const ctx = getContext();
       if (ctx.state === 'suspended') {
@@ -133,8 +159,9 @@
         return;
       }
 
-      info('Running for 10 seconds... listen for steady 120 BPM beeps');
-      info('(5 voices per step, slight pitch offset per voice)\n');
+      info('Running for 10 seconds... listen for steady 120 BPM clicks');
+      info('Watch the white flash in the top-right corner');
+      info('Check browser console for per-note diagnostics\n');
 
       // Let it run for 10 seconds
       await new Promise(r => setTimeout(r, 10000));
@@ -159,7 +186,6 @@
       }
 
       // Test 4: Regular intervals (~0.125s per step at 120 BPM, 16 steps)
-      // secondsPerStep = (60/120)/(16/4) = 0.5/4 = 0.125s
       const expectedInterval = 0.125;
       let intervalOk = true;
       let maxDrift = 0;
@@ -170,7 +196,7 @@
         deltas.push(delta);
         const drift = Math.abs(delta - expectedInterval);
         if (drift > maxDrift) maxDrift = drift;
-        if (drift > 0.02) { // allow 20ms tolerance
+        if (drift > 0.02) {
           intervalOk = false;
         }
       }
@@ -200,7 +226,6 @@
 
       // Test 6: Loop ran for full duration without stall
       const totalDuration = scheduledTimes[scheduledTimes.length - 1].time - scheduledTimes[0].time;
-      // 10 seconds at 0.125s/step = ~80 steps expected, so duration should be ~10s
       if (totalDuration >= 9.0) {
         pass(`Loop continued for ${totalDuration.toFixed(1)}s without stall`);
       } else {
@@ -210,6 +235,7 @@
       // Summary
       info(`\nSummary: ${scheduledTimes.length} steps, ${totalDuration.toFixed(2)}s total`);
       info(`Step interval: avg ${(deltas.reduce((a,b) => a+b, 0) / deltas.length * 1000).toFixed(1)}ms`);
+      info(`Gain: 0.5, decay: 10ms (punchy click)`);
 
       log('\nDone.');
     });
