@@ -115,6 +115,58 @@
       padding: 0.25rem 0.5rem;
       margin: 0;
     }
+    .export-panel {
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+      max-width: 600px;
+      margin-top: 1rem;
+    }
+    .export-panel h2 {
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+      color: #aaa;
+    }
+    .export-durations {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .dur-btn {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+    }
+    .dur-btn.active {
+      background: #3a5a3a;
+      border-color: #4ec96e;
+    }
+    #custom-dur {
+      font-family: inherit;
+      font-size: 0.8rem;
+      width: 4rem;
+      padding: 0.3rem 0.5rem;
+      background: #2a2a2a;
+      color: #e0e0e0;
+      border: 1px solid #555;
+      border-radius: 4px;
+    }
+    .export-btn {
+      background: #2a5a3a;
+      border-color: #4ec96e;
+      color: #e0e0e0;
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+    }
+    .export-btn:hover { background: #3a7a4a; }
+    .export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .export-status {
+      font-size: 0.8rem;
+      color: #888;
+      margin-left: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -211,8 +263,21 @@
     <button id="btn-all">All</button>
   </div>
 
+  <div class="export-panel">
+    <h2>Export WAV</h2>
+    <div class="export-durations">
+      <button class="dur-btn" data-dur="15">15s</button>
+      <button class="dur-btn" data-dur="30">30s</button>
+      <button class="dur-btn" data-dur="60">60s</button>
+      <button class="dur-btn" data-dur="120">120s</button>
+      <input type="number" id="custom-dur" min="1" max="600" placeholder="sec">
+    </div>
+    <button id="btn-export" class="export-btn">Export WAV</button>
+    <span id="export-status" class="export-status"></span>
+  </div>
+
   <script type="module">
-    import { start, stop, playing, setActiveVoices, setRingVoice, getPatch } from './src/main.js';
+    import { start, stop, playing, setActiveVoices, setRingVoice, getPatch, exportCurrentPatch } from './src/main.js';
     import { getPresetByName } from './src/state/presets.js';
     import { createPatch } from './src/state/patch.js';
 
@@ -220,6 +285,12 @@
     const btnAll = document.getElementById('btn-all');
     const checkboxes = document.querySelectorAll('[data-voice]');
     const voiceDropdowns = document.querySelectorAll('[data-ring-voice]');
+    const durButtons = document.querySelectorAll('.dur-btn');
+    const customDur = document.getElementById('custom-dur');
+    const btnExport = document.getElementById('btn-export');
+    const exportStatus = document.getElementById('export-status');
+
+    let selectedDuration = 30; // default 30s
 
     function getSelectedVoices() {
       const selected = [];
@@ -256,7 +327,6 @@
         }
       });
     }
-    // Sync after a tick to let main.js bootstrap complete
     setTimeout(syncDropdowns, 50);
 
     if (btnAll) {
@@ -266,6 +336,43 @@
         onMuteChange();
       });
     }
+
+    // Duration preset buttons
+    durButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        durButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedDuration = Number(btn.dataset.dur);
+        customDur.value = '';
+      });
+    });
+    // Default: 30s active
+    document.querySelector('[data-dur="30"]')?.classList.add('active');
+
+    // Custom duration input
+    customDur.addEventListener('input', () => {
+      if (customDur.value) {
+        durButtons.forEach(b => b.classList.remove('active'));
+        selectedDuration = Math.max(1, Math.min(600, Number(customDur.value)));
+      }
+    });
+
+    // Export button
+    btnExport.addEventListener('click', async () => {
+      const dur = customDur.value ? Math.max(1, Math.min(600, Number(customDur.value))) : selectedDuration;
+      btnExport.disabled = true;
+      exportStatus.textContent = 'Exporting...';
+
+      try {
+        await exportCurrentPatch(dur);
+        exportStatus.textContent = 'Downloaded!';
+      } catch (e) {
+        exportStatus.textContent = `Error: ${e.message}`;
+      }
+
+      btnExport.disabled = false;
+      setTimeout(() => { exportStatus.textContent = ''; }, 3000);
+    });
 
     // Preset selector
     presetSelect.addEventListener('change', async () => {

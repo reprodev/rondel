@@ -222,6 +222,16 @@ export function setRingVoice(ringIndex, voiceName) {
   persistPatch();
 }
 
+/**
+ * Export the current patch as a WAV file and trigger download.
+ * @param {number} durationSeconds — how long to render
+ */
+export async function exportCurrentPatch(durationSeconds) {
+  const { exportWAV, downloadWAV } = await import('./audio/export.js');
+  const { wavBlob } = await exportWAV(currentPatch, durationSeconds);
+  downloadWAV(wavBlob, `rondel-${Date.now()}.wav`);
+}
+
 export function getPatch() {
   return currentPatch;
 }
