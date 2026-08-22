@@ -209,6 +209,19 @@ export function setActiveVoices(indices) {
   currentPatch.activeVoices = indices;
 }
 
+/**
+ * Reassign the voice for a specific ring. Takes effect on the next step.
+ * @param {number} ringIndex — 0-4
+ * @param {string} voiceName — one of: kick, snare, hat, bass, poly, pluck, clap, tom
+ */
+export function setRingVoice(ringIndex, voiceName) {
+  const ring = currentPatch.rings[ringIndex];
+  if (!ring) return;
+  ring.voice = voiceName;
+  updateRings(currentPatch.rings);
+  persistPatch();
+}
+
 export function getPatch() {
   return currentPatch;
 }
