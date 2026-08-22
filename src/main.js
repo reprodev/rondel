@@ -121,9 +121,13 @@ function onPlayToggle() {
 export async function start(patchData) {
   if (patchData && patchData !== currentPatch) {
     if (patchData.bpm !== undefined) currentPatch.bpm = patchData.bpm;
-    if (patchData.activeVoices !== undefined) currentPatch.activeVoices = patchData.activeVoices;
+    if (patchData.root !== undefined) currentPatch.root = patchData.root;
+    if (patchData.scale !== undefined) currentPatch.scale = patchData.scale;
     if (patchData.seed !== undefined) currentPatch.seed = patchData.seed;
+    if (patchData.masterGain !== undefined) currentPatch.masterGain = patchData.masterGain;
+    if (patchData.activeVoices !== undefined) currentPatch.activeVoices = patchData.activeVoices;
     if (patchData.rings) currentPatch.rings = patchData.rings;
+    if (patchData.arrangement) currentPatch.arrangement = patchData.arrangement;
   }
 
   const ctx = await ensureResumed();

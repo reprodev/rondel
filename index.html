@@ -15,10 +15,10 @@
       line-height: 1.6;
     }
     h1 { margin-bottom: 1rem; font-size: 1.4rem; }
-    button {
+    button, select {
       font-family: inherit;
-      font-size: 1rem;
-      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      padding: 0.5rem 0.8rem;
       cursor: pointer;
       background: #333;
       color: #e0e0e0;
@@ -26,9 +26,10 @@
       border-radius: 4px;
       margin-right: 0.5rem;
     }
-    button:hover { background: #444; }
+    button:hover, select:hover { background: #444; }
     button:active { background: #555; }
     button:disabled { opacity: 0.4; cursor: not-allowed; }
+    select { margin-bottom: 1rem; }
     #canvas-placeholder {
       width: 100%;
       max-width: 600px;
@@ -42,6 +43,16 @@
       color: #444;
       font-size: 0.85rem;
       margin-bottom: 1.5rem;
+    }
+    .preset-bar {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .preset-bar label {
+      font-size: 0.85rem;
+      color: #888;
     }
     .voice-selection {
       background: #222;
@@ -84,6 +95,19 @@
   <h1>Rondel</h1>
   <div id="canvas-placeholder">Canvas will render here</div>
 
+  <div class="preset-bar">
+    <label for="preset-select">Preset:</label>
+    <select id="preset-select">
+      <option value="">Default</option>
+      <option value="Techno">Techno</option>
+      <option value="Ambient">Ambient</option>
+      <option value="Polymetric">Polymetric</option>
+      <option value="Minimal">Minimal</option>
+      <option value="Afro">Afro</option>
+      <option value="Glitch">Glitch</option>
+    </select>
+  </div>
+
   <div class="voice-selection">
     <h2>Voice Selection</h2>
     <div class="voice-checkboxes">
@@ -98,7 +122,10 @@
 
   <script type="module">
     import { start, stop, playing, setActiveVoices } from './src/main.js';
+    import { getPresetByName } from './src/state/presets.js';
+    import { createPatch } from './src/state/patch.js';
 
+    const presetSelect = document.getElementById('preset-select');
     const btnAll = document.getElementById('btn-all');
     const checkboxes = document.querySelectorAll('[data-voice]');
 
@@ -125,6 +152,24 @@
         onVoiceChange();
       });
     }
+
+    // Preset selector: load and start playback on change
+    presetSelect.addEventListener('change', async () => {
+      const name = presetSelect.value;
+
+      // Stop current playback before switching
+      if (playing()) stop();
+
+      if (name) {
+        const preset = getPresetByName(name);
+        if (preset) {
+          await start(preset);
+        }
+      } else {
+        // "Default" selected — load fresh default patch
+        await start(createPatch());
+      }
+    });
   </script>
 </body>
 </html>
