@@ -1,7 +1,7 @@
 // Snare synthesis — noise gives the rattle, triangle gives the body.
 // The tone parameter lets the sequencer blend between tight and fat.
 
-import { attack, decay } from '../env.js';
+import { floor } from '../env.js';
 import { createNoiseSource, initNoise } from '../noise.js';
 
 /**
@@ -25,12 +25,12 @@ export function play(ctx, destination, time, params) {
   noiseBP.Q.value = 0.7;
 
   const noiseGain = ctx.createGain();
-  noiseGain.gain.value = 0;
-  // Noise level inversely proportional to tone (more noise when tone is low)
-  // 0.35 base gain keeps the snare present without overwhelming the mix.
+  // Single unbroken envelope chain to avoid cancel conflict.
   const noiseLevel = 0.35 * velocity * (1 - tone * 0.6);
-  attack(ctx, noiseGain.gain, time, noiseLevel, 0.005);
-  decay(ctx, noiseGain.gain, time + 0.005, 0, 0.170);
+  noiseGain.gain.setValueAtTime(0, time);
+  noiseGain.gain.linearRampToValueAtTime(noiseLevel, time + 0.005);         // 5ms attack
+  noiseGain.gain.exponentialRampToValueAtTime(floor(0), time + 0.005 + 0.170); // 170ms decay
+  noiseGain.gain.setValueAtTime(0, time + 0.005 + 0.170);                  // snap to zero
 
   noiseSrc.connect(noiseBP).connect(noiseGain).connect(destination);
   noiseSrc.stop(time + 0.2);
@@ -41,11 +41,11 @@ export function play(ctx, destination, time, params) {
   body.frequency.value = 185;
 
   const bodyGain = ctx.createGain();
-  bodyGain.gain.value = 0;
-  // Body level proportional to tone
   const bodyLevel = 0.35 * velocity * (0.4 + tone * 0.5);
-  attack(ctx, bodyGain.gain, time, bodyLevel, 0.005);
-  decay(ctx, bodyGain.gain, time + 0.005, 0, 0.110);
+  bodyGain.gain.setValueAtTime(0, time);
+  bodyGain.gain.linearRampToValueAtTime(bodyLevel, time + 0.005);           // 5ms attack
+  bodyGain.gain.exponentialRampToValueAtTime(floor(0), time + 0.005 + 0.110); // 110ms decay
+  bodyGain.gain.setValueAtTime(0, time + 0.005 + 0.110);                   // snap to zero
 
   body.connect(bodyGain).connect(destination);
   body.start(time);

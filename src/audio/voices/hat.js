@@ -1,7 +1,7 @@
 // Hi-hat — filtered noise shaped by decay time. Closed hats are tight;
 // open hats ring until choked by the next closed hit.
 
-import { attack, decay } from '../env.js';
+import { floor } from '../env.js';
 import { createNoiseSource, initNoise } from '../noise.js';
 
 // Module-scoped choke state — tracks the currently ringing open hat
@@ -45,12 +45,13 @@ export function play(ctx, destination, time, params) {
   bp.frequency.value = 10500;
   bp.Q.value = 1.2;
 
+  // Single unbroken envelope chain.
   const gain = ctx.createGain();
-  gain.gain.value = 0;
-  // 0.3 base gain — hats are naturally quieter in a mix.
   const level = 0.3 * velocity;
-  attack(ctx, gain.gain, time, level, 0.002);             // 2ms attack
-  decay(ctx, gain.gain, time + 0.002, 0, decayTime);      // exponential decay
+  gain.gain.setValueAtTime(0, time);
+  gain.gain.linearRampToValueAtTime(level, time + 0.002);                  // 2ms attack
+  gain.gain.exponentialRampToValueAtTime(floor(0), time + 0.002 + decayTime); // exponential decay
+  gain.gain.setValueAtTime(0, time + 0.002 + decayTime);                   // snap to zero
 
   noiseSrc.connect(hp).connect(bp).connect(gain).connect(destination);
   noiseSrc.stop(time + decayTime + 0.05);
