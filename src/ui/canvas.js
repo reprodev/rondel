@@ -34,15 +34,17 @@ export function getCanvas() {
 }
 
 /**
- * Recalculate canvas dimensions. Uses min(viewportWidth, viewportHeight) * 0.86
- * as the CSS size, then scales the backing store by DPR for crisp rendering.
+ * Recalculate canvas dimensions. Uses the canvas parent's actual size
+ * to determine the square canvas size, then scales by DPR.
  */
 export function resizeCanvas() {
   if (!canvas) return { size: 0, dpr: 1 };
 
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const cssPx = Math.floor(Math.min(vw, vh) * 0.86);
+  const parent = canvas.parentElement;
+  const parentW = parent ? parent.clientWidth : window.innerWidth;
+  const parentH = parent ? parent.clientHeight : window.innerHeight;
+  const available = Math.min(parentW, parentH);
+  const cssPx = Math.floor(available * 0.92);
 
   // Cap DPR at 2 — higher values waste memory for no perceptible gain.
   dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -84,7 +86,8 @@ function setupResizeObserver() {
   // Use ResizeObserver on the canvas parent for robust detection
   if (typeof ResizeObserver !== 'undefined') {
     resizeObserver = new ResizeObserver(onResize);
-    resizeObserver.observe(document.body);
+    const parent = canvas.parentElement || document.body;
+    resizeObserver.observe(parent);
   }
 
   // Also listen to window resize as fallback
