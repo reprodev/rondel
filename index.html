@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rondel</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='7' fill='none' stroke='%23e0e0e0' stroke-width='1.5'/><circle cx='8' cy='4' r='1.5' fill='%23e0e0e0'/></svg>">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -117,11 +118,13 @@
       cb.addEventListener('change', onVoiceChange);
     });
 
-    btnAll.addEventListener('click', () => {
-      const allChecked = [...checkboxes].every(cb => cb.checked);
-      checkboxes.forEach(cb => { cb.checked = !allChecked; });
-      onVoiceChange();
-    });
+    if (btnAll) {
+      btnAll.addEventListener('click', () => {
+        const allChecked = [...checkboxes].every(cb => cb.checked);
+        checkboxes.forEach(cb => { cb.checked = !allChecked; });
+        onVoiceChange();
+      });
+    }
   </script>
 </body>
 </html>

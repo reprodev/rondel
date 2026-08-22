@@ -16,28 +16,26 @@ import { getCanvas } from './ui/canvas.js';
 import { startInteraction, stopInteraction } from './ui/interact.js';
 import * as Controls from './ui/controls.js';
 import { createPatch } from './state/patch.js';
+import { encodePatch, syncHashWithPatch, loadPatchFromHash, loadPatchFromStorage, savePatchToStorage } from './state/codec.js';
 import { bjorklund, rotate } from './gen/euclid.js';
 
 // --- Module state ---
 
-let currentPatch = createPatch();
+// Load patch from URL hash, localStorage, or defaults (in priority order)
+let currentPatch = loadPatchFromHash() || loadPatchFromStorage() || createPatch();
+
 const voices = [kick, snare, hat, bass, poly];
 
 // Wrap each voice to check the Euclidean pattern before playing.
-// This is where rotation, pulses, and probability actually gate the audio.
 function wrapVoice(voiceFn, ringIndex) {
   return (ctx, destination, time, params) => {
     const ring = currentPatch.rings[ringIndex];
     if (!ring) return;
 
-    // Generate the rotated Euclidean pattern for this ring
     const pattern = rotate(bjorklund(ring.steps, ring.pulses), ring.rotation);
-
-    // Gate: only play if this step is active in the pattern
     const stepInPattern = params.step % ring.steps;
     if (!pattern[stepInPattern]) return;
 
-    // Probability gate: skip randomly based on ring probability
     if (ring.probability < 1.0 && Math.random() > ring.probability) return;
 
     voiceFn(ctx, destination, time, params);
@@ -47,10 +45,16 @@ function wrapVoice(voiceFn, ringIndex) {
 
 const wrappedVoices = voices.map((v, i) => wrapVoice(v, i));
 
+// --- Patch persistence helper ---
+
+function persistPatch() {
+  syncHashWithPatch(currentPatch);
+  savePatchToStorage(currentPatch);
+}
+
 // --- Interaction callbacks ---
 
 function onStepToggle(ring, step) {
-  console.log(`[main] onStepToggle(ring=${ring}, step=${step})`);
   const r = currentPatch.rings[ring];
   if (!r) return;
   const pattern = rotate(bjorklund(r.steps, r.pulses), r.rotation);
@@ -61,51 +65,50 @@ function onStepToggle(ring, step) {
   }
   updateRings(currentPatch.rings);
   Controls.updateStatus(currentPatch, isPlaying(), currentPatch.bpm);
+  persistPatch();
 }
 
 function onProbabilityDrag(ring, step, newProb) {
-  console.log(`[main] onProbabilityDrag(ring=${ring}, step=${step}, prob=${newProb.toFixed(3)})`);
   const r = currentPatch.rings[ring];
   if (!r) return;
   r.probability = Math.max(0, Math.min(1, newProb));
   updateRings(currentPatch.rings);
   Controls.updateStatus(currentPatch, isPlaying(), currentPatch.bpm);
+  persistPatch();
 }
 
 function onPulsesDrag(ring, newPulses) {
-  console.log(`[main] onPulsesDrag(ring=${ring}, pulses=${newPulses})`);
   const r = currentPatch.rings[ring];
   if (!r) return;
   r.pulses = Math.max(0, Math.min(r.steps, newPulses));
   updateRings(currentPatch.rings);
   Controls.updateStatus(currentPatch, isPlaying(), currentPatch.bpm);
+  persistPatch();
 }
 
 function onRotationDrag(ring, deltaRotation) {
-  console.log(`[main] onRotationDrag(ring=${ring}, delta=${deltaRotation})`);
   const r = currentPatch.rings[ring];
   if (!r) return;
   r.rotation = ((r.rotation + deltaRotation) % r.steps + r.steps) % r.steps;
   updateRings(currentPatch.rings);
   Controls.updateStatus(currentPatch, isPlaying(), currentPatch.bpm);
+  persistPatch();
 }
 
 function onTempoTap(deltaBPM) {
-  console.log(`[main] onTempoTap(delta=${deltaBPM})`);
   currentPatch.bpm = Math.max(60, Math.min(200, currentPatch.bpm + deltaBPM));
   setSchedulerBpm(currentPatch.bpm);
 
-  // Resync the visual loop timing
   const stepsPerLoop = 16;
   const secondsPerStep = (60 / currentPatch.bpm) / (stepsPerLoop / 4);
   const secondsPerLoop = secondsPerStep * stepsPerLoop;
   syncTiming(performance.now() / 1000, secondsPerLoop, currentPatch.bpm);
 
   Controls.updateStatus(currentPatch, isPlaying(), currentPatch.bpm);
+  persistPatch();
 }
 
 function onPlayToggle() {
-  console.log(`[main] onPlayToggle()`);
   if (isPlaying()) {
     stop();
   } else {
@@ -115,14 +118,7 @@ function onPlayToggle() {
 
 // --- Public API ---
 
-/**
- * Start playback with optional patch overrides.
- * Merges patchData into currentPatch rather than replacing it, so callers
- * can pass partial objects (e.g., { bpm, activeVoices }) without losing
- * the full patch structure (rings, arrangement, etc.).
- */
 export async function start(patchData) {
-  // Merge partial patchData into currentPatch
   if (patchData && patchData !== currentPatch) {
     if (patchData.bpm !== undefined) currentPatch.bpm = patchData.bpm;
     if (patchData.activeVoices !== undefined) currentPatch.activeVoices = patchData.activeVoices;
@@ -131,8 +127,6 @@ export async function start(patchData) {
   }
 
   const ctx = await ensureResumed();
-
-  // Noise buffer must exist before snare/hat can play
   initNoise(ctx);
 
   const bpm = currentPatch.bpm || 120;
@@ -146,7 +140,6 @@ export async function start(patchData) {
     activeVoices: currentPatch.activeVoices,
   });
 
-  // Start the visual loop synced to the audio clock
   const secondsPerStep = (60 / bpm) / (stepsPerLoop / 4);
   const secondsPerLoop = secondsPerStep * stepsPerLoop;
 
@@ -156,11 +149,11 @@ export async function start(patchData) {
     loopStartTime: performance.now() / 1000,
     seed: currentPatch.seed || 12345,
     activeVoices: currentPatch.activeVoices || [0, 1, 2, 3, 4],
+    rings: currentPatch.rings,
   });
 
   syncTiming(performance.now() / 1000, secondsPerLoop, bpm);
 
-  // Wire canvas interactions
   const { canvas } = getCanvas();
   startInteraction(canvas, {
     onStepToggle,
@@ -176,9 +169,6 @@ export async function start(patchData) {
   Controls.updateStatus(currentPatch, true, bpm);
 }
 
-/**
- * Stop playback, the draw loop, and interactions.
- */
 export function stop() {
   stopScheduler();
   stopDrawLoop();
@@ -187,45 +177,39 @@ export function stop() {
   Controls.updateStatus(currentPatch, false, currentPatch.bpm);
 }
 
-/**
- * Returns whether the sequencer is currently running.
- */
 export function playing() {
   return isPlaying();
 }
 
-/**
- * Update which voices are active (0=kick, 1=snare, 2=hat, 3=bass, 4=poly).
- * Can be called while playing — takes effect on the next scheduled step.
- */
 export function setActiveVoices(indices) {
   setSchedulerActiveVoices(indices);
   setRadialActiveVoices(indices);
   currentPatch.activeVoices = indices;
 }
 
-/**
- * Get the current live patch state.
- */
 export function getPatch() {
   return currentPatch;
 }
 
+// --- Copy link ---
+
+function copyPatchLink() {
+  const encoded = encodePatch(currentPatch);
+  if (!encoded) return;
+  const url = window.location.origin + window.location.pathname + '#' + encoded;
+  navigator.clipboard.writeText(url).then(() => {
+    Controls.showCopyToast('Link copied!');
+  }).catch(() => {
+    Controls.showCopyToast('Copy failed');
+  });
+}
+
 // --- Bootstrap ---
-// Initialize controls DOM on module load. The controls root element
-// gets inserted before the canvas in the page flow.
 
 const { root } = Controls.initControls();
 
-// Insert controls root into the page if not already there.
-// Waits for DOMContentLoaded in case module loads before body is parsed.
 function insertControls() {
-  const container = document.querySelector('.controls');
-  if (container) {
-    container.replaceWith(root);
-  } else {
-    document.body.prepend(root);
-  }
+  document.body.prepend(root);
 }
 
 if (document.readyState === 'loading') {
@@ -234,8 +218,14 @@ if (document.readyState === 'loading') {
   insertControls();
 }
 
-// Wire the play button from controls.js
+// Wire play button
 Controls.getPlayButton().addEventListener('click', onPlayToggle);
 
-// Wire copy button placeholder
-Controls.showCopyToast; // available for future codec wiring
+// Wire copy (double-click play button as copy shortcut for now)
+Controls.getPlayButton().addEventListener('dblclick', (e) => {
+  e.preventDefault();
+  copyPatchLink();
+});
+
+// Initial status
+Controls.updateStatus(currentPatch, false, currentPatch.bpm);
