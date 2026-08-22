@@ -197,6 +197,25 @@ function render(ctx) {
   ctx.fill();
   ctx.globalAlpha = 1;
 
+  // Instrument labels — positioned at 315° (upper-left) to avoid playhead
+  const LABELS = ['Kick', 'Snare', 'Hat', 'Bass', 'Poly'];
+  const labelAngle = 315;
+  ctx.font = '11px system-ui, -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  for (let r = 0; r < 5; r++) {
+    const radius = innerRadius + (r + 1) * ringSpacing;
+    const color = palette[r] || '#888';
+    const isActive = activeVoices.has(r);
+    const { x: lx, y: ly } = toCartesian(cx, cy, radius, labelAngle);
+
+    ctx.fillStyle = color;
+    ctx.globalAlpha = isActive ? 0.7 : 0.25;
+    ctx.fillText(LABELS[r], lx, ly);
+    ctx.globalAlpha = 1;
+  }
+
   // Process pending hit events → spawn animations
   while (pendingEvents.length > 0) {
     const evt = pendingEvents.shift();
