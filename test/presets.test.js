@@ -4,8 +4,8 @@ import { presets, getPresetByName, getPresetNames } from '../src/state/presets.j
 import { validatePatch } from '../src/state/patch.js';
 
 describe('presets', () => {
-  it('has 6 presets', () => {
-    assert.strictEqual(presets.length, 6);
+  it('has 16 presets', () => {
+    assert.strictEqual(presets.length, 16);
   });
 
   it('each preset has a unique name', () => {
@@ -64,15 +64,15 @@ describe('presets', () => {
 });
 
 describe('getPresetByName', () => {
-  it('finds Techno', () => {
-    const p = getPresetByName('Techno');
+  it('finds Techno Kick Drive', () => {
+    const p = getPresetByName('Techno Kick Drive');
     assert.ok(p);
     assert.strictEqual(p.bpm, 128);
   });
 
   it('case-insensitive', () => {
-    assert.ok(getPresetByName('ambient'));
-    assert.ok(getPresetByName('GLITCH'));
+    assert.ok(getPresetByName('ambient floating'));
+    assert.ok(getPresetByName('GLITCH IDM'));
   });
 
   it('returns null for unknown name', () => {
@@ -81,9 +81,9 @@ describe('getPresetByName', () => {
 });
 
 describe('getPresetNames', () => {
-  it('returns array of 6 strings', () => {
+  it('returns array of 16 strings', () => {
     const names = getPresetNames();
-    assert.strictEqual(names.length, 6);
+    assert.strictEqual(names.length, 16);
     for (const n of names) assert.strictEqual(typeof n, 'string');
   });
 });
