@@ -28,19 +28,20 @@ export function play(ctx, destination, time, params) {
   // Lowpass filter with resonance
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.Q.value = 7;
+  filter.Q.value = 2;
   
-  // Filter envelope: 220 Hz → 1400 Hz (attack 8ms) → 320 Hz (release 300ms)
+  // Filter envelope: 220 Hz → 900 Hz (attack 8ms) → 320 Hz (release 300ms)
   // The filter sweep is what gives the bass its "pluck" — fast open, slow close.
   filter.frequency.setValueAtTime(220, time);
-  filter.frequency.linearRampToValueAtTime(1400, time + 0.008);
+  filter.frequency.linearRampToValueAtTime(900, time + 0.008);
   filter.frequency.exponentialRampToValueAtTime(floor(320), time + 0.008 + 0.300);
   
   // Amplitude envelope — gated
   const gain = ctx.createGain();
   gain.gain.value = 0;
-  // 0.25 output gain keeps bass under the kick in the mix.
-  const level = 0.25 * velocity;
+  // 0.08 output gain — bass should be felt more than heard,
+  // supporting the kick without competing in the midrange.
+  const level = 0.08 * velocity;
   attack(ctx, gain.gain, time, level, 0.002);             // 2ms attack
   decay(ctx, gain.gain, time + duration, 0, 0.030);       // 30ms release at gate end
   

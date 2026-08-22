@@ -26,7 +26,9 @@ export function play(ctx, destination, time, params) {
 
   const noiseGain = ctx.createGain();
   // Single unbroken envelope chain to avoid cancel conflict.
-  const noiseLevel = 0.35 * velocity * (1 - tone * 0.6);
+  // 0.45 base gain — snare needs to crack through the mix as the
+  // second-loudest element. The bandpass attenuates significantly.
+  const noiseLevel = 0.45 * velocity * (1 - tone * 0.6);
   noiseGain.gain.setValueAtTime(0, time);
   noiseGain.gain.linearRampToValueAtTime(noiseLevel, time + 0.005);         // 5ms attack
   noiseGain.gain.exponentialRampToValueAtTime(floor(0), time + 0.005 + 0.170); // 170ms decay
@@ -41,7 +43,7 @@ export function play(ctx, destination, time, params) {
   body.frequency.value = 185;
 
   const bodyGain = ctx.createGain();
-  const bodyLevel = 0.35 * velocity * (0.4 + tone * 0.5);
+  const bodyLevel = 0.45 * velocity * (0.4 + tone * 0.5);
   bodyGain.gain.setValueAtTime(0, time);
   bodyGain.gain.linearRampToValueAtTime(bodyLevel, time + 0.005);           // 5ms attack
   bodyGain.gain.exponentialRampToValueAtTime(floor(0), time + 0.005 + 0.110); // 110ms decay

@@ -11,6 +11,7 @@ import {
 } from './audio/scheduler.js';
 import { kick, snare, hat, bass, poly } from './audio/voices/index.js';
 import { initNoise } from './audio/noise.js';
+import { createMaster } from './audio/master.js';
 import { startDrawLoop, stopDrawLoop, pushEvent, syncTiming, setActiveVoices as setRadialActiveVoices, updateRings } from './ui/radial.js';
 import { getCanvas } from './ui/canvas.js';
 import { startInteraction, stopInteraction } from './ui/interact.js';
@@ -23,10 +24,11 @@ import { bjorklund, rotate } from './gen/euclid.js';
 
 // Load patch from URL hash, localStorage, or defaults (in priority order)
 let currentPatch = loadPatchFromHash() || loadPatchFromStorage() || createPatch();
+let master = null;
 
 const voices = [kick, snare, hat, bass, poly];
 
-// Wrap each voice to check the Euclidean pattern before playing.
+// Wrap each voice to check the Euclidean pattern and apply ring gain.
 function wrapVoice(voiceFn, ringIndex) {
   return (ctx, destination, time, params) => {
     const ring = currentPatch.rings[ringIndex];
@@ -38,7 +40,9 @@ function wrapVoice(voiceFn, ringIndex) {
 
     if (ring.probability < 1.0 && Math.random() > ring.probability) return;
 
-    voiceFn(ctx, destination, time, params);
+    // Pass ring.gain as velocity so the voice's built-in multiplier scales by it.
+    // This is where the preset gain values actually affect output level.
+    voiceFn(ctx, destination, time, { ...params, velocity: ring.gain });
     pushEvent(ringIndex, params.step, time);
   };
 }
@@ -133,6 +137,12 @@ export async function start(patchData) {
   const ctx = await ensureResumed();
   initNoise(ctx);
 
+  // Create master bus: compressor + limiter + analyser
+  if (master) master.disconnect();
+  master = createMaster(ctx);
+  master.gain.gain.value = currentPatch.masterGain ?? 0.45;
+  master.connect(ctx.destination);
+
   const bpm = currentPatch.bpm || 120;
   const stepsPerLoop = 16;
 
@@ -140,7 +150,7 @@ export async function start(patchData) {
     bpm,
     stepsPerLoop,
     voices: wrappedVoices,
-    dest: ctx.destination,
+    dest: master.input,  // voices route through master chain
     activeVoices: currentPatch.activeVoices,
   });
 
@@ -177,6 +187,10 @@ export function stop() {
   stopScheduler();
   stopDrawLoop();
   stopInteraction();
+  if (master) {
+    master.disconnect();
+    master = null;
+  }
   Controls.setPlayingState(false);
   Controls.updateStatus(currentPatch, false, currentPatch.bpm);
 }

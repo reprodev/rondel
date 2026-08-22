@@ -11,12 +11,13 @@ describe('createPatch', () => {
     assert.strictEqual(p.seed, 12345);
   });
 
-  it('default patch has 5 rings, each with 16 steps and 8 pulses', () => {
+  it('default patch has 5 rings, each with 16 steps and correct pulses', () => {
     const p = createPatch();
     assert.strictEqual(p.rings.length, 5);
-    for (const ring of p.rings) {
-      assert.strictEqual(ring.steps, 16);
-      assert.strictEqual(ring.pulses, 8);
+    const expectedPulses = [4, 4, 8, 4, 3];
+    for (let i = 0; i < p.rings.length; i++) {
+      assert.strictEqual(p.rings[i].steps, 16);
+      assert.strictEqual(p.rings[i].pulses, expectedPulses[i]);
     }
   });
 
@@ -29,11 +30,12 @@ describe('createPatch', () => {
   });
 
   it('ring overrides merge per-ring', () => {
-    const p = createPatch({ rings: [{ pulses: 4 }] });
-    assert.strictEqual(p.rings[0].pulses, 4);
+    const p = createPatch({ rings: [{ pulses: 6 }] });
+    assert.strictEqual(p.rings[0].pulses, 6);
     assert.strictEqual(p.rings[0].steps, 16);
     assert.strictEqual(p.rings[0].voice, 'kick');
-    assert.strictEqual(p.rings[1].pulses, 8);
+    // ring[1] keeps its default (4 pulses)
+    assert.strictEqual(p.rings[1].pulses, 4);
   });
 
   it('returns a new object (not same reference as defaults)', () => {
@@ -47,7 +49,7 @@ describe('createPatch', () => {
     p.bpm = 999;
     p.rings[0].pulses = 99;
     assert.strictEqual(patchDefaults.bpm, 120);
-    assert.strictEqual(patchDefaults.rings[0].pulses, 8);
+    assert.strictEqual(patchDefaults.rings[0].pulses, 4);
   });
 });
 

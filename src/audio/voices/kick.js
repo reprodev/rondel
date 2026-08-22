@@ -24,7 +24,7 @@ export function play(ctx, destination, time, params) {
 
   // Amplitude envelope as a single unbroken chain — avoids the
   // cancelScheduledValues conflict between attack() and decay().
-  const level = 0.4 * velocity;
+  const level = 0.35 * velocity;
   gain.gain.setValueAtTime(0, time);
   gain.gain.linearRampToValueAtTime(level, time + 0.004);             // 4ms attack
   gain.gain.exponentialRampToValueAtTime(floor(0), time + 0.004 + 0.340);  // 340ms decay

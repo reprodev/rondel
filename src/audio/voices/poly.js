@@ -1,13 +1,13 @@
 // Poly pad — three detuned sawtooths through a gentle lowpass.
-// ADSR envelope and a hard 6-voice cap keep it from consuming all CPU.
+// ADSR envelope and a hard 4-voice cap keep it from consuming all CPU.
 // This is the voice that makes the sequencer sound beautiful.
 
 import { attack, decay, floor } from '../env.js';
 
-// Voice pool — cap at 6 simultaneous instances to prevent runaway.
-// Oldest voice is killed when the 7th fires.
+// Voice pool — cap at 4 simultaneous instances to prevent runaway.
+// Oldest voice is killed when the 5th fires.
 const voicePool = [];
-const MAX_VOICES = 6;
+const MAX_VOICES = 4;
 
 function killOldest() {
   if (voicePool.length >= MAX_VOICES) {
@@ -48,8 +48,8 @@ export function play(ctx, destination, time, params) {
   
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.frequency.value = 2600;
-  filter.Q.value = 1.5;
+  filter.frequency.value = 800;
+  filter.Q.value = 0.7;
   
   for (const d of detunes) {
     const osc = ctx.createOscillator();
@@ -65,8 +65,10 @@ export function play(ctx, destination, time, params) {
   const gain = ctx.createGain();
   gain.gain.value = 0;
   
-  const peakGain = velocity; // peak at velocity (default 0.16, soft)
-  const sustainLevel = peakGain * 0.45;
+  // 0.06 output gain — pad is a subtle bed, barely perceptible on its own
+  // but adds warmth and depth when combined with the rhythm section.
+  const peakGain = 0.06 * velocity;
+  const sustainLevel = peakGain * 0.3;
   const attackEnd = time + 0.120;
   const decayEnd = attackEnd + 0.250;
   const releaseStart = time + duration;

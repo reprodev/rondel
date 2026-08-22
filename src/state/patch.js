@@ -9,13 +9,13 @@ export const patchDefaults = Object.freeze({
   root: 60,            // MIDI note C4
   scale: 'major',
   seed: 12345,
-  masterGain: 0.7,
+  masterGain: 0.45,
   rings: [
-    { voice: 'kick',  steps: 16, pulses: 8, rotation: 0, probability: 1.0, gain: 0.8, delaySend: 0.2, reverbSend: 0.3 },
-    { voice: 'snare', steps: 16, pulses: 8, rotation: 0, probability: 1.0, gain: 0.8, delaySend: 0.2, reverbSend: 0.3 },
-    { voice: 'hat',   steps: 16, pulses: 8, rotation: 0, probability: 1.0, gain: 0.8, delaySend: 0.2, reverbSend: 0.3 },
-    { voice: 'bass',  steps: 16, pulses: 8, rotation: 0, probability: 1.0, gain: 0.8, delaySend: 0.2, reverbSend: 0.3 },
-    { voice: 'poly',  steps: 16, pulses: 8, rotation: 0, probability: 1.0, gain: 0.8, delaySend: 0.2, reverbSend: 0.3 },
+    { voice: 'kick',  steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.75, delaySend: 0.1, reverbSend: 0.15 },
+    { voice: 'snare', steps: 16, pulses: 4, rotation: 4, probability: 0.9, gain: 0.55, delaySend: 0.2, reverbSend: 0.2 },
+    { voice: 'hat',   steps: 16, pulses: 8, rotation: 0, probability: 0.85, gain: 0.4, delaySend: 0.1, reverbSend: 0.1 },
+    { voice: 'bass',  steps: 16, pulses: 4, rotation: 2, probability: 1.0, gain: 0.5, delaySend: 0.15, reverbSend: 0.1 },
+    { voice: 'poly',  steps: 16, pulses: 3, rotation: 0, probability: 0.9, gain: 0.4, delaySend: 0.3, reverbSend: 0.5 },
   ],
   arrangement: {
     scenes: [{ name: 'A', rings: null }],  // null = use top-level rings

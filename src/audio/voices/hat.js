@@ -47,7 +47,9 @@ export function play(ctx, destination, time, params) {
 
   // Single unbroken envelope chain.
   const gain = ctx.createGain();
-  const level = 0.3 * velocity;
+  // 0.4 base gain — the HP+BP filter chain eats ~12dB of signal,
+  // so raw gain needs to be higher to maintain presence.
+  const level = 0.4 * velocity;
   gain.gain.setValueAtTime(0, time);
   gain.gain.linearRampToValueAtTime(level, time + 0.002);                  // 2ms attack
   gain.gain.exponentialRampToValueAtTime(floor(0), time + 0.002 + decayTime); // exponential decay
