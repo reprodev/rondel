@@ -9,7 +9,7 @@ import {
   setActiveVoices as setSchedulerActiveVoices,
   setBpm as setSchedulerBpm,
 } from './audio/scheduler.js';
-import { kick, snare, hat, bass, poly, pluck } from './audio/voices/index.js';
+import { kick, snare, hat, bass, poly, pluck, clap, tom } from './audio/voices/index.js';
 import { initNoise } from './audio/noise.js';
 import { createMaster } from './audio/master.js';
 import { startDrawLoop, stopDrawLoop, pushEvent, syncTiming, setActiveVoices as setRadialActiveVoices, updateRings } from './ui/radial.js';
@@ -27,7 +27,7 @@ let currentPatch = loadPatchFromHash() || loadPatchFromStorage() || createPatch(
 let master = null;
 
 // Voice lookup by name — allows dynamic reassignment via ring.voice field.
-const voiceMap = { kick, snare, hat, bass, poly, pluck };
+const voiceMap = { kick, snare, hat, bass, poly, pluck, clap, tom };
 
 // Each ring's play function resolves the voice at play-time from ring.voice,
 // so reassigning ring.voice immediately changes what sound plays.

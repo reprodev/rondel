@@ -2,7 +2,7 @@
 // Pure ES module, no side effects, no DOM.
 
 const VALID_SCALES = ['major', 'minor', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'pentatonic', 'blues', 'chromatic'];
-const VALID_VOICES = ['kick', 'snare', 'hat', 'bass', 'poly', 'pluck'];
+const VALID_VOICES = ['kick', 'snare', 'hat', 'bass', 'poly', 'pluck', 'clap', 'tom'];
 
 export const patchDefaults = Object.freeze({
   bpm: 120,
