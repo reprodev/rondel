@@ -1,11 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import { presets, getPresetByName, getPresetNames } from '../src/state/presets.js';
+import { presets, getPresetByName, getPresetNames, getPresetsByCategory, CATEGORIES } from '../src/state/presets.js';
 import { validatePatch } from '../src/state/patch.js';
 
 describe('presets', () => {
-  it('has 16 presets', () => {
-    assert.strictEqual(presets.length, 16);
+  it('has 30 presets', () => {
+    assert.strictEqual(presets.length, 30);
   });
 
   it('each preset has a unique name', () => {
@@ -36,6 +36,19 @@ describe('presets', () => {
     }
   });
 
+  it('each preset has a valid category', () => {
+    for (const preset of presets) {
+      assert.ok(CATEGORIES.includes(preset.category), `preset "${preset.name}" has invalid category "${preset.category}"`);
+    }
+  });
+
+  it('each preset has a mood array with at least 1 keyword', () => {
+    for (const preset of presets) {
+      assert.ok(Array.isArray(preset.mood), `preset "${preset.name}" mood is not an array`);
+      assert.ok(preset.mood.length >= 1, `preset "${preset.name}" mood is empty`);
+    }
+  });
+
   it('BPM values are in valid range (40-200)', () => {
     for (const preset of presets) {
       assert.ok(preset.bpm >= 40 && preset.bpm <= 200, `preset "${preset.name}" bpm ${preset.bpm} out of range`);
@@ -55,7 +68,7 @@ describe('presets', () => {
     for (const preset of presets) {
       for (let i = 0; i < preset.rings.length; i++) {
         const ring = preset.rings[i];
-        if (ring.steps > 0) {
+        if (ring.steps > 0 && ring.pulses > 0) {
           assert.ok(ring.rotation <= ring.steps - 1, `preset "${preset.name}" ring ${i}: rotation ${ring.rotation} >= steps ${ring.steps}`);
         }
       }
@@ -72,7 +85,7 @@ describe('getPresetByName', () => {
 
   it('case-insensitive', () => {
     assert.ok(getPresetByName('ambient floating'));
-    assert.ok(getPresetByName('GLITCH IDM'));
+    assert.ok(getPresetByName('SAMBA CARNIVAL'));
   });
 
   it('returns null for unknown name', () => {
@@ -81,9 +94,24 @@ describe('getPresetByName', () => {
 });
 
 describe('getPresetNames', () => {
-  it('returns array of 16 strings', () => {
+  it('returns array of 30 strings', () => {
     const names = getPresetNames();
-    assert.strictEqual(names.length, 16);
+    assert.strictEqual(names.length, 30);
     for (const n of names) assert.strictEqual(typeof n, 'string');
+  });
+});
+
+describe('getPresetsByCategory', () => {
+  it('Dancefloor has 6 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Dancefloor').length, 6);
+  });
+  it('World & Groove has 8 presets', () => {
+    assert.strictEqual(getPresetsByCategory('World & Groove').length, 8);
+  });
+  it('Ambient & Study has 10 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Ambient & Study').length, 10);
+  });
+  it('Epic & Cinematic has 6 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Epic & Cinematic').length, 6);
   });
 });
