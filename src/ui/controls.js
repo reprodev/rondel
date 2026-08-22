@@ -12,41 +12,48 @@ let tooltipEl = null;
 
 const STYLES = `
   .rondel-controls {
-    position: relative;
-    max-width: 600px;
-    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    justify-content: flex-end;
   }
   .rondel-status {
     font-family: monospace;
-    font-size: 0.85em;
+    font-size: 0.8em;
     color: #aaa;
-    text-align: center;
-    padding: 0.5rem 0;
     letter-spacing: 0.02em;
+    white-space: nowrap;
   }
   .rondel-play-btn {
-    display: block;
-    margin: 0.8rem auto;
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: 2px solid #666;
     background: #222;
     color: #e0e0e0;
     font-family: system-ui, sans-serif;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
-    text-transform: uppercase;
-    line-height: 44px;
+    line-height: 32px;
     text-align: center;
     transition: border-color 0.15s, background 0.15s;
+    flex-shrink: 0;
   }
   .rondel-play-btn:hover {
     border-color: #aaa;
     background: #2a2a2a;
   }
+  .rondel-play-btn:not(.playing) {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
   .rondel-play-btn.playing {
+    animation: none;
     border-color: #4ec96e;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { border-color: #666; box-shadow: 0 0 0 0 rgba(78, 201, 110, 0); }
+    50% { border-color: #4ec96e; box-shadow: 0 0 8px 2px rgba(78, 201, 110, 0.3); }
   }
   .rondel-keyboard-hint {
     position: fixed;

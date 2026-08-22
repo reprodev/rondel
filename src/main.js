@@ -254,7 +254,12 @@ function copyPatchLink() {
 const { root } = Controls.initControls();
 
 function insertControls() {
-  document.body.prepend(root);
+  const header = document.querySelector('.app-header');
+  if (header) {
+    header.appendChild(root);
+  } else {
+    document.body.prepend(root);
+  }
 }
 
 if (document.readyState === 'loading') {
