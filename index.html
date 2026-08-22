@@ -157,21 +157,6 @@
       color: #e0e0e0;
     }
 
-    .preset-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.8rem;
-    }
-    .preset-bar label {
-      font-size: 0.8rem;
-      color: #888;
-    }
-    .preset-bar select {
-      font-size: 0.8rem;
-      margin: 0;
-    }
-
     .ring-controls {
       display: flex;
       flex-direction: column;
@@ -242,6 +227,73 @@
       color: #888;
       margin-left: 0.4rem;
     }
+
+    /* --- Preset Browser --- */
+    .preset-browser {
+      margin-bottom: 1rem;
+    }
+    .preset-browser > label {
+      display: block;
+      font-size: 0.85rem;
+      color: #999;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .preset-category {
+      margin-bottom: 0.75rem;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 0.5rem;
+    }
+    .preset-category[open] {
+      background: #1a1a1a;
+    }
+    .category-header {
+      cursor: pointer;
+      user-select: none;
+      padding: 0.5rem;
+      color: #aaa;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      list-style: none;
+    }
+    .category-header::-webkit-details-marker { display: none; }
+    .category-header:hover {
+      color: #fff;
+    }
+    .preset-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      padding: 0.5rem 0 0 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .preset-btn {
+      background: #222;
+      border: 1px solid #444;
+      color: #bbb;
+      padding: 0.4rem 0.6rem;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      text-align: left;
+      transition: all 0.15s;
+    }
+    .preset-btn:hover {
+      background: #2a4a6a;
+      color: #fff;
+      border-color: #5a9fd4;
+    }
+    .preset-btn.active {
+      background: #2a4a6a;
+      color: #60d5ff;
+      border-color: #60d5ff;
+    }
   </style>
 </head>
 <body>
@@ -251,49 +303,62 @@
     </header>
 
     <aside class="controls-panel">
-      <div class="preset-bar">
-        <label for="preset-select">Preset:</label>
-        <select id="preset-select">
-          <option value="">Default</option>
-          <optgroup label="Dancefloor">
-            <option value="Techno Kick Drive">Techno Kick Drive</option>
-            <option value="House Deep">House Deep</option>
-            <option value="Jungle Breakbeat">Jungle Breakbeat</option>
-            <option value="Acid Rave">Acid Rave</option>
-            <option value="Glitch IDM">Glitch IDM</option>
-            <option value="Industrial Rigid">Industrial Rigid</option>
-          </optgroup>
-          <optgroup label="World & Groove">
-            <option value="Afro Polyrhythm">Afro Polyrhythm</option>
-            <option value="Krautrock Hypnotic">Krautrock Hypnotic</option>
-            <option value="Samba Carnival">Samba Carnival</option>
-            <option value="Funk Pocket">Funk Pocket</option>
-            <option value="Bossa Nova Chill">Bossa Nova Chill</option>
-            <option value="Dub Reggae">Dub Reggae</option>
-            <option value="Downtempo Swing">Downtempo Swing</option>
-            <option value="Dancehall Riddim">Dancehall Riddim</option>
-          </optgroup>
-          <optgroup label="Ambient & Study">
-            <option value="Ambient Floating">Ambient Floating</option>
-            <option value="Lo-Fi Chill">Lo-Fi Chill</option>
-            <option value="Meditation Breath">Meditation Breath</option>
-            <option value="Warm Pad Ambient">Warm Pad Ambient</option>
-            <option value="Melancholic Lofi">Melancholic Lofi</option>
-            <option value="Glitch Ambient">Glitch Ambient</option>
-            <option value="Jazz Ambient">Jazz Ambient</option>
-            <option value="Hypnotic Minimal">Hypnotic Minimal</option>
-            <option value="Cinematic Swell">Cinematic Swell</option>
-            <option value="Tropical Ambient">Tropical Ambient</option>
-          </optgroup>
-          <optgroup label="Epic & Cinematic">
-            <option value="Synthwave Retro">Synthwave Retro</option>
-            <option value="Polymetric Drift">Polymetric Drift</option>
-            <option value="Minimal Kick Bass">Minimal Kick Bass</option>
-            <option value="Hyperpop Chaos">Hyperpop Chaos</option>
-            <option value="Space Journey">Space Journey</option>
-            <option value="Cosmic Meditation">Cosmic Meditation</option>
-          </optgroup>
-        </select>
+      <div class="preset-browser">
+        <label>Presets</label>
+
+        <details open class="preset-category">
+          <summary class="category-header">🎹 Dancefloor (6)</summary>
+          <div class="preset-list">
+            <button class="preset-btn" data-preset="Techno Kick Drive">Techno Kick Drive (120)</button>
+            <button class="preset-btn" data-preset="House Deep">House Deep (128)</button>
+            <button class="preset-btn" data-preset="Jungle Breakbeat">Jungle Breakbeat (160)</button>
+            <button class="preset-btn" data-preset="Acid Rave">Acid Rave (130)</button>
+            <button class="preset-btn" data-preset="Glitch IDM">Glitch IDM (140)</button>
+            <button class="preset-btn" data-preset="Industrial Rigid">Industrial Rigid (110)</button>
+          </div>
+        </details>
+
+        <details open class="preset-category">
+          <summary class="category-header">🌍 World & Groove (8)</summary>
+          <div class="preset-list">
+            <button class="preset-btn" data-preset="Afro Polyrhythm">Afro Polyrhythm (110)</button>
+            <button class="preset-btn" data-preset="Krautrock Hypnotic">Krautrock Hypnotic (120)</button>
+            <button class="preset-btn" data-preset="Samba Carnival">Samba Carnival (120)</button>
+            <button class="preset-btn" data-preset="Funk Pocket">Funk Pocket (110)</button>
+            <button class="preset-btn" data-preset="Bossa Nova Chill">Bossa Nova Chill (90)</button>
+            <button class="preset-btn" data-preset="Dub Reggae">Dub Reggae (90)</button>
+            <button class="preset-btn" data-preset="Downtempo Swing">Downtempo Swing (90)</button>
+            <button class="preset-btn" data-preset="Dancehall Riddim">Dancehall Riddim (95)</button>
+          </div>
+        </details>
+
+        <details open class="preset-category">
+          <summary class="category-header">🌙 Ambient & Study (10)</summary>
+          <div class="preset-list">
+            <button class="preset-btn" data-preset="Ambient Floating">Ambient Floating (90)</button>
+            <button class="preset-btn" data-preset="Lo-Fi Chill">Lo-Fi Chill (85)</button>
+            <button class="preset-btn" data-preset="Meditation Breath">Meditation Breath (60)</button>
+            <button class="preset-btn" data-preset="Warm Pad Ambient">Warm Pad Ambient (75)</button>
+            <button class="preset-btn" data-preset="Melancholic Lofi">Melancholic Lofi (90)</button>
+            <button class="preset-btn" data-preset="Glitch Ambient">Glitch Ambient (70)</button>
+            <button class="preset-btn" data-preset="Jazz Ambient">Jazz Ambient (85)</button>
+            <button class="preset-btn" data-preset="Hypnotic Minimal">Hypnotic Minimal (65)</button>
+            <button class="preset-btn" data-preset="Cinematic Swell">Cinematic Swell (100)</button>
+            <button class="preset-btn" data-preset="Tropical Ambient">Tropical Ambient (80)</button>
+          </div>
+        </details>
+
+        <details open class="preset-category">
+          <summary class="category-header">🚀 Epic & Cinematic (6)</summary>
+          <div class="preset-list">
+            <button class="preset-btn" data-preset="Synthwave Retro">Synthwave Retro (115)</button>
+            <button class="preset-btn" data-preset="Polymetric Drift">Polymetric Drift (130)</button>
+            <button class="preset-btn" data-preset="Minimal Kick Bass">Minimal Kick Bass (100)</button>
+            <button class="preset-btn" data-preset="Hyperpop Chaos">Hyperpop Chaos (145)</button>
+            <button class="preset-btn" data-preset="Space Journey">Space Journey (90)</button>
+            <button class="preset-btn" data-preset="Cosmic Meditation">Cosmic Meditation (70)</button>
+          </div>
+        </details>
       </div>
 
       <details class="panel" id="rings-panel" open>
@@ -472,7 +537,6 @@
     import { getPresetByName } from './src/state/presets.js';
     import { createPatch } from './src/state/patch.js';
 
-    const presetSelect = document.getElementById('preset-select');
     const btnAll = document.getElementById('btn-all');
     const checkboxes = document.querySelectorAll('[data-voice]');
     const voiceDropdowns = document.querySelectorAll('[data-ring-voice]');
@@ -517,6 +581,22 @@
     }
     setTimeout(syncDropdowns, 50);
 
+    // Preset browser buttons
+    const presetButtons = document.querySelectorAll('.preset-btn');
+    presetButtons.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const name = btn.dataset.preset;
+        if (playing()) stop();
+        const preset = getPresetByName(name);
+        if (preset) {
+          presetButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          await start(preset);
+          syncDropdowns();
+        }
+      });
+    });
+
     if (btnAll) {
       btnAll.addEventListener('click', () => {
         const allChecked = [...checkboxes].every(cb => cb.checked);
@@ -554,18 +634,6 @@
       }
       btnExport.disabled = false;
       setTimeout(() => { exportStatus.textContent = ''; }, 3000);
-    });
-
-    presetSelect.addEventListener('change', async () => {
-      const name = presetSelect.value;
-      if (playing()) stop();
-      if (name) {
-        const preset = getPresetByName(name);
-        if (preset) { await start(preset); syncDropdowns(); }
-      } else {
-        await start(createPatch());
-        syncDropdowns();
-      }
     });
 
     // Persist collapse state
