@@ -36,6 +36,7 @@ const wrappedVoices = voices.map((v, i) => wrapVoice(v, i));
 // --- Interaction callbacks ---
 
 function onStepToggle(ring, step) {
+  console.log(`[main] onStepToggle(ring=${ring}, step=${step})`);
   const r = currentPatch.rings[ring];
   if (!r) return;
   // Toggle: regenerate Euclidean pattern is not step-level, so we toggle
@@ -53,6 +54,7 @@ function onStepToggle(ring, step) {
 }
 
 function onProbabilityDrag(ring, step, newProb) {
+  console.log(`[main] onProbabilityDrag(ring=${ring}, step=${step}, prob=${newProb.toFixed(3)})`);
   const r = currentPatch.rings[ring];
   if (!r) return;
   r.probability = Math.max(0, Math.min(1, newProb));
@@ -60,6 +62,7 @@ function onProbabilityDrag(ring, step, newProb) {
 }
 
 function onPulsesDrag(ring, newPulses) {
+  console.log(`[main] onPulsesDrag(ring=${ring}, pulses=${newPulses})`);
   const r = currentPatch.rings[ring];
   if (!r) return;
   r.pulses = Math.max(0, Math.min(r.steps, newPulses));
@@ -67,6 +70,7 @@ function onPulsesDrag(ring, newPulses) {
 }
 
 function onRotationDrag(ring, deltaRotation) {
+  console.log(`[main] onRotationDrag(ring=${ring}, delta=${deltaRotation})`);
   const r = currentPatch.rings[ring];
   if (!r) return;
   r.rotation = ((r.rotation + deltaRotation) % r.steps + r.steps) % r.steps;
@@ -74,6 +78,7 @@ function onRotationDrag(ring, deltaRotation) {
 }
 
 function onTempoTap(deltaBPM) {
+  console.log(`[main] onTempoTap(delta=${deltaBPM})`);
   currentPatch.bpm = Math.max(60, Math.min(200, currentPatch.bpm + deltaBPM));
   setSchedulerBpm(currentPatch.bpm);
 
@@ -87,6 +92,7 @@ function onTempoTap(deltaBPM) {
 }
 
 function onPlayToggle() {
+  console.log(`[main] onPlayToggle()`);
   if (isPlaying()) {
     stop();
   } else {

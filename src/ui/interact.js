@@ -70,14 +70,18 @@ function getCanvasXY(e) {
 
 function onPointerDown(e) {
   const { x, y } = getCanvasXY(e);
-  const { cx, cy, ringSpacing, innerRadius } = getRingLayout();
+  const { cx, cy, ringSpacing, innerRadius, size } = getRingLayout();
   const { radius, angle } = toPolar(cx, cy, x, y);
 
+  console.log(`[interact] pointerdown at (${x.toFixed(1)}, ${y.toFixed(1)}) | polar: r=${radius.toFixed(1)}, a=${angle.toFixed(1)} | center=(${cx.toFixed(0)},${cy.toFixed(0)}) size=${size}`);
+
   const ring = hitRing(radius);
+  console.log(`[interact] hitRing(${radius.toFixed(1)}) = ${ring} | innerR=${innerRadius.toFixed(1)}, spacing=${ringSpacing.toFixed(1)}`);
 
   if (ring >= 0) {
     const steps = RING_STEPS[ring] || 16;
     const step = snapToStep(angle, steps);
+    console.log(`[interact] Ring ${ring} hit! step=${step} (angle=${angle.toFixed(1)}, steps=${steps})`);
 
     // Start tracking for potential drag
     dragging = true;
@@ -90,13 +94,14 @@ function onPointerDown(e) {
     canvas.setPointerCapture(e.pointerId);
     e.preventDefault();
   } else if (isInCenter(radius)) {
-    // Tempo tap — center click adjusts BPM
+    console.log(`[interact] Center hit — tempo tap`);
     if (callbacks.onTempoTap) {
-      // Left half = -1, right half = +1
       const delta = x < cx ? -1 : 1;
       callbacks.onTempoTap(delta);
     }
     e.preventDefault();
+  } else {
+    console.log(`[interact] No hit — radius ${radius.toFixed(1)} doesn't match any ring or center`);
   }
 }
 
@@ -115,19 +120,18 @@ function onPointerMove(e) {
   if (!dragType) {
     if (radialDelta > 8) {
       dragType = 'probability';
+      console.log(`[interact] Drag type: PROBABILITY (radial delta=${radialDelta.toFixed(1)}px)`);
     } else if (angularDelta > 10) {
       dragType = 'rotation';
+      console.log(`[interact] Drag type: ROTATION (angular delta=${angularDelta.toFixed(1)}deg)`);
     } else {
       return; // not enough movement yet
     }
   }
 
   if (dragType === 'probability') {
-    // Map radial distance from ring center to probability 0.1–1.0
-    // Outward = higher probability, inward = lower
     const tolerance = ringSpacing * 0.4;
     const offset = radius - ringRadius;
-    // Normalize: -tolerance to +tolerance → 0.1 to 1.0
     const normalized = (offset + tolerance) / (tolerance * 2);
     const prob = Math.max(0.1, Math.min(1.0, normalized));
 
@@ -135,17 +139,16 @@ function onPointerMove(e) {
       callbacks.onProbabilityDrag(dragRing, dragStep, prob);
     }
   } else if (dragType === 'rotation') {
-    // Angular movement → rotation in steps
     const steps = RING_STEPS[dragRing] || 16;
     const stepSize = 360 / steps;
     const deltaAngle = angle - dragStartAngle;
-    // Normalize to [-180, 180] to handle wrap
     const wrapped = ((deltaAngle + 180) % 360 + 360) % 360 - 180;
     const deltaSteps = Math.round(wrapped / stepSize);
 
     if (deltaSteps !== 0 && callbacks.onRotationDrag) {
+      console.log(`[interact] Rotation: delta=${deltaSteps} steps`);
       callbacks.onRotationDrag(dragRing, deltaSteps);
-      dragStartAngle = angle; // reset for incremental deltas
+      dragStartAngle = angle;
     }
   }
 
@@ -153,21 +156,24 @@ function onPointerMove(e) {
 }
 
 function onPointerUp(e) {
-  if (!dragging) return;
-
-  const { x, y } = getCanvasXY(e);
-  const { cx, cy } = getRingLayout();
-  const { radius, angle } = toPolar(cx, cy, x, y);
+  if (!dragging) {
+    console.log(`[interact] pointerup but not dragging — ignored`);
+    return;
+  }
 
   // If no drag type was determined, this was a click (not a drag)
   if (!dragType) {
-    const steps = RING_STEPS[dragRing] || 16;
-    const step = snapToStep(angle, steps);
-
+    // Use the step saved from pointerDown — re-snapping at the up position
+    // can miss due to sub-pixel movement between down and up events.
+    console.log(`[interact] CLICK detected: ring=${dragRing}, step=${dragStep}`);
     if (callbacks.onStepToggle) {
-      // Toggle — the callback decides the new state
-      callbacks.onStepToggle(dragRing, step, undefined);
+      console.log(`[interact] Calling onStepToggle(${dragRing}, ${dragStep})`);
+      callbacks.onStepToggle(dragRing, dragStep, undefined);
+    } else {
+      console.log(`[interact] WARNING: no onStepToggle callback registered!`);
     }
+  } else {
+    console.log(`[interact] Drag ended: type=${dragType}, ring=${dragRing}`);
   }
 
   dragging = false;
@@ -198,13 +204,13 @@ function onKeyDown(e) {
       e.preventDefault();
       break;
 
-    case 'Equal':      // + key
+    case 'Equal':
     case 'NumpadAdd':
       if (callbacks.onTempoTap) callbacks.onTempoTap(1);
       e.preventDefault();
       break;
 
-    case 'Minus':      // - key
+    case 'Minus':
     case 'NumpadSubtract':
       if (callbacks.onTempoTap) callbacks.onTempoTap(-1);
       e.preventDefault();
@@ -215,26 +221,26 @@ function onKeyDown(e) {
 // --- Touch prevention ---
 
 function onTouchStart(e) {
-  // Prevent default touch behavior (scrolling) on the canvas
   if (e.target === canvas) e.preventDefault();
 }
 
 /**
  * Attach interaction listeners to the canvas.
  * options.ringSteps can override the default step counts per ring.
- *
- * @param {HTMLCanvasElement} canvasEl
- * @param {object} opts — callback map
  */
 export function startInteraction(canvasEl, opts = {}) {
   canvas = canvasEl;
   callbacks = opts;
+
+  console.log(`[interact] startInteraction called — canvas=${canvas?.tagName}, size=${canvas?.width}x${canvas?.height}`);
+  console.log(`[interact] Callbacks registered:`, Object.keys(callbacks).filter(k => typeof callbacks[k] === 'function'));
 
   if (opts.ringSteps) {
     for (let i = 0; i < opts.ringSteps.length && i < RING_COUNT; i++) {
       RING_STEPS[i] = opts.ringSteps[i];
     }
   }
+  console.log(`[interact] Ring steps:`, [...RING_STEPS]);
 
   canvas.addEventListener('pointerdown', onPointerDown);
   canvas.addEventListener('pointermove', onPointerMove);
@@ -242,6 +248,8 @@ export function startInteraction(canvasEl, opts = {}) {
   canvas.addEventListener('pointercancel', onPointerUp);
   document.addEventListener('keydown', onKeyDown);
   canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+
+  console.log(`[interact] Listeners attached to canvas`);
 
   cleanup = [
     () => canvas.removeEventListener('pointerdown', onPointerDown),
@@ -257,6 +265,7 @@ export function startInteraction(canvasEl, opts = {}) {
  * Remove all interaction listeners and reset state.
  */
 export function stopInteraction() {
+  console.log(`[interact] stopInteraction called`);
   for (const fn of cleanup) fn();
   cleanup = [];
   canvas = null;
