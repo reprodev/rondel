@@ -388,6 +388,16 @@
       margin-right: 0.2rem;
     }
 
+    /* --- Tab Help Text --- */
+    .tab-help {
+      margin-top: 1rem;
+      padding: 0.6rem 0.5rem;
+      font-size: 0.75rem;
+      color: #666;
+      line-height: 1.5;
+      border-top: 1px solid #2a2a2a;
+    }
+
     /* --- Narrow / Snapped viewport (< 700px) — Bottom Sheet --- */
     @media (max-width: 699px) {
       .app-main {
@@ -688,6 +698,7 @@
               </div>
             </div>
             <button id="btn-all">All</button>
+            <p class="tab-help">Your groove is built from 5 layers. Pick an instrument for each, mute what you don't need, and click rings on the canvas to edit patterns.</p>
           </div>
 
           <!-- Export Tab -->
@@ -701,6 +712,7 @@
             </div>
             <button id="btn-export" class="export-btn">Export WAV</button>
             <span id="export-status" class="export-status"></span>
+            <p class="tab-help">Download a high-quality recording of your groove. Go longer for more variation and let the pattern breathe. Once exported, it's yours to share, remix, or release.</p>
           </div>
         </div>
 
@@ -769,6 +781,18 @@
         tabPanes.forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById(`pane-${target}`).classList.add('active');
+      });
+    });
+
+    // --- Accordion preset categories (only one open at a time) ---
+    const presetCategories = document.querySelectorAll('.preset-category');
+    presetCategories.forEach(details => {
+      details.addEventListener('toggle', () => {
+        if (details.open) {
+          presetCategories.forEach(other => {
+            if (other !== details) other.open = false;
+          });
+        }
       });
     });
 

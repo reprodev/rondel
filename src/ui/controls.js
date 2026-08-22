@@ -55,18 +55,6 @@ const STYLES = `
     0%, 100% { border-color: #666; box-shadow: 0 0 0 0 rgba(78, 201, 110, 0); }
     50% { border-color: #4ec96e; box-shadow: 0 0 8px 2px rgba(78, 201, 110, 0.3); }
   }
-  .rondel-keyboard-hint {
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    font-family: monospace;
-    font-size: 0.65em;
-    color: #e0e0e0;
-    opacity: 0.5;
-    pointer-events: none;
-    line-height: 1.6;
-    text-align: right;
-  }
   .rondel-modal-overlay {
     position: fixed;
     inset: 0;
@@ -204,16 +192,6 @@ export function initControls() {
   playBtn.textContent = '\u25B6'; // ▶
   playBtn.setAttribute('aria-label', 'Play');
   root.appendChild(playBtn);
-
-  // Keyboard hints (fixed position)
-  keyboardHintEl = document.createElement('div');
-  keyboardHintEl.className = 'rondel-keyboard-hint';
-  keyboardHintEl.innerHTML = [
-    'Space: play/stop',
-    '\u2190\u2192: rotate',
-    '+/\u2212: tempo',
-  ].join('<br>');
-  document.body.appendChild(keyboardHintEl);
 
   // Modal overlay (hidden)
   modalOverlay = document.createElement('div');
