@@ -14,9 +14,6 @@
       line-height: 1.6;
     }
     h1 { margin-bottom: 1rem; font-size: 1.4rem; }
-    .controls {
-      margin-bottom: 1rem;
-    }
     button {
       font-family: inherit;
       font-size: 1rem;
@@ -31,15 +28,10 @@
     button:hover { background: #444; }
     button:active { background: #555; }
     button:disabled { opacity: 0.4; cursor: not-allowed; }
-    #status {
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-      color: #888;
-    }
     #canvas-placeholder {
       width: 100%;
       max-width: 600px;
-      height: 300px;
+      height: 600px;
       background: #111;
       border: 1px solid #333;
       border-radius: 8px;
@@ -89,11 +81,6 @@
 </head>
 <body>
   <h1>Rondel</h1>
-  <div class="controls">
-    <button id="btn-play">&#9654; Play</button>
-    <button id="btn-stop" disabled>&#9632; Stop</button>
-  </div>
-  <p id="status">Ready</p>
   <div id="canvas-placeholder">Canvas will render here</div>
 
   <div class="voice-selection">
@@ -111,10 +98,7 @@
   <script type="module">
     import { start, stop, playing, setActiveVoices } from './src/main.js';
 
-    const btnPlay = document.getElementById('btn-play');
-    const btnStop = document.getElementById('btn-stop');
     const btnAll = document.getElementById('btn-all');
-    const status = document.getElementById('status');
     const checkboxes = document.querySelectorAll('[data-voice]');
 
     function getSelectedVoices() {
@@ -137,27 +121,6 @@
       const allChecked = [...checkboxes].every(cb => cb.checked);
       checkboxes.forEach(cb => { cb.checked = !allChecked; });
       onVoiceChange();
-    });
-
-    btnPlay.addEventListener('click', async () => {
-      btnPlay.disabled = true;
-      status.textContent = 'Starting...';
-
-      try {
-        await start({ bpm: 120, activeVoices: getSelectedVoices() });
-        status.textContent = 'Playing at 120 BPM';
-        btnStop.disabled = false;
-      } catch (e) {
-        status.textContent = `Error: ${e.message}`;
-        btnPlay.disabled = false;
-      }
-    });
-
-    btnStop.addEventListener('click', () => {
-      stop();
-      status.textContent = 'Stopped';
-      btnPlay.disabled = false;
-      btnStop.disabled = true;
     });
   </script>
 </body>

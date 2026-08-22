@@ -5,6 +5,7 @@ import { getCanvas, getMetrics, resizeCanvas } from './canvas.js';
 import { toCartesian } from './geometry.js';
 import { oklchToHex } from './oklch.js';
 import { add as addAnimation, update as updateAnimations, draw as drawAnimations } from './animations.js';
+import { bjorklund, rotate } from '../gen/euclid.js';
 
 // --- State ---
 let animFrameId = null;
@@ -51,19 +52,19 @@ export function pushEvent(ring, step, time) {
  */
 export function startDrawLoop(options = {}) {
   const { canvas, ctx } = getCanvas();
-  
+
   bpm = options.bpm || 120;
   const stepsPerLoop = options.stepsPerLoop || 16;
   secondsPerLoop = (60 / bpm) / (stepsPerLoop / 4) * stepsPerLoop;
   loopStartTime = options.loopStartTime || 0;
-  
+
   if (options.rings) rings = options.rings;
   if (options.activeVoices) activeVoices = new Set(options.activeVoices);
-  
+
   generatePalette(options.seed || 12345);
-  
+
   if (animFrameId) cancelAnimationFrame(animFrameId);
-  
+
   function frame() {
     animFrameId = requestAnimationFrame(frame);
     render(ctx);
@@ -97,34 +98,36 @@ export function setActiveVoices(indices) {
   activeVoices = new Set(indices);
 }
 
+/**
+ * Update the rings data used for rendering. Call this after any ring
+ * mutation (pulses, rotation, probability) so the canvas reflects
+ * the live patch state on the next frame.
+ */
+export function updateRings(newRings) {
+  rings = newRings;
+}
+
 // --- Render ---
 
 function render(ctx) {
   const { size, cx, cy } = getMetrics();
   const now = performance.now();
-  
+
   // Clear
   ctx.clearRect(0, 0, size, size);
   ctx.fillStyle = '#111111';
   ctx.fillRect(0, 0, size, size);
-  
-  // Compute playhead phase from AudioContext time if available
+
+  // Compute playhead phase
   let phase = 0;
-  try {
-    const audioCtx = document.querySelector('canvas')?._audioCtx;
-    // Fallback: use performance.now-based phase
-    if (loopStartTime > 0 && secondsPerLoop > 0) {
-      // Convert performance.now to approximate audio time relationship
-      phase = ((now / 1000 - loopStartTime) / secondsPerLoop) % 1;
-      if (phase < 0) phase += 1;
-    }
-  } catch (e) {
-    phase = 0;
+  if (loopStartTime > 0 && secondsPerLoop > 0) {
+    phase = ((now / 1000 - loopStartTime) / secondsPerLoop) % 1;
+    if (phase < 0) phase += 1;
   }
-  
+
   const ringSpacing = (size * 0.4) / 5;
   const innerRadius = size * 0.12;
-  
+
   // Draw rings and step markers
   for (let r = 0; r < 5; r++) {
     const radius = innerRadius + (r + 1) * ringSpacing;
@@ -133,7 +136,10 @@ function render(ctx) {
     const color = palette[r] || '#888';
     const isActive = activeVoices.has(r);
     const dimAlpha = isActive ? 1.0 : 0.3;
-    
+
+    // Generate the actual rotated Euclidean pattern — matches scheduler logic
+    const pattern = rotate(bjorklund(ring.steps, ring.pulses), ring.rotation);
+
     // Ring circle (subtle guide)
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
@@ -142,20 +148,20 @@ function render(ctx) {
     ctx.lineWidth = 1;
     ctx.stroke();
     ctx.globalAlpha = 1;
-    
+
     // Step markers
     for (let s = 0; s < steps; s++) {
       const angle = (s / steps) * 360;
       const { x, y } = toCartesian(cx, cy, radius, angle);
-      const isActive_step = s < ring.pulses; // simplified: first N steps are active
-      const markerRadius = isActive_step
+      const isActiveStep = pattern[s];
+      const markerRadius = isActiveStep
         ? 3 + ring.probability * 3   // 3–6px for active
         : 2.5;                         // small for inactive
-      
+
       ctx.beginPath();
       ctx.arc(x, y, markerRadius, 0, Math.PI * 2);
-      
-      if (isActive_step) {
+
+      if (isActiveStep) {
         ctx.fillStyle = color;
         ctx.globalAlpha = 0.85 * dimAlpha;
         ctx.fill();
@@ -168,12 +174,12 @@ function render(ctx) {
       ctx.globalAlpha = 1;
     }
   }
-  
+
   // Playhead — line from center to outer ring
   const outerRadius = innerRadius + 5 * ringSpacing + 10;
   const playheadAngle = phase * 360;
   const { x: phX, y: phY } = toCartesian(cx, cy, outerRadius, playheadAngle);
-  
+
   ctx.beginPath();
   ctx.moveTo(cx, cy);
   ctx.lineTo(phX, phY);
@@ -182,7 +188,7 @@ function render(ctx) {
   ctx.lineWidth = 1.5;
   ctx.stroke();
   ctx.globalAlpha = 1;
-  
+
   // Playhead dot
   ctx.beginPath();
   ctx.arc(phX, phY, 4, 0, Math.PI * 2);
@@ -190,7 +196,7 @@ function render(ctx) {
   ctx.globalAlpha = 0.9;
   ctx.fill();
   ctx.globalAlpha = 1;
-  
+
   // Process pending hit events → spawn animations
   while (pendingEvents.length > 0) {
     const evt = pendingEvents.shift();
@@ -205,7 +211,7 @@ function render(ctx) {
       duration: 0.450,
     });
   }
-  
+
   // Update and draw animations
   updateAnimations(now);
   drawAnimations(ctx, palette);

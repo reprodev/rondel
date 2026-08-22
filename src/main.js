@@ -11,7 +11,7 @@ import {
 } from './audio/scheduler.js';
 import { kick, snare, hat, bass, poly } from './audio/voices/index.js';
 import { initNoise } from './audio/noise.js';
-import { startDrawLoop, stopDrawLoop, pushEvent, syncTiming, setActiveVoices as setRadialActiveVoices } from './ui/radial.js';
+import { startDrawLoop, stopDrawLoop, pushEvent, syncTiming, setActiveVoices as setRadialActiveVoices, updateRings } from './ui/radial.js';
 import { getCanvas } from './ui/canvas.js';
 import { startInteraction, stopInteraction } from './ui/interact.js';
 import * as Controls from './ui/controls.js';
@@ -23,9 +23,23 @@ import { bjorklund, rotate } from './gen/euclid.js';
 let currentPatch = createPatch();
 const voices = [kick, snare, hat, bass, poly];
 
-// Wrap each voice to push a visual event on every trigger
+// Wrap each voice to check the Euclidean pattern before playing.
+// This is where rotation, pulses, and probability actually gate the audio.
 function wrapVoice(voiceFn, ringIndex) {
   return (ctx, destination, time, params) => {
+    const ring = currentPatch.rings[ringIndex];
+    if (!ring) return;
+
+    // Generate the rotated Euclidean pattern for this ring
+    const pattern = rotate(bjorklund(ring.steps, ring.pulses), ring.rotation);
+
+    // Gate: only play if this step is active in the pattern
+    const stepInPattern = params.step % ring.steps;
+    if (!pattern[stepInPattern]) return;
+
+    // Probability gate: skip randomly based on ring probability
+    if (ring.probability < 1.0 && Math.random() > ring.probability) return;
+
     voiceFn(ctx, destination, time, params);
     pushEvent(ringIndex, params.step, time);
   };
@@ -39,17 +53,13 @@ function onStepToggle(ring, step) {
   console.log(`[main] onStepToggle(ring=${ring}, step=${step})`);
   const r = currentPatch.rings[ring];
   if (!r) return;
-  // Toggle: regenerate Euclidean pattern is not step-level, so we toggle
-  // the pulse count up/down by 1 as a simple interaction. For true step
-  // toggling we'd need a per-step mask — for now, adjust pulses.
-  // This is a simplified toggle: if the step would be active in the current
-  // pattern, reduce pulses; otherwise increase.
   const pattern = rotate(bjorklund(r.steps, r.pulses), r.rotation);
   if (pattern[step]) {
     r.pulses = Math.max(0, r.pulses - 1);
   } else {
     r.pulses = Math.min(r.steps, r.pulses + 1);
   }
+  updateRings(currentPatch.rings);
   Controls.updateStatus(currentPatch, isPlaying(), currentPatch.bpm);
 }
 
@@ -58,6 +68,7 @@ function onProbabilityDrag(ring, step, newProb) {
   const r = currentPatch.rings[ring];
   if (!r) return;
   r.probability = Math.max(0, Math.min(1, newProb));
+  updateRings(currentPatch.rings);
   Controls.updateStatus(currentPatch, isPlaying(), currentPatch.bpm);
 }
 
@@ -66,6 +77,7 @@ function onPulsesDrag(ring, newPulses) {
   const r = currentPatch.rings[ring];
   if (!r) return;
   r.pulses = Math.max(0, Math.min(r.steps, newPulses));
+  updateRings(currentPatch.rings);
   Controls.updateStatus(currentPatch, isPlaying(), currentPatch.bpm);
 }
 
@@ -74,6 +86,7 @@ function onRotationDrag(ring, deltaRotation) {
   const r = currentPatch.rings[ring];
   if (!r) return;
   r.rotation = ((r.rotation + deltaRotation) % r.steps + r.steps) % r.steps;
+  updateRings(currentPatch.rings);
   Controls.updateStatus(currentPatch, isPlaying(), currentPatch.bpm);
 }
 
@@ -96,19 +109,27 @@ function onPlayToggle() {
   if (isPlaying()) {
     stop();
   } else {
-    start(currentPatch);
+    start();
   }
 }
 
 // --- Public API ---
 
 /**
- * Start playback with the given patch data.
- * Ensures AudioContext is running, initializes noise buffer,
- * starts the scheduler, begins the draw loop, and wires interactions.
+ * Start playback with optional patch overrides.
+ * Merges patchData into currentPatch rather than replacing it, so callers
+ * can pass partial objects (e.g., { bpm, activeVoices }) without losing
+ * the full patch structure (rings, arrangement, etc.).
  */
 export async function start(patchData) {
-  currentPatch = patchData || currentPatch;
+  // Merge partial patchData into currentPatch
+  if (patchData && patchData !== currentPatch) {
+    if (patchData.bpm !== undefined) currentPatch.bpm = patchData.bpm;
+    if (patchData.activeVoices !== undefined) currentPatch.activeVoices = patchData.activeVoices;
+    if (patchData.seed !== undefined) currentPatch.seed = patchData.seed;
+    if (patchData.rings) currentPatch.rings = patchData.rings;
+  }
+
   const ctx = await ensureResumed();
 
   // Noise buffer must exist before snare/hat can play
