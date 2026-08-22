@@ -3,85 +3,90 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rondel — AudioContext Test</title>
+  <title>Rondel</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: monospace;
+      font-family: 'SF Mono', 'Fira Code', monospace;
       background: #1a1a1a;
       color: #e0e0e0;
       padding: 2rem;
+      line-height: 1.6;
     }
-    h1 { margin-bottom: 1rem; }
-    #state { margin-bottom: 1rem; }
-    #btn-play {
-      font-family: monospace;
+    h1 { margin-bottom: 1rem; font-size: 1.4rem; }
+    .controls {
+      margin-bottom: 1rem;
+    }
+    button {
+      font-family: inherit;
       font-size: 1rem;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1.2rem;
       cursor: pointer;
       background: #333;
       color: #e0e0e0;
       border: 1px solid #555;
       border-radius: 4px;
-      margin-bottom: 1rem;
+      margin-right: 0.5rem;
     }
-    #btn-play:hover { background: #444; }
-    #log {
+    button:hover { background: #444; }
+    button:active { background: #555; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    #status {
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+    #canvas-placeholder {
+      width: 100%;
+      max-width: 600px;
+      height: 300px;
       background: #111;
-      padding: 1rem;
-      border-radius: 4px;
-      max-height: 300px;
-      overflow-y: auto;
+      border: 1px solid #333;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
       font-size: 0.85rem;
-      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
-  <h1>Rondel — AudioContext Test</h1>
-  <p id="state">Context state: <span>not created</span></p>
-  <button id="btn-play">&#9654; Play</button>
-  <pre id="log"></pre>
+  <h1>Rondel</h1>
+  <div class="controls">
+    <button id="btn-play">&#9654; Play</button>
+    <button id="btn-stop" disabled>&#9632; Stop</button>
+  </div>
+  <p id="status">Ready</p>
+  <div id="canvas-placeholder">Canvas will render here</div>
 
   <script type="module">
-    import { getContext, ensureResumed, addResumeListener } from './src/audio/context.js';
+    import { start, stop, playing } from './src/main.js';
 
-    const stateSpan = document.querySelector('#state span');
-    const logEl = document.getElementById('log');
-    const btn = document.getElementById('btn-play');
+    const btnPlay = document.getElementById('btn-play');
+    const btnStop = document.getElementById('btn-stop');
+    const status = document.getElementById('status');
 
-    let lastState = null;
-
-    function log(msg) {
-      const ts = new Date().toLocaleTimeString('en-US', { hour12: false });
-      logEl.textContent += `[${ts}] ${msg}\n`;
-      logEl.scrollTop = logEl.scrollHeight;
-    }
-
-    addResumeListener(() => {
-      log('Context resumed!');
-    });
-
-    btn.addEventListener('click', async () => {
-      log('Play clicked — calling ensureResumed()');
-      await ensureResumed();
-      log('ensureResumed() resolved');
-    });
-
-    setInterval(() => {
-      let current = 'not created';
+    btnPlay.addEventListener('click', async () => {
+      btnPlay.disabled = true;
+      status.textContent = 'Starting...';
+      
       try {
-        const ctx = getContext();
-        current = ctx.state;
+        await start({ bpm: 120 });
+        status.textContent = 'Playing at 120 BPM';
+        btnStop.disabled = false;
       } catch (e) {
-        // context not available
+        status.textContent = `Error: ${e.message}`;
+        btnPlay.disabled = false;
       }
-      stateSpan.textContent = current;
-      if (current !== lastState) {
-        log(`State changed: ${lastState} -> ${current}`);
-        lastState = current;
-      }
-    }, 500);
+    });
+
+    btnStop.addEventListener('click', () => {
+      stop();
+      status.textContent = 'Stopped';
+      btnPlay.disabled = false;
+      btnStop.disabled = true;
+    });
   </script>
 </body>
 </html>
