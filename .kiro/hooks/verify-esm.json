@@ -1,0 +1,11 @@
+﻿{
+  "version": "v1",
+  "hooks": [{
+    "name": "Verify ESM Module",
+    "trigger": "PreTaskExec",
+    "action": {
+      "type": "command",
+      "command": "node .kiro/hooks/verify-esm.cjs"
+    }
+  }]
+}
