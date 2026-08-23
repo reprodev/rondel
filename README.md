@@ -1,56 +1,60 @@
-# Rondel
+# 🎵 Rondel
 
-**Make music in your browser to share, export or remix. Presets so you don't need to know everything and just start creating.**
+<div align="center">
 
-Rondel is a browser-based music maker powered by Euclidean rhythms. No install, no account, no copyright worries — just pick a preset, tweak it, and export.
+**A generative Euclidean rhythm sequencer that runs entirely in your browser.**
 
-### What's a Euclidean rhythm?
+Make music to share, export or remix. Presets so you don't need to know everything — just start creating.
 
-It's a way of spreading beats as evenly as possible across a pattern. Put 3 beats into 8 steps and the algorithm spaces them out naturally — the same spacing found in West African djembe patterns, Cuban tresillo, and countless other rhythms across cultures. You don't need to know any of this to use Rondel — the presets handle it — but it's why everything sounds musical instead of random.
+[**Try it live →**](https://rondel.reprodev.com)
 
-## Why Rondel exists
+</div>
 
-Getting music for a project shouldn't be hard. Whether you need a background beat for a YouTube video, a loop to rap over, or a MIDI file to drop into your DAW for sampling — the usual path involves expensive software, subscription limits, or hours searching for something that fits.
+---
 
-Rondel was built out of that frustration. The creator wanted a quick way to generate a beat as a MIDI and WAV file while working on sampling vocal tracks from an advert he remembered. Instead of spending hours in a full DAW just to get a rhythm bed, Rondel lets you have something usable in seconds — so you can focus on the creative work that actually matters.
+Instead of expensive DAWs, subscription limits, or hours searching for the right loop — Rondel gives you a usable beat in seconds. Pick a preset, tweak it, export as WAV or MIDI. It's yours. No account, no install, no copyright worries.
 
-It's also designed for people who aren't musicians. You don't need to understand time signatures or synthesis. Pick a preset, change the key if you want, export, done. You made that. It's yours.
+The sequencer uses Euclidean rhythms — a mathematical way of spacing beats as evenly as possible. The same patterns found in West African djembe, Cuban tresillo, and countless other musical traditions. You don't need to know any of this — the presets handle it — but it's why everything sounds musical instead of random.
 
-## Who is this for
+## Demo
 
-- **Content creators** who need background music without copyright strikes
-- **Rappers and producers** looking for quick beat ideas or loop material
-- **Non-musicians** who want to make something without music theory
-- **Students** exploring generative music and Euclidean rhythms
-- **Anyone** who wants a beat or background music fast without opening a DAW
+> **[rondel.reprodev.com](https://rondel.reprodev.com)** — Open on any device. Works on phone, tablet, and desktop.
 
-## What makes it different
-
-- **Zero friction** — no install, no signup, no download. Open in a browser and go.
-- **Platform agnostic** — works on phone, tablet, laptop. No need to remote into a powerful machine.
-- **Lightweight** — no RAM-heavy DAW. Just a web page with Web Audio synthesis.
-- **You own it** — everything you make is yours. No subscription limits on exports.
-- **WAV + MIDI** — export both instantly. Drop the MIDI into Ableton, GarageBand, FL Studio, or whatever you use.
-- **75 presets across 5 genres** — Dancefloor, World & Groove, Ambient & Study, Epic & Cinematic, Vocal & Chorus.
-- **30 instruments** — drums, bass, melodic, pads, vocal textures. Assign any to any ring.
-- **Key and scale** — change the musical key with one click. No theory needed.
-- **Share links** — copy a URL that recreates your exact patch. Send it to anyone.
+Pick a preset from the sidebar, hit play, change the key — export when you're happy. Everything synthesised in real-time with Web Audio.
 
 ## Features
 
 | Feature | Details |
 |---------|---------|
-| Voices | 30 synthesized instruments (Web Audio, no samples) |
-| Presets | 75 curated across 5 categories |
-| Export | WAV (any duration) + MIDI (4 bars) |
-| Key/Scale | 15 keys × 9 scales |
-| BPM | 40–200, adjustable live |
-| Rings | 5 concurrent Euclidean rhythm layers |
-| Sharing | URL-encoded patch state |
-| Mobile | Responsive — phone, tablet, desktop |
-| Dependencies | Zero. Pure ESM, no build step. |
+| 🎹 Voices | 30 synthesised instruments (Web Audio, zero samples) |
+| 🎛️ Presets | 75 curated across 5 categories |
+| 📤 Export | WAV (any duration) + MIDI (4 bars) |
+| 🎵 Key/Scale | 15 keys × 9 scales |
+| ⏱️ BPM | 40–200, adjustable live |
+| 🔵 Rings | 5 concurrent Euclidean rhythm layers |
+| 🔗 Sharing | URL-encoded patch state — share with one link |
+| 📱 Mobile | Fully responsive with bottom sheet UI |
+| 📦 Dependencies | Zero. Pure ESM, no build step |
 
-## Getting started
+## Who Is This For
+
+- **Content creators** — background music without copyright strikes
+- **Rappers and producers** — quick beat ideas, loop material, MIDI to drop into your DAW
+- **Non-musicians** — make something without music theory
+- **Students** — explore generative music and Euclidean rhythms
+- **Anyone** — who wants a beat fast without opening a DAW
+
+## What Makes It Different
+
+- **Zero friction** — no install, no signup, no download
+- **Platform agnostic** — phone, tablet, laptop. No powerful machine needed
+- **Lightweight** — no RAM-heavy DAW, just a web page
+- **You own it** — everything you export is yours, no subscription limits
+- **WAV + MIDI** — drop the MIDI into Ableton, GarageBand, FL Studio, whatever you use
+- **30 instruments** — drums, bass, melodic, pads, vocal textures. Assign any to any ring
+- **Share links** — URL recreates your exact patch. Send it to anyone
+
+## Getting Started
 
 ### Option 1: Just open it
 
@@ -67,11 +71,6 @@ npm start
 # → http://localhost:3000
 ```
 
-Or without npm:
-```bash
-node serve.js
-```
-
 ### Option 3: Docker
 
 ```bash
@@ -86,26 +85,25 @@ docker run -p 3000:3000 rondel
 # Python
 python3 -m http.server 3000
 
-# npx (no install needed)
+# npx
 npx serve .
 ```
 
-## Deploying to the web
+## Deploying
 
 ### GitHub Pages
 
 1. Push this repo to GitHub
-2. Go to **Settings → Pages**
-3. Source: **Deploy from a branch** → `main` → `/ (root)`
-4. Your app is live at `https://yourusername.github.io/rondel`
+2. **Settings → Pages → Deploy from branch** → `main` → `/ (root)`
+3. Live at `https://yourusername.github.io/rondel`
 
-All paths are relative so it works on any subpath. The Dockerfile, package.json, and test files don't affect the site — browsers only load what index.html references.
+All paths are relative — works on any subpath. The Dockerfile, package.json, and test files don't affect the site.
 
 ### Netlify / Vercel / Cloudflare Pages
 
-Connect the repo. No build command needed. Publish directory: `.` (root). Deploys on every push.
+Connect the repo. No build command. Publish directory: `.` (root). Deploys on push.
 
-## How to use
+## How To Use
 
 1. **Pick a preset** — browse by category or search by name
 2. **Hit play** — press Space or click the play button
@@ -113,7 +111,32 @@ Connect the repo. No build command needed. Publish directory: `.` (root). Deploy
 4. **Edit patterns** — click rings on the canvas to add/remove beats
 5. **Export** — WAV for audio, MIDI for your DAW, or copy a share link
 
-## Running tests
+## Project Structure
+
+```
+rondel/
+├── index.html          ← The app (HTML + CSS + inline script)
+├── serve.js            ← Zero-dependency dev server
+├── package.json        ← npm start/test scripts
+├── Dockerfile          ← Containerised deployment
+├── src/
+│   ├── audio/          ← 30 voice synths, scheduler, master chain, export
+│   ├── ui/             ← Canvas renderer, interactions, controls
+│   ├── gen/            ← Euclidean algorithm, scales, melody generation
+│   └── state/          ← Patch schema, 75 presets, URL codec
+├── test/               ← 263 unit tests across 14 files
+└── README.md
+```
+
+## Tech Stack
+
+- Pure JavaScript (ES modules)
+- Web Audio API for synthesis
+- Canvas 2D for radial visualisation
+- No framework, no bundler, no dependencies
+- Node.js only needed for local dev server and tests
+
+## Tests
 
 ```bash
 npm test
@@ -121,37 +144,33 @@ npm test
 
 263 tests across 14 test files covering all pure modules.
 
-## Tech stack
+## Why Rondel Exists
 
-- Pure JavaScript (ES modules)
-- Web Audio API for synthesis
-- Canvas 2D for the radial visualisation
-- No framework, no bundler, no dependencies
-- Node.js only needed for local dev server and tests
+Getting music for a project shouldn't be hard. Whether you need a background beat for a video, a loop to rap over, or a MIDI file to drop into your DAW — the usual path involves expensive software, subscription limits, or hours searching.
 
-## Project structure
-
-```
-index.html       — the app (HTML + CSS + inline script)
-serve.js         — zero-dependency dev server
-package.json     — npm start/test scripts
-Dockerfile       — containerised deployment
-src/
-  audio/         — 30 voice synths, scheduler, master chain, WAV/MIDI export
-  ui/            — canvas renderer, interaction handlers, controls
-  gen/           — Euclidean algorithm, scales, melody generation
-  state/         — patch schema, validation, 75 presets, URL codec
-test/            — unit tests for all pure modules
-```
+Rondel was built out of that frustration. The creator wanted a quick way to generate a beat as a MIDI and WAV file while working on sampling vocal tracks. Instead of spending hours in a full DAW just to get a rhythm bed, Rondel gives you something usable in seconds — so you can focus on the creative work that actually matters.
 
 ## License
 
 MIT — this project is open-source. Fork it, remix it, build on it, make it your own.
 
-All audio you export is yours — no attribution required for the music you create but it would be nice if you did.
+All audio you export is yours — no attribution required for the music you create.
+
+## Built With Kiro
+
+This project was built using [Kiro IDE](https://kiro.dev):
+
+- **Steering** — Project context loaded into every session
+- **Spec-driven development** — Requirements → Design → Tasks workflow
+- **Collaborative authoring** — All code written in partnership with Kiro
+- **Iterative development** — Visible in commit history from first synth to final polish
 
 ---
 
-Built with [Kiro](https://kiro.dev), Web Audio, Euclidean rhythms, and the belief that making music should be as easy as pressing play.
+<div align="center">
 
-Created for the [Ready, Spec, Ship 2026 Hackathon](https://codingagents.fyi/hackathon/kiro/) sponsored by [Kiro](https://kiro.dev).
+🎵 **The rhythm is yours.**
+
+Built using [Kiro](https://kiro.dev) for the [Ready, Spec, Ship 2026 Hackathon](https://codingagents.fyi/hackathon/kiro/) by [codingagents.fyi](https://codingagents.fyi) — Sponsored by [Kiro](https://kiro.dev)
+
+</div>
