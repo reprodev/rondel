@@ -1121,7 +1121,7 @@
               </div>
             </div>
             <button id="btn-all">All</button>
-            <p class="tab-help">Your groove is built from 5 layers. Pick an instrument for each, mute what you don't need, and click rings on the canvas to edit patterns.</p>
+            <p class="tab-help">Your groove is built from 5 layers with 30 instruments to choose from. Set the key and scale to shape the harmony, adjust BPM for tempo, and click rings on the canvas to edit patterns.</p>
           </div>
 
           <!-- Export Tab -->
@@ -1139,7 +1139,7 @@
             </div>
             <span id="export-status" class="export-status"></span>
             <button id="btn-share" class="share-btn">&#128279; Copy Share Link</button>
-            <p class="tab-help">Download a high-quality recording of your groove. Go longer for more variation and let the pattern breathe. Once exported, it's yours to share, remix, or release.</p>
+            <p class="tab-help">Export as WAV for a high-quality audio file, or MIDI to drop into your DAW. Go longer for more variation. Share your creation with a link — anyone can listen with one click.</p>
           </div>
         </div>
 
@@ -1478,9 +1478,9 @@
       if (localStorage.getItem('rondel-tour-done')) return;
 
       const steps = [
-        '🎵 Welcome to Rondel! A generative rhythm machine.\nPick a preset from the sidebar to hear something instantly.',
-        '🎯 Click rings on the canvas to add or remove beats.\nDrag to change rotation or probability.',
-        '🎧 When you love what you hear, export it as a WAV or copy the share link. Have fun!'
+        '🎵 Welcome to Rondel! A generative rhythm machine with 30 instruments and 75 presets.\nPick a preset from the sidebar to start exploring.',
+        '🎛️ Use the Rings tab to swap instruments, change BPM, key, and scale.\nClick rings on the canvas to add or remove beats.',
+        '🎧 Export as WAV or MIDI, copy a share link, or just vibe.\nUse the volume slider in the header to find your level. Enjoy!'
       ];
 
       const overlay = document.getElementById('tour-overlay');
