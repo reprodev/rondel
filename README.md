@@ -54,6 +54,32 @@ Pick a preset from the sidebar, hit play, change the key — export when you're 
 - **30 instruments** — drums, bass, melodic, pads, vocal textures. Assign any to any ring
 - **Share links** — URL recreates your exact patch. Send it to anyone
 
+## Feature Highlights
+
+### 🔗 Share Links
+Every patch encodes into a URL. Copy it, send it to a friend — they open the exact same groove with all your settings intact. No account needed.
+
+### 🔊 Volume Control
+Master volume slider in the header with mute toggle. Adjusts in real-time through the compressor/limiter chain so nothing clips regardless of how many voices are stacked.
+
+### 🎹 30 Instruments
+Nine drum/percussion voices (kick, snare, hat, clap, tom, cowbell, rim, conga, shaker), eleven melodic voices (bass, sub bass, poly, pluck, bell, kalimba, vibraphone, marimba, metallic, sitar, organ), and ten pad/vocal textures (pad, string pad, gong, tape, choir, vocal pad, vocal stab, harmonies, whisper, vocal glitch). All synthesised — no samples, no loading times.
+
+### 🎛️ Key & Scale
+Change the musical key and scale with one click. 15 root notes × 9 scales (major, minor, dorian, phrygian, lydian, mixolydian, pentatonic, blues, chromatic). Melodic voices follow your selection automatically.
+
+### 📤 Dual Export
+Export WAV at any duration (15s to 10 minutes) for a finished audio file, or export MIDI (4 bars) to drop into your DAW for further production. Filenames include preset name, BPM, key, and timestamp so you can tell them apart.
+
+### 🎯 First-Visit Tour
+New users get a quick 3-step onboarding that explains the interface without overwhelming. Dismisses permanently after completion.
+
+### 🔍 Preset Search
+Type to filter across all 75 presets instantly. Categories with no matches hide automatically so you only see what's relevant.
+
+### 📱 Mobile Optimised
+Bottom sheet drawer, sticky search, touch-friendly canvas interaction, and a compact transport bar. Full functionality on phone — not a stripped-down version.
+
 ## Getting Started
 
 ### Option 1: Just open it
