@@ -14,31 +14,38 @@ const STYLES = `
   .rondel-controls {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     flex: 1;
     justify-content: flex-end;
   }
   .rondel-status {
     font-family: monospace;
-    font-size: 0.8em;
-    color: #aaa;
-    letter-spacing: 0.02em;
+    font-size: 0.95rem;
+    color: #bbb;
+    letter-spacing: 0.03em;
     white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  .rondel-status:hover {
+    color: #e0e0e0;
   }
   .rondel-play-btn {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 2px solid #666;
     background: #222;
     color: #e0e0e0;
     font-family: system-ui, sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    line-height: 32px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: border-color 0.15s, background 0.15s;
     flex-shrink: 0;
+    padding: 0;
   }
   .rondel-play-btn:hover {
     border-color: #aaa;
@@ -216,10 +223,8 @@ export function initControls() {
  */
 export function updateStatus(patch, isPlaying, bpm) {
   if (!statusEl) return;
-  const playing = isPlaying ? '\uD83C\uDFB5' : '\u23F8'; // 🎵 or ⏸
-  const scene = patch?.arrangement?.scenes?.[patch?.arrangement?.currentScene]?.name || 'A';
-  const seed = patch?.seed ?? '\u2014';
-  statusEl.textContent = `${playing} ${bpm} BPM | Scene ${scene} | seed: ${seed}`;
+  const icon = isPlaying ? '\u25B6' : '\u23F8'; // ▶ or ⏸
+  statusEl.textContent = `${icon} ${bpm} BPM`;
 }
 
 /**

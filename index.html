@@ -101,15 +101,15 @@
     /* --- Tabs --- */
     .drawer-tabs {
       display: flex;
-      gap: 0.25rem;
-      padding: 0.6rem 0.75rem 0;
+      gap: 0.35rem;
+      padding: 0.75rem 0.75rem 0;
       flex-shrink: 0;
     }
     .tab-btn {
       flex: 1;
       font-family: inherit;
-      font-size: 0.75rem;
-      padding: 0.35rem 0.5rem;
+      font-size: 0.85rem;
+      padding: 0.5rem 0.6rem;
       border: 1px solid #444;
       border-radius: 20px;
       background: #222;
@@ -133,7 +133,7 @@
       flex: 1;
       min-height: 0;
       overflow-y: auto;
-      padding: 0.75rem;
+      padding: 1rem;
     }
     .tab-pane {
       display: none;
@@ -220,26 +220,26 @@
     .ring-controls {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
     .ring-row {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
     .ring-row input[type="checkbox"] {
-      width: 0.9rem;
-      height: 0.9rem;
+      width: 1.1rem;
+      height: 1.1rem;
       cursor: pointer;
     }
     .ring-label {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       color: #888;
-      width: 3.2rem;
+      width: 3.5rem;
     }
     .ring-row select {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.4rem;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.5rem;
       margin: 0;
       flex: 1;
     }
@@ -249,10 +249,48 @@
     .ring-row:has(input:not(:checked)) select {
       pointer-events: none;
     }
+    .bpm-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .bpm-control label {
+      font-size: 0.85rem;
+      color: #888;
+      width: 2.8rem;
+    }
+    .bpm-btn {
+      width: 32px;
+      height: 32px;
+      font-size: 1.1rem;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      color: #ccc;
+    }
+    .bpm-btn:hover { background: #3a3a3a; color: #fff; }
+    #bpm-input {
+      font-family: inherit;
+      font-size: 0.95rem;
+      width: 4rem;
+      padding: 0.35rem 0.5rem;
+      background: #2a2a2a;
+      color: #e0e0e0;
+      border: 1px solid #555;
+      border-radius: 4px;
+      text-align: center;
+    }
     #btn-all {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.6rem;
-      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.8rem;
+      margin-top: 0.75rem;
     }
 
     /* --- Export Controls --- */
@@ -264,8 +302,8 @@
       flex-wrap: wrap;
     }
     .dur-btn {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.5rem;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.6rem;
     }
     .dur-btn.active {
       background: #3a5a3a;
@@ -273,9 +311,9 @@
     }
     #custom-dur {
       font-family: inherit;
-      font-size: 0.75rem;
-      width: 3.5rem;
-      padding: 0.25rem 0.4rem;
+      font-size: 0.85rem;
+      width: 4rem;
+      padding: 0.35rem 0.5rem;
       background: #2a2a2a;
       color: #e0e0e0;
       border: 1px solid #555;
@@ -285,8 +323,8 @@
       background: #2a5a3a;
       border-color: #4ec96e;
       color: #e0e0e0;
-      font-size: 0.8rem;
-      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
     }
     .export-btn:hover { background: #3a7a4a; }
     .export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -297,8 +335,8 @@
       background: #2a3a5a;
       border-color: #5a9fd4;
       color: #5a9fd4;
-      font-size: 0.8rem;
-      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
       text-align: center;
     }
     .share-btn:hover {
@@ -314,10 +352,10 @@
 
     /* --- Preset Browser --- */
     .preset-category {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       border: 1px solid #333;
-      border-radius: 4px;
-      padding: 0.4rem;
+      border-radius: 6px;
+      padding: 0.5rem;
     }
     .preset-category[open] {
       background: #151515;
@@ -325,13 +363,13 @@
     .category-header {
       cursor: pointer;
       user-select: none;
-      padding: 0.4rem;
+      padding: 0.5rem;
       color: #aaa;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
       list-style: none;
     }
     .category-header::-webkit-details-marker { display: none; }
@@ -341,19 +379,19 @@
     .preset-list {
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
-      padding: 0.4rem 0 0 0;
-      max-height: 180px;
+      gap: 0.4rem;
+      padding: 0.5rem 0 0 0;
+      max-height: 220px;
       overflow-y: auto;
     }
     .preset-btn {
       background: #222;
       border: 1px solid #444;
       color: #bbb;
-      padding: 0.35rem 0.5rem;
-      border-radius: 3px;
+      padding: 0.5rem 0.65rem;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       text-align: left;
       transition: all 0.15s;
     }
@@ -361,6 +399,16 @@
       background: #2a4a6a;
       color: #fff;
       border-color: #5a9fd4;
+    }
+    .preset-btn[data-bpm]::after {
+      content: attr(data-bpm) ' bpm';
+      float: right;
+      font-size: 0.75rem;
+      color: #666;
+      margin-left: 0.5rem;
+    }
+    .preset-btn.active[data-bpm]::after {
+      color: #4a9abc;
     }
     .preset-btn.active {
       background: #2a4a6a;
@@ -372,9 +420,9 @@
       background: #1a3a2a;
       border-color: #4ec96e;
       color: #4ec96e;
-      font-size: 0.8rem;
-      padding: 0.45rem 0.7rem;
-      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      padding: 0.6rem 0.8rem;
+      margin-bottom: 0.6rem;
       text-align: center;
       font-weight: 600;
     }
@@ -384,30 +432,30 @@
       border-color: #6eee8e;
     }
     .onboarding-hint {
-      font-size: 0.7rem;
-      color: #555;
+      font-size: 0.8rem;
+      color: #666;
       text-align: center;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.75rem;
     }
 
     /* --- Drawer Hints --- */
     .drawer-hints {
       flex-shrink: 0;
-      padding: 0.6rem 0.75rem;
+      padding: 0.75rem 1rem;
       border-top: 1px solid #2a2a2a;
-      font-size: 0.65rem;
-      color: #555;
-      line-height: 1.8;
+      font-size: 0.75rem;
+      color: #666;
+      line-height: 2;
     }
     .drawer-hints span {
       display: inline-block;
       background: #2a2a2a;
       border: 1px solid #3a3a3a;
       border-radius: 3px;
-      padding: 0 0.3rem;
-      color: #888;
-      font-size: 0.6rem;
-      margin-right: 0.2rem;
+      padding: 0.1rem 0.4rem;
+      color: #999;
+      font-size: 0.7rem;
+      margin-right: 0.25rem;
     }
 
     /* --- Tab Help Text --- */
@@ -639,60 +687,66 @@
             <details class="preset-category">
               <summary class="category-header">&#127929; Dancefloor (6)</summary>
               <div class="preset-list">
-                <button class="preset-btn" data-preset="Techno Kick Drive">Techno Kick Drive (120)</button>
-                <button class="preset-btn" data-preset="House Deep">House Deep (128)</button>
-                <button class="preset-btn" data-preset="Jungle Breakbeat">Jungle Breakbeat (160)</button>
-                <button class="preset-btn" data-preset="Acid Rave">Acid Rave (130)</button>
-                <button class="preset-btn" data-preset="Glitch IDM">Glitch IDM (140)</button>
-                <button class="preset-btn" data-preset="Industrial Rigid">Industrial Rigid (110)</button>
+                <button class="preset-btn" data-preset="Techno Kick Drive" data-bpm="120">Techno Kick Drive</button>
+                <button class="preset-btn" data-preset="House Deep" data-bpm="128">House Deep</button>
+                <button class="preset-btn" data-preset="Jungle Breakbeat" data-bpm="160">Jungle Breakbeat</button>
+                <button class="preset-btn" data-preset="Acid Rave" data-bpm="130">Acid Rave</button>
+                <button class="preset-btn" data-preset="Glitch IDM" data-bpm="140">Glitch IDM</button>
+                <button class="preset-btn" data-preset="Industrial Rigid" data-bpm="110">Industrial Rigid</button>
               </div>
             </details>
 
             <details class="preset-category">
               <summary class="category-header">&#127758; World & Groove (8)</summary>
               <div class="preset-list">
-                <button class="preset-btn" data-preset="Afro Polyrhythm">Afro Polyrhythm (110)</button>
-                <button class="preset-btn" data-preset="Krautrock Hypnotic">Krautrock Hypnotic (120)</button>
-                <button class="preset-btn" data-preset="Samba Carnival">Samba Carnival (120)</button>
-                <button class="preset-btn" data-preset="Funk Pocket">Funk Pocket (110)</button>
-                <button class="preset-btn" data-preset="Bossa Nova Chill">Bossa Nova Chill (90)</button>
-                <button class="preset-btn" data-preset="Dub Reggae">Dub Reggae (90)</button>
-                <button class="preset-btn" data-preset="Downtempo Swing">Downtempo Swing (90)</button>
-                <button class="preset-btn" data-preset="Dancehall Riddim">Dancehall Riddim (95)</button>
+                <button class="preset-btn" data-preset="Afro Polyrhythm" data-bpm="110">Afro Polyrhythm</button>
+                <button class="preset-btn" data-preset="Krautrock Hypnotic" data-bpm="120">Krautrock Hypnotic</button>
+                <button class="preset-btn" data-preset="Samba Carnival" data-bpm="120">Samba Carnival</button>
+                <button class="preset-btn" data-preset="Funk Pocket" data-bpm="110">Funk Pocket</button>
+                <button class="preset-btn" data-preset="Bossa Nova Chill" data-bpm="90">Bossa Nova Chill</button>
+                <button class="preset-btn" data-preset="Dub Reggae" data-bpm="90">Dub Reggae</button>
+                <button class="preset-btn" data-preset="Downtempo Swing" data-bpm="90">Downtempo Swing</button>
+                <button class="preset-btn" data-preset="Dancehall Riddim" data-bpm="95">Dancehall Riddim</button>
               </div>
             </details>
 
             <details class="preset-category">
               <summary class="category-header">&#127769; Ambient & Study (10)</summary>
               <div class="preset-list">
-                <button class="preset-btn" data-preset="Ambient Floating">Ambient Floating (90)</button>
-                <button class="preset-btn" data-preset="Lo-Fi Chill">Lo-Fi Chill (85)</button>
-                <button class="preset-btn" data-preset="Meditation Breath">Meditation Breath (60)</button>
-                <button class="preset-btn" data-preset="Warm Pad Ambient">Warm Pad Ambient (75)</button>
-                <button class="preset-btn" data-preset="Melancholic Lofi">Melancholic Lofi (90)</button>
-                <button class="preset-btn" data-preset="Glitch Ambient">Glitch Ambient (70)</button>
-                <button class="preset-btn" data-preset="Jazz Ambient">Jazz Ambient (85)</button>
-                <button class="preset-btn" data-preset="Hypnotic Minimal">Hypnotic Minimal (65)</button>
-                <button class="preset-btn" data-preset="Cinematic Swell">Cinematic Swell (100)</button>
-                <button class="preset-btn" data-preset="Tropical Ambient">Tropical Ambient (80)</button>
+                <button class="preset-btn" data-preset="Ambient Floating" data-bpm="90">Ambient Floating</button>
+                <button class="preset-btn" data-preset="Lo-Fi Chill" data-bpm="85">Lo-Fi Chill</button>
+                <button class="preset-btn" data-preset="Meditation Breath" data-bpm="60">Meditation Breath</button>
+                <button class="preset-btn" data-preset="Warm Pad Ambient" data-bpm="75">Warm Pad Ambient</button>
+                <button class="preset-btn" data-preset="Melancholic Lofi" data-bpm="90">Melancholic Lofi</button>
+                <button class="preset-btn" data-preset="Glitch Ambient" data-bpm="70">Glitch Ambient</button>
+                <button class="preset-btn" data-preset="Jazz Ambient" data-bpm="85">Jazz Ambient</button>
+                <button class="preset-btn" data-preset="Hypnotic Minimal" data-bpm="65">Hypnotic Minimal</button>
+                <button class="preset-btn" data-preset="Cinematic Swell" data-bpm="100">Cinematic Swell</button>
+                <button class="preset-btn" data-preset="Tropical Ambient" data-bpm="80">Tropical Ambient</button>
               </div>
             </details>
 
             <details class="preset-category">
               <summary class="category-header">&#128640; Epic & Cinematic (6)</summary>
               <div class="preset-list">
-                <button class="preset-btn" data-preset="Synthwave Retro">Synthwave Retro (115)</button>
-                <button class="preset-btn" data-preset="Polymetric Drift">Polymetric Drift (130)</button>
-                <button class="preset-btn" data-preset="Minimal Kick Bass">Minimal Kick Bass (100)</button>
-                <button class="preset-btn" data-preset="Hyperpop Chaos">Hyperpop Chaos (145)</button>
-                <button class="preset-btn" data-preset="Space Journey">Space Journey (90)</button>
-                <button class="preset-btn" data-preset="Cosmic Meditation">Cosmic Meditation (70)</button>
+                <button class="preset-btn" data-preset="Synthwave Retro" data-bpm="115">Synthwave Retro</button>
+                <button class="preset-btn" data-preset="Polymetric Drift" data-bpm="130">Polymetric Drift</button>
+                <button class="preset-btn" data-preset="Minimal Kick Bass" data-bpm="100">Minimal Kick Bass</button>
+                <button class="preset-btn" data-preset="Hyperpop Chaos" data-bpm="145">Hyperpop Chaos</button>
+                <button class="preset-btn" data-preset="Space Journey" data-bpm="90">Space Journey</button>
+                <button class="preset-btn" data-preset="Cosmic Meditation" data-bpm="70">Cosmic Meditation</button>
               </div>
             </details>
           </div>
 
           <!-- Rings Tab -->
           <div class="tab-pane" id="pane-rings">
+            <div class="bpm-control">
+              <label>BPM</label>
+              <button class="bpm-btn" id="bpm-down">−</button>
+              <input type="number" id="bpm-input" min="40" max="200" value="120">
+              <button class="bpm-btn" id="bpm-up">+</button>
+            </div>
             <div class="ring-controls">
               <div class="ring-row" data-ring="0">
                 <input type="checkbox" data-voice="0" checked>
@@ -998,6 +1052,7 @@
           select.value = patch.rings[ringIndex].voice;
         }
       });
+      if (bpmInput) bpmInput.value = patch.bpm || 120;
     }
     setTimeout(syncDropdowns, 50);
 
@@ -1037,6 +1092,29 @@
         onMuteChange();
       });
     }
+
+    // --- BPM control ---
+    const bpmInput = document.getElementById('bpm-input');
+    const bpmDown = document.getElementById('bpm-down');
+    const bpmUp = document.getElementById('bpm-up');
+
+    function setBpmValue(newBpm) {
+      const clamped = Math.max(40, Math.min(200, newBpm));
+      const patch = getPatch();
+      patch.bpm = clamped;
+      bpmInput.value = clamped;
+      import('./src/audio/scheduler.js').then(s => s.setBpm(clamped));
+      // Update header status display
+      const statusEl = document.querySelector('.rondel-status');
+      if (statusEl) {
+        const icon = playing() ? '\u25B6' : '\u23F8';
+        statusEl.textContent = `${icon} ${clamped} BPM`;
+      }
+    }
+
+    bpmDown.addEventListener('click', () => setBpmValue(getPatch().bpm - 5));
+    bpmUp.addEventListener('click', () => setBpmValue(getPatch().bpm + 5));
+    bpmInput.addEventListener('change', () => setBpmValue(Number(bpmInput.value) || 120));
 
     // --- Export controls ---
     const durButtons = document.querySelectorAll('.dur-btn');
