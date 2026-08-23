@@ -10,6 +10,10 @@ Make music to share, export or remix. Presets so you don't need to know everythi
 
 </div>
 
+<div align="center">
+<img src="assets/rondel-ui.png" alt="Rondel UI showing the radial sequencer with 5 Euclidean rhythm rings" width="700">
+</div>
+
 ---
 
 Instead of expensive DAWs, subscription limits, or hours searching for the right loop — Rondel gives you a usable beat in seconds. Pick a preset, tweak it, export as WAV or MIDI. It's yours. No account, no install, no copyright worries.
