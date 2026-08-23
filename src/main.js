@@ -153,7 +153,7 @@ export async function start(patchData) {
     if (master) master.disconnect();
     master = createMaster(ctx);
     const vol = Controls.getVolume();
-    master.gain.gain.value = vol * (currentPatch.masterGain ?? 0.45) * 0.75;
+    master.gain.gain.value = vol * (currentPatch.masterGain ?? 0.45);
     master.connect(ctx.destination);
 
     const bpm = currentPatch.bpm || 120;
@@ -394,7 +394,7 @@ Controls.updateStatus(currentPatch, false, currentPatch.bpm);
 // Wire volume control
 Controls.onVolume((vol) => {
   if (master && master.gain) {
-    master.gain.gain.setValueAtTime(vol * (currentPatch.masterGain ?? 0.45) * 0.75, master.gain.context.currentTime);
+    master.gain.gain.setValueAtTime(vol * (currentPatch.masterGain ?? 0.45), master.gain.context.currentTime);
   }
 });
 
