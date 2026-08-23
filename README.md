@@ -97,7 +97,7 @@ npx serve .
 1. Push this repo to GitHub
 2. Go to **Settings → Pages**
 3. Source: **Deploy from a branch** → `main` → `/ (root)`
-4. Your app is live at `https://reprodev.github.io/Rondel`
+4. Your app is live at `https://yourusername.github.io/Rondel`
 
 All paths are relative so it works on any subpath. The Dockerfile, package.json, and test files don't affect the site — browsers only load what index.html references.
 
