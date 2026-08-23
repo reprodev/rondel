@@ -263,7 +263,7 @@
     .ring-row:has(input:not(:checked)) select {
       pointer-events: none;
     }
-    /* Fallback for browsers without :has() — JS adds .ring-muted class */
+    /* Fallback for browsers without :has() â€” JS adds .ring-muted class */
     .ring-row.ring-muted {
       opacity: 0.4;
     }
@@ -647,7 +647,7 @@
     /* --- Mobile Bar (hidden on desktop) --- */
     .mobile-bar { display: none; }
 
-    /* --- Narrow / Snapped viewport (< 700px) — Bottom Sheet --- */
+    /* --- Narrow / Snapped viewport (< 700px) â€” Bottom Sheet --- */
     @media (max-width: 699px) {
       .app-header {
         padding: 0.5rem 0.8rem;
@@ -945,13 +945,15 @@
                 <button class="preset-btn" data-preset="Choir & Organ" data-bpm="95">Choir & Organ</button>
               </div>
             </details>
+
+            <button class="preset-btn" id="btn-tour" style="margin-top:0.75rem;text-align:center;color:#888;border-color:#333">&#10067; How to use</button>
           </div>
 
           <!-- Rings Tab -->
           <div class="tab-pane" id="pane-rings">
             <div class="bpm-control">
               <label>BPM</label>
-              <button class="bpm-btn" id="bpm-down">−</button>
+              <button class="bpm-btn" id="bpm-down">âˆ’</button>
               <input type="number" id="bpm-input" min="40" max="200" value="120">
               <button class="bpm-btn" id="bpm-up">+</button>
             </div>
@@ -1222,7 +1224,7 @@
             </div>
             <span id="export-status" class="export-status"></span>
             <button id="btn-share" class="share-btn">&#128279; Copy Share Link</button>
-            <p class="tab-help">Export as WAV for a high-quality audio file, or MIDI to drop into your DAW. Go longer for more variation. Share your creation with a link — anyone can listen with one click.</p>
+            <p class="tab-help">Export as WAV for a high-quality audio file, or MIDI to drop into your DAW. Go longer for more variation. Share your creation with a link â€” anyone can listen with one click.</p>
           </div>
         </div>
 
@@ -1284,12 +1286,12 @@
       if (open) {
         drawer.classList.remove('closed');
         appMain.classList.remove('drawer-closed');
-        drawerToggle.innerHTML = '&#10005;'; // ✕
+        drawerToggle.innerHTML = '&#10005;'; // âœ•
         drawerToggle.setAttribute('aria-label', 'Close drawer');
       } else {
         drawer.classList.add('closed');
         appMain.classList.add('drawer-closed');
-        drawerToggle.innerHTML = '&#9776;'; // ☰
+        drawerToggle.innerHTML = '&#9776;'; // â˜°
         drawerToggle.setAttribute('aria-label', 'Open drawer');
       }
       localStorage.setItem('rondel-drawer-open', open);
@@ -1353,7 +1355,7 @@
       cb.addEventListener('change', onMuteChange);
     });
 
-    // :has() fallback — toggle .ring-muted class for browsers without support
+    // :has() fallback â€” toggle .ring-muted class for browsers without support
     function syncMuteVisuals() {
       checkboxes.forEach(cb => {
         const row = cb.closest('.ring-row');
@@ -1552,11 +1554,11 @@
       const url = window.location.origin + window.location.pathname + '#' + encoded;
       try {
         await navigator.clipboard.writeText(url);
-        btnShare.textContent = '✓ Link copied!';
-        setTimeout(() => { btnShare.textContent = '🔗 Copy Share Link'; }, 2000);
+        btnShare.textContent = 'âœ“ Link copied!';
+        setTimeout(() => { btnShare.textContent = 'ðŸ”— Copy Share Link'; }, 2000);
       } catch (e) {
-        btnShare.textContent = '✗ Copy failed';
-        setTimeout(() => { btnShare.textContent = '🔗 Copy Share Link'; }, 2000);
+        btnShare.textContent = 'âœ— Copy failed';
+        setTimeout(() => { btnShare.textContent = 'ðŸ”— Copy Share Link'; }, 2000);
       }
     });
 
@@ -1616,52 +1618,63 @@
     }
 
     // --- First-visit tour ---
-    (function initTour() {
-      if (localStorage.getItem('rondel-tour-done')) return;
+    // --- Tour ---
+    const tourSteps = [
+      '🎵 Welcome to Rondel! A generative rhythm machine with 30 instruments and 75 presets.\nPick a preset from the sidebar to start exploring.',
+      '🎛 Use the Rings tab to swap instruments, change BPM, key, and scale.\nClick rings on the canvas to add or remove beats.',
+      '🎧 Export as WAV or MIDI, copy a share link, or just vibe.\nUse the volume slider in the header to find your level. Enjoy!'
+    ];
 
-      const steps = [
-        '🎵 Welcome to Rondel! A generative rhythm machine with 30 instruments and 75 presets.\nPick a preset from the sidebar to start exploring.',
-        '🎛️ Use the Rings tab to swap instruments, change BPM, key, and scale.\nClick rings on the canvas to add or remove beats.',
-        '🎧 Export as WAV or MIDI, copy a share link, or just vibe.\nUse the volume slider in the header to find your level. Enjoy!'
-      ];
+    const tourOverlay = document.getElementById('tour-overlay');
+    const tourText = document.getElementById('tour-text');
+    const tourDots = document.getElementById('tour-dots');
+    const tourNext = document.getElementById('tour-next');
+    const tourSkip = document.getElementById('tour-skip');
+    let tourCurrent = 0;
 
-      const overlay = document.getElementById('tour-overlay');
-      const textEl = document.getElementById('tour-text');
-      const dotsEl = document.getElementById('tour-dots');
-      const nextBtn = document.getElementById('tour-next');
-      const skipBtn = document.getElementById('tour-skip');
-      let current = 0;
+    function renderTour() {
+      tourText.textContent = tourSteps[tourCurrent];
+      tourDots.innerHTML = tourSteps.map((_, i) =>
+        `<span class="${i === tourCurrent ? 'active' : ''}"></span>`
+      ).join('');
+      tourNext.textContent = tourCurrent === tourSteps.length - 1 ? 'Got it!' : 'Next';
+    }
 
-      function render() {
-        textEl.textContent = steps[current];
-        dotsEl.innerHTML = steps.map((_, i) =>
-          `<span class="${i === current ? 'active' : ''}"></span>`
-        ).join('');
-        nextBtn.textContent = current === steps.length - 1 ? 'Got it!' : 'Next';
+    function closeTour() {
+      tourOverlay.classList.remove('active');
+      localStorage.setItem('rondel-tour-done', 'true');
+    }
+
+    function startTour() {
+      tourCurrent = 0;
+      renderTour();
+      tourOverlay.classList.add('active');
+    }
+
+    tourNext.addEventListener('click', () => {
+      if (tourCurrent >= tourSteps.length - 1) {
+        closeTour();
+      } else {
+        tourCurrent++;
+        renderTour();
       }
+    });
 
-      function closeTour() {
-        overlay.classList.remove('active');
-        localStorage.setItem('rondel-tour-done', 'true');
-      }
+    tourSkip.addEventListener('click', closeTour);
+    tourOverlay.addEventListener('click', (e) => {
+      if (e.target === tourOverlay || e.target.classList.contains('tour-backdrop')) closeTour();
+    });
 
-      nextBtn.addEventListener('click', () => {
-        if (current >= steps.length - 1) {
-          closeTour();
-        } else {
-          current++;
-          render();
-        }
-      });
+    // Show tour on first visit
+    if (!localStorage.getItem('rondel-tour-done')) {
+      startTour();
+    }
 
-      skipBtn.addEventListener('click', closeTour);
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay || e.target.classList.contains('tour-backdrop')) closeTour();
-      });
-
-      overlay.classList.add('active');
-      render();
-    })();
+    // "How to use" button retriggers tour
+    const btnTour = document.getElementById('btn-tour');
+    if (btnTour) {
+      btnTour.addEventListener('click', startTour);
+    }
   </script>
 </body>
 </html>

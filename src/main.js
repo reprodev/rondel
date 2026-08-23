@@ -398,21 +398,22 @@ Controls.onVolume((vol) => {
   }
 });
 
-// Initialize canvas immediately so the placeholder is replaced on load
-function initCanvas() {
-  getCanvas();
-  startDrawLoop({
-    bpm: currentPatch.bpm || 120,
-    stepsPerLoop: 16,
-    loopStartTime: performance.now() / 1000,
-    seed: currentPatch.seed || 12345,
-    activeVoices: currentPatch.activeVoices || [0, 1, 2, 3, 4],
-    rings: currentPatch.rings,
-  });
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initCanvas);
-} else {
-  initCanvas();
-}
+// Initialize canvas on load so placeholder text disappears immediately.
+// Wrap in try/catch so a render error cannot block the rest of the app.
+(function bootCanvas() {
+  try {
+    const { canvas } = getCanvas();
+    if (canvas && canvas.parentElement) {
+      startDrawLoop({
+        bpm: currentPatch.bpm || 120,
+        stepsPerLoop: 16,
+        loopStartTime: performance.now() / 1000,
+        seed: currentPatch.seed || 12345,
+        activeVoices: currentPatch.activeVoices || [0, 1, 2, 3, 4],
+        rings: currentPatch.rings,
+      });
+    }
+  } catch (e) {
+    console.warn('[rondel] canvas boot skipped:', e);
+  }
+})();
