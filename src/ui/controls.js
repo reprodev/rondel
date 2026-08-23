@@ -9,14 +9,20 @@ let keyboardHintEl = null;
 let modalOverlay = null;
 let toastEl = null;
 let tooltipEl = null;
+let volumeContainer = null;
+let volumeBtn = null;
+let volumeSlider = null;
+let currentVolume = 70;
+let isMuted = false;
 
 const STYLES = `
   .rondel-controls {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
     flex: 1;
     justify-content: flex-end;
+    padding-left: 2rem;
   }
   .rondel-status {
     font-family: monospace;
@@ -29,6 +35,72 @@ const STYLES = `
   }
   .rondel-status:hover {
     color: #e0e0e0;
+  }
+  .rondel-volume {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+  .rondel-volume-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.2rem;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .rondel-volume-btn:hover {
+    color: #fff;
+    background: none;
+  }
+  .rondel-volume-btn.muted {
+    color: #666;
+  }
+  .rondel-volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80px;
+    height: 14px;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+    vertical-align: middle;
+  }
+  .rondel-volume-slider::-webkit-slider-runnable-track {
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
+  }
+  .rondel-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    margin-top: -5px;
+  }
+  .rondel-volume-slider::-moz-range-track {
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
+    border: none;
+  }
+  .rondel-volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
   }
   .rondel-play-btn {
     width: 40px;
@@ -176,6 +248,59 @@ function injectStyles() {
   document.head.appendChild(style);
 }
 
+// --- Volume control callbacks ---
+
+let onVolumeChangeCallback = null;
+
+function toggleMute() {
+  isMuted = !isMuted;
+  if (isMuted) {
+    volumeBtn.innerHTML = '\uD83D\uDD07'; // 🔇
+    volumeBtn.classList.add('muted');
+    if (onVolumeChangeCallback) onVolumeChangeCallback(0);
+  } else {
+    updateVolumeIcon(currentVolume);
+    volumeBtn.classList.remove('muted');
+    if (onVolumeChangeCallback) onVolumeChangeCallback(currentVolume / 100);
+  }
+}
+
+function onVolumeChange() {
+  currentVolume = Number(volumeSlider.value);
+  isMuted = currentVolume === 0;
+  updateVolumeIcon(currentVolume);
+  if (isMuted) {
+    volumeBtn.classList.add('muted');
+  } else {
+    volumeBtn.classList.remove('muted');
+  }
+  if (onVolumeChangeCallback) onVolumeChangeCallback(currentVolume / 100);
+}
+
+function updateVolumeIcon(vol) {
+  if (vol === 0) {
+    volumeBtn.innerHTML = '\uD83D\uDD07'; // 🔇
+  } else if (vol < 40) {
+    volumeBtn.innerHTML = '\uD83D\uDD09'; // 🔉
+  } else {
+    volumeBtn.innerHTML = '\uD83D\uDD0A'; // 🔊
+  }
+}
+
+/**
+ * Register a callback for volume changes. Receives a value 0-1.
+ */
+export function onVolume(callback) {
+  onVolumeChangeCallback = callback;
+}
+
+/**
+ * Get the current volume (0-1). Returns 0 if muted.
+ */
+export function getVolume() {
+  return isMuted ? 0 : currentVolume / 100;
+}
+
 /**
  * Create the full DOM structure for controls. Idempotent — calling
  * multiple times returns the same elements.
@@ -193,6 +318,29 @@ export function initControls() {
   statusEl.className = 'rondel-status';
   statusEl.textContent = 'Ready';
   root.appendChild(statusEl);
+
+  // Volume control
+  volumeContainer = document.createElement('div');
+  volumeContainer.className = 'rondel-volume';
+
+  volumeBtn = document.createElement('button');
+  volumeBtn.className = 'rondel-volume-btn';
+  volumeBtn.innerHTML = '\uD83D\uDD0A'; // 🔊
+  volumeBtn.setAttribute('aria-label', 'Mute');
+  volumeBtn.addEventListener('click', toggleMute);
+  volumeContainer.appendChild(volumeBtn);
+
+  volumeSlider = document.createElement('input');
+  volumeSlider.type = 'range';
+  volumeSlider.className = 'rondel-volume-slider';
+  volumeSlider.min = '0';
+  volumeSlider.max = '100';
+  volumeSlider.value = '70';
+  volumeSlider.setAttribute('aria-label', 'Volume');
+  volumeSlider.addEventListener('input', onVolumeChange);
+  volumeContainer.appendChild(volumeSlider);
+
+  root.appendChild(volumeContainer);
 
   // Play/Stop button
   playBtn = document.createElement('button');
