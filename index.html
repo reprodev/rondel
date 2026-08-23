@@ -263,7 +263,7 @@
     .ring-row:has(input:not(:checked)) select {
       pointer-events: none;
     }
-    /* Fallback for browsers without :has() Ã¢â‚¬â€ JS adds .ring-muted class */
+    /* Fallback for browsers without :has() ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â JS adds .ring-muted class */
     .ring-row.ring-muted {
       opacity: 0.4;
     }
@@ -647,7 +647,7 @@
     /* --- Mobile Bar (hidden on desktop) --- */
     .mobile-bar { display: none; }
 
-    /* --- Narrow / Snapped viewport (< 700px) Ã¢â‚¬â€ Bottom Sheet --- */
+    /* --- Narrow / Snapped viewport (< 700px) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Bottom Sheet --- */
     @media (max-width: 699px) {
       .app-header {
         padding: 0.5rem 0.8rem;
@@ -953,7 +953,7 @@
           <div class="tab-pane" id="pane-rings">
             <div class="bpm-control">
               <label>BPM</label>
-              <button class="bpm-btn" id="bpm-down">Ã¢Ë†â€™</button>
+              <button class="bpm-btn" id="bpm-down">ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢</button>
               <input type="number" id="bpm-input" min="40" max="200" value="120">
               <button class="bpm-btn" id="bpm-up">+</button>
             </div>
@@ -1224,7 +1224,7 @@
             </div>
             <span id="export-status" class="export-status"></span>
             <button id="btn-share" class="share-btn">&#128279; Copy Share Link</button>
-            <p class="tab-help">Export as WAV for a high-quality audio file, or MIDI to drop into your DAW. Go longer for more variation. Share your creation with a link Ã¢â‚¬â€ anyone can listen with one click.</p>
+            <p class="tab-help">Export as WAV for a high-quality audio file, or MIDI to drop into your DAW. Go longer for more variation. Share your creation with a link ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â anyone can listen with one click.</p>
           </div>
         </div>
 
@@ -1286,12 +1286,12 @@
       if (open) {
         drawer.classList.remove('closed');
         appMain.classList.remove('drawer-closed');
-        drawerToggle.innerHTML = '&#10005;'; // Ã¢Å“â€¢
+        drawerToggle.innerHTML = '&#10005;'; // ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¢
         drawerToggle.setAttribute('aria-label', 'Close drawer');
       } else {
         drawer.classList.add('closed');
         appMain.classList.add('drawer-closed');
-        drawerToggle.innerHTML = '&#9776;'; // Ã¢ËœÂ°
+        drawerToggle.innerHTML = '&#9776;'; // ÃƒÂ¢Ã‹Å“Ã‚Â°
         drawerToggle.setAttribute('aria-label', 'Open drawer');
       }
       localStorage.setItem('rondel-drawer-open', open);
@@ -1355,7 +1355,7 @@
       cb.addEventListener('change', onMuteChange);
     });
 
-    // :has() fallback Ã¢â‚¬â€ toggle .ring-muted class for browsers without support
+    // :has() fallback ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â toggle .ring-muted class for browsers without support
     function syncMuteVisuals() {
       checkboxes.forEach(cb => {
         const row = cb.closest('.ring-row');
@@ -1553,11 +1553,11 @@
       const url = window.location.origin + window.location.pathname + '#' + encoded;
       try {
         await navigator.clipboard.writeText(url);
-        btnShare.textContent = 'Ã¢Å“â€œ Link copied!';
-        setTimeout(() => { btnShare.textContent = 'Ã°Å¸â€â€” Copy Share Link'; }, 2000);
+        btnShare.textContent = 'ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Link copied!';
+        setTimeout(() => { btnShare.textContent = 'ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â€ Copy Share Link'; }, 2000);
       } catch (e) {
-        btnShare.textContent = 'Ã¢Å“â€” Copy failed';
-        setTimeout(() => { btnShare.textContent = 'Ã°Å¸â€â€” Copy Share Link'; }, 2000);
+        btnShare.textContent = 'ÃƒÂ¢Ã…â€œÃ¢â‚¬â€ Copy failed';
+        setTimeout(() => { btnShare.textContent = 'ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â€ Copy Share Link'; }, 2000);
       }
     });
 
@@ -1619,9 +1619,9 @@
     // --- First-visit tour ---
     // --- Tour ---
     const tourSteps = [
-      'ðŸŽµ Welcome to Rondel! A generative rhythm machine with 30 instruments and 75 presets.\nPick a preset from the sidebar to start exploring.',
-      'ðŸŽ› Use the Rings tab to swap instruments, change BPM, key, and scale.\nClick rings on the canvas to add or remove beats.',
-      'ðŸŽ§ Export as WAV or MIDI, copy a share link, or just vibe.\nUse the volume slider in the header to find your level. Enjoy!'
+      'Welcome to Rondel! A generative rhythm machine with 30 instruments and 75 presets. Pick a preset from the sidebar to start exploring.',
+      'Use the Rings tab to swap instruments, change BPM, key, and scale. Click rings on the canvas to add or remove beats.',
+      'Export as WAV or MIDI, copy a share link, or just vibe. Use the volume slider in the header to find your level. Enjoy!'
     ];
 
     const tourOverlay = document.getElementById('tour-overlay');
