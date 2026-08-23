@@ -252,12 +252,18 @@ function generateFilename(ext, durationSeconds) {
   const scale = (currentPatch.scale || 'major').slice(0, 3);
   const bpm = currentPatch.bpm || 120;
   const name = currentPatch._presetName || 'custom';
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  let slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  if (slug.length > 20) slug = slug.slice(0, 20).replace(/-$/, '');
   const durStr = durationSeconds ? `-${durationSeconds}s` : '';
-  // Short time suffix for uniqueness (e.g., "14h32")
   const now = new Date();
   const time = `${now.getHours()}h${String(now.getMinutes()).padStart(2,'0')}`;
-  return `rondel-${slug}-${bpm}bpm-${key}${scale}${durStr}-${time}.${ext}`;
+  let filename = `rondel-${slug}-${bpm}-${key}${scale}${durStr}-${time}.${ext}`;
+  // Safety cap at 80 chars total (safe for all file systems)
+  if (filename.length > 80) {
+    slug = slug.slice(0, 12).replace(/-$/, '');
+    filename = `rondel-${slug}-${bpm}-${key}${scale}${durStr}-${time}.${ext}`;
+  }
+  return filename;
 }
 
 /**
