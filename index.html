@@ -1613,12 +1613,16 @@
       });
     }
 
-    // Keep mobile BPM in sync
+    // Keep mobile BPM and Rings tab BPM in sync with header
     const statusObserver = new MutationObserver(() => {
       const statusEl = document.querySelector('.rondel-status');
-      if (statusEl && mobileBpm) {
+      if (statusEl) {
         const match = statusEl.textContent.match(/(\d+)\s*BPM/);
-        if (match) mobileBpm.textContent = match[1] + ' BPM';
+        if (match) {
+          const currentBpm = match[1];
+          if (mobileBpm) mobileBpm.textContent = currentBpm + ' BPM';
+          if (bpmInput && bpmInput.value !== currentBpm) bpmInput.value = currentBpm;
+        }
       }
     });
     const statusTarget = document.querySelector('.rondel-status');
