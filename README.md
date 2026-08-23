@@ -154,4 +154,4 @@ All audio you export is yours — no attribution required for the music you crea
 
 Built with [Kiro](https://kiro.dev), Web Audio, Euclidean rhythms, and the belief that making music should be as easy as pressing play.
 
-Created for the [Kiro Hackathon](https://kiro.dev/hackathon).
+Created for the [Ready, Spec, Ship 2026 Hackathon](https://codingagents.fyi/hackathon/kiro/) sponsored by [Kiro](https://kiro.dev).
