@@ -251,11 +251,13 @@ function generateFilename(ext, durationSeconds) {
   const key = NOTE_NAMES[root % 12];
   const scale = (currentPatch.scale || 'major').slice(0, 3);
   const bpm = currentPatch.bpm || 120;
-  // Try to find active preset name
   const name = currentPatch._presetName || 'custom';
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const durStr = durationSeconds ? `-${durationSeconds}s` : '';
-  return `rondel-${slug}-${bpm}bpm-${key}${scale}${durStr}.${ext}`;
+  // Short time suffix for uniqueness (e.g., "14h32")
+  const now = new Date();
+  const time = `${now.getHours()}h${String(now.getMinutes()).padStart(2,'0')}`;
+  return `rondel-${slug}-${bpm}bpm-${key}${scale}${durStr}-${time}.${ext}`;
 }
 
 /**
