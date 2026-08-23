@@ -27,8 +27,8 @@ let dragStartRadius = 0;
  */
 function getRingLayout() {
   const { size, cx, cy } = getMetrics();
-  const ringSpacing = (size * 0.4) / 5;
-  const innerRadius = size * 0.12;
+  const ringSpacing = (size * 0.34) / 5;
+  const innerRadius = size * 0.10;
   return { size, cx, cy, ringSpacing, innerRadius };
 }
 

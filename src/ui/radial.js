@@ -115,7 +115,7 @@ function render(ctx) {
 
   // Clear
   ctx.clearRect(0, 0, size, size);
-  ctx.fillStyle = '#111111';
+  ctx.fillStyle = '#0a0a0a';
   ctx.fillRect(0, 0, size, size);
 
   // Compute playhead phase
@@ -125,8 +125,8 @@ function render(ctx) {
     if (phase < 0) phase += 1;
   }
 
-  const ringSpacing = (size * 0.4) / 5;
-  const innerRadius = size * 0.12;
+  const ringSpacing = (size * 0.34) / 5;
+  const innerRadius = size * 0.10;
 
   // Draw rings and step markers
   for (let r = 0; r < 5; r++) {

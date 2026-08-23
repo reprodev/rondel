@@ -285,3 +285,10 @@ Controls.getPlayButton().addEventListener('dblclick', (e) => {
 
 // Initial status
 Controls.updateStatus(currentPatch, false, currentPatch.bpm);
+
+// Wire volume control
+Controls.onVolume((vol) => {
+  if (master && master.gain) {
+    master.gain.gain.setValueAtTime(vol * (currentPatch.masterGain ?? 0.45), master.gain.context.currentTime);
+  }
+});
