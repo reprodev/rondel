@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rondel</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='7' fill='none' stroke='%23e0e0e0' stroke-width='1.5'/><circle cx='8' cy='4' r='1.5' fill='%23e0e0e0'/></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230a0a0a'/><circle cx='90' cy='90' r='60' fill='none' stroke='%23e0e0e0' stroke-width='6'/><circle cx='90' cy='45' r='8' fill='%234ec96e'/></svg>">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
@@ -262,6 +263,13 @@
     .ring-row:has(input:not(:checked)) select {
       pointer-events: none;
     }
+    /* Fallback for browsers without :has() — JS adds .ring-muted class */
+    .ring-row.ring-muted {
+      opacity: 0.4;
+    }
+    .ring-row.ring-muted select {
+      pointer-events: none;
+    }
     .bpm-control {
       display: flex;
       align-items: center;
@@ -501,6 +509,24 @@
       color: #666;
       text-align: center;
       margin-bottom: 0.75rem;
+    }
+    .preset-search {
+      width: 100%;
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.6rem;
+      margin-bottom: 0.6rem;
+      background: #141414;
+      color: #e0e0e0;
+      border: 1px solid #333;
+      border-radius: 4px;
+      outline: none;
+    }
+    .preset-search:focus {
+      border-color: #60d5ff;
+    }
+    .preset-search::placeholder {
+      color: #555;
     }
 
     /* --- Drawer Hints --- */
@@ -755,6 +781,7 @@
         <div class="drawer-content">
           <!-- Presets Tab -->
           <div class="tab-pane active" id="pane-presets">
+            <input type="text" id="preset-search" class="preset-search" placeholder="Search presets...">
             <button class="preset-btn quick-start" data-preset="Samba Carnival">&#9654; Quick Start: Samba Carnival</button>
             <p class="onboarding-hint">Pick a preset or press Space to play</p>
 
@@ -1266,6 +1293,16 @@
       cb.addEventListener('change', onMuteChange);
     });
 
+    // :has() fallback — toggle .ring-muted class for browsers without support
+    function syncMuteVisuals() {
+      checkboxes.forEach(cb => {
+        const row = cb.closest('.ring-row');
+        if (row) row.classList.toggle('ring-muted', !cb.checked);
+      });
+    }
+    checkboxes.forEach(cb => cb.addEventListener('change', syncMuteVisuals));
+    syncMuteVisuals(); // initial state
+
     voiceDropdowns.forEach(select => {
       select.addEventListener('change', () => {
         const ringIndex = Number(select.dataset.ringVoice);
@@ -1312,6 +1349,23 @@
           syncDropdowns();
         }
       });
+    });
+
+    // --- Preset search filter ---
+    const presetSearch = document.getElementById('preset-search');
+    presetSearch.addEventListener('input', () => {
+      const query = presetSearch.value.toLowerCase().trim();
+      presetButtons.forEach(btn => {
+        if (btn.classList.contains('quick-start')) return; // always visible
+        const name = (btn.dataset.preset || '').toLowerCase();
+        const bpm = btn.dataset.bpm || '';
+        const matches = !query || name.includes(query) || bpm.includes(query);
+        btn.style.display = matches ? '' : 'none';
+      });
+      // Show all categories when searching (override accordion)
+      if (query) {
+        presetCategories.forEach(d => d.open = true);
+      }
     });
 
     // Hide onboarding hint on Space key (play)
