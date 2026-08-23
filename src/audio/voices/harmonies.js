@@ -4,56 +4,41 @@ import { floor } from '../env.js';
 export function play(ctx, destination, time, params) {
   const velocity = params.velocity ?? 0.8;
   const duration = params.duration ?? 0.4;
-  const releaseEnd = time + duration + 0.400;
+  const releaseEnd = time + duration + 0.350;
 
-  // 3-part harmony: root, third, fifth (formant frequencies)
+  // Wider-spaced formants to eliminate beating; no detune
   const voices = [
-    { freq: 350, detune: 0 },
-    { freq: 440, detune: 5 },
-    { freq: 525, detune: -3 },
+    { freq: 280 },
+    { freq: 420 },
+    { freq: 580 },
   ];
+
+  // Master lowpass to damp any brightness
+  const masterLP = ctx.createBiquadFilter();
+  masterLP.type = 'lowpass';
+  masterLP.frequency.value = 3000;
+  masterLP.Q.value = 0.5;
+  masterLP.connect(destination);
 
   voices.forEach((v, i) => {
     const osc = ctx.createOscillator();
     osc.type = 'sine';
     osc.frequency.value = v.freq;
-    osc.detune.value = v.detune;
-
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 2000;
-    filter.Q.value = 1;
 
     const g = ctx.createGain();
-    const level = 0.06 * velocity / 3;
+    const level = 0.05 * velocity / 3;
     g.gain.setValueAtTime(0, time);
-    g.gain.linearRampToValueAtTime(level, time + 0.010); // 10ms attack
-    g.gain.setValueAtTime(level * 0.9, time + 0.200); // sustain
+    g.gain.linearRampToValueAtTime(level, time + 0.015);
+    g.gain.setValueAtTime(level * 0.85, time + 0.180);
     g.gain.exponentialRampToValueAtTime(floor(0), releaseEnd);
     g.gain.setValueAtTime(0, releaseEnd);
 
-    osc.connect(filter).connect(g).connect(destination);
+    osc.connect(g).connect(masterLP);
     osc.start(time);
     osc.stop(releaseEnd + 0.01);
 
     if (i === 0) {
-      osc.onended = () => { osc.disconnect(); filter.disconnect(); g.disconnect(); };
+      osc.onended = () => { osc.disconnect(); g.disconnect(); masterLP.disconnect(); };
     }
   });
-
-  // Breathy noise layer
-  const noise = ctx.createOscillator();
-  noise.type = 'sawtooth';
-  noise.frequency.value = 150;
-  const nf = ctx.createBiquadFilter();
-  nf.type = 'highpass';
-  nf.frequency.value = 3000;
-  const ng = ctx.createGain();
-  ng.gain.setValueAtTime(0, time);
-  ng.gain.linearRampToValueAtTime(0.008 * velocity, time + 0.020);
-  ng.gain.exponentialRampToValueAtTime(floor(0), releaseEnd);
-  ng.gain.setValueAtTime(0, releaseEnd);
-  noise.connect(nf).connect(ng).connect(destination);
-  noise.start(time);
-  noise.stop(releaseEnd + 0.01);
 }

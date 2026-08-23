@@ -6,9 +6,16 @@ export function play(ctx, destination, time, params) {
   const duration = params.duration ?? 0.6;
   const releaseEnd = time + duration + 1.2;
 
-  // Formant-like oscillators (warm vowel "aah")
-  const formants = [320, 800, 2500];
-  const gains = [0.05, 0.035, 0.015];
+  // Warm formants only in low-mid range; no exposed high frequencies
+  const formants = [280, 700, 1400];
+  const gains = [0.045, 0.03, 0.01];
+
+  // Damping lowpass to prevent brightness accumulation
+  const lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.value = 2200;
+  lp.Q.value = 0.5;
+  lp.connect(destination);
 
   formants.forEach((freq, i) => {
     const osc = ctx.createOscillator();
@@ -18,32 +25,32 @@ export function play(ctx, destination, time, params) {
     const g = ctx.createGain();
     const level = gains[i] * velocity;
     g.gain.setValueAtTime(0, time);
-    g.gain.linearRampToValueAtTime(level, time + 0.250); // slow attack
-    g.gain.setValueAtTime(level * 0.8, time + duration);
+    g.gain.linearRampToValueAtTime(level, time + 0.280);
+    g.gain.setValueAtTime(level * 0.75, time + duration);
     g.gain.exponentialRampToValueAtTime(floor(0), releaseEnd);
     g.gain.setValueAtTime(0, releaseEnd);
 
-    osc.connect(g).connect(destination);
+    osc.connect(g).connect(lp);
     osc.start(time);
     osc.stop(releaseEnd + 0.01);
 
     if (i === 0) {
-      osc.onended = () => { osc.disconnect(); g.disconnect(); };
+      osc.onended = () => { osc.disconnect(); g.disconnect(); lp.disconnect(); };
     }
   });
 
-  // Subtle detuned layer for warmth
-  const detune = ctx.createOscillator();
-  detune.type = 'triangle';
-  detune.frequency.value = 315;
-  const dg = ctx.createGain();
-  const dl = 0.02 * velocity;
-  dg.gain.setValueAtTime(0, time);
-  dg.gain.linearRampToValueAtTime(dl, time + 0.300);
-  dg.gain.setValueAtTime(dl * 0.7, time + duration);
-  dg.gain.exponentialRampToValueAtTime(floor(0), releaseEnd);
-  dg.gain.setValueAtTime(0, releaseEnd);
-  detune.connect(dg).connect(destination);
-  detune.start(time);
-  detune.stop(releaseEnd + 0.01);
+  // Warm sub layer (no detuning that creates beats)
+  const sub = ctx.createOscillator();
+  sub.type = 'sine';
+  sub.frequency.value = 180;
+  const sg = ctx.createGain();
+  const sl = 0.015 * velocity;
+  sg.gain.setValueAtTime(0, time);
+  sg.gain.linearRampToValueAtTime(sl, time + 0.350);
+  sg.gain.setValueAtTime(sl * 0.6, time + duration);
+  sg.gain.exponentialRampToValueAtTime(floor(0), releaseEnd);
+  sg.gain.setValueAtTime(0, releaseEnd);
+  sub.connect(sg).connect(lp);
+  sub.start(time);
+  sub.stop(releaseEnd + 0.01);
 }
