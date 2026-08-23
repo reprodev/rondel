@@ -4,6 +4,10 @@
 
 Rondel is a generative Euclidean rhythm sequencer that runs entirely in your browser. No install, no account, no copyright worries — just pick a preset, tweak it, and export.
 
+### What's a Euclidean rhythm?
+
+It's a way of spreading beats as evenly as possible across a pattern. Put 3 beats into 8 steps and the algorithm spaces them out naturally — the same spacing found in West African djembe patterns, Cuban tresillo, and countless other rhythms across cultures. You don't need to know any of this to use Rondel — the presets handle it — but it's why everything sounds musical instead of random.
+
 ## Why Rondel exists
 
 Getting music for a project shouldn't be hard. Whether you need a background beat for a YouTube video, a loop to rap over, or a MIDI file to drop into your DAW for sampling — the usual path involves expensive software, subscription limits, or hours searching for something that fits.
@@ -144,7 +148,7 @@ test/            — unit tests for all pure modules
 
 MIT — this project is open-source. Fork it, remix it, build on it, make it your own.
 
-All audio you export is yours — no attribution required for the music you create.
+All audio you export is yours — no attribution required for the music you create but it would be nice if you did.
 
 ---
 
