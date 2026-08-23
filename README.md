@@ -27,7 +27,7 @@ It's also designed for people who aren't musicians. You don't need to understand
 - **Lightweight** — no RAM-heavy DAW. Just a web page with Web Audio synthesis.
 - **You own it** — everything you make is yours. No subscription limits on exports.
 - **WAV + MIDI** — export both instantly. Drop the MIDI into Ableton, GarageBand, FL Studio, or whatever you use.
-- **75 presets across 5 genres** — Dancefloor, World & Groove, Ambient & Study, Epic & Cinematic, Vocal & Chorus. Start from something good and make it yours.
+- **75 presets across 5 genres** — Dancefloor, World & Groove, Ambient & Study, Epic & Cinematic, Vocal & Chorus.
 - **30 instruments** — drums, bass, melodic, pads, vocal textures. Assign any to any ring.
 - **Key and scale** — change the musical key with one click. No theory needed.
 - **Share links** — copy a URL that recreates your exact patch. Send it to anyone.
@@ -39,63 +39,110 @@ It's also designed for people who aren't musicians. You don't need to understand
 | Voices | 30 synthesized instruments (Web Audio, no samples) |
 | Presets | 75 curated across 5 categories |
 | Export | WAV (any duration) + MIDI (4 bars) |
-| Key/Scale | 15 keys × 9 scales = 135 tonal options |
+| Key/Scale | 15 keys × 9 scales |
 | BPM | 40–200, adjustable live |
 | Rings | 5 concurrent Euclidean rhythm layers |
-| Sharing | URL-encoded patch state (hash link) |
-| Mobile | Responsive — works on phone/tablet |
+| Sharing | URL-encoded patch state |
+| Mobile | Responsive — phone, tablet, desktop |
 | Dependencies | Zero. Pure ESM, no build step. |
 
 ## Getting started
 
+### Option 1: Just open it
+
+Open `index.html` in any modern browser. That's it.
+
+> Note: WAV/MIDI export requires serving over HTTP due to Web Worker restrictions.
+
+### Option 2: Node.js
+
 ```bash
-# Clone and serve
-git clone <repo-url>
+git clone https://github.com/yourusername/Rondel.git
 cd Rondel
-node serve.js
-# Open http://localhost:3000
+npm start
+# → http://localhost:3000
 ```
 
-Or just open `index.html` in any modern browser.
+Or without npm:
+```bash
+node serve.js
+```
+
+### Option 3: Docker
+
+```bash
+docker build -t rondel .
+docker run -p 3000:3000 rondel
+# → http://localhost:3000
+```
+
+### Option 4: Any static file server
+
+```bash
+# Python
+python3 -m http.server 3000
+
+# npx (no install needed)
+npx serve .
+```
+
+## Deploying to the web
+
+### GitHub Pages
+
+1. Push this repo to GitHub
+2. Go to **Settings → Pages**
+3. Source: **Deploy from a branch** → `main` → `/ (root)`
+4. Your app is live at `https://yourusername.github.io/Rondel`
+
+All paths are relative so it works on any subpath. The Dockerfile, package.json, and test files don't affect the site — browsers only load what index.html references.
+
+### Netlify / Vercel / Cloudflare Pages
+
+Connect the repo. No build command needed. Publish directory: `.` (root). Deploys on every push.
 
 ## How to use
 
-1. **Pick a preset** — Open the sidebar, browse by category or search
-2. **Hit play** — Press Space or click the play button
-3. **Make it yours** — Change the key, swap instruments, adjust BPM
-4. **Click the canvas** — Add/remove beats on the radial display
+1. **Pick a preset** — browse by category or search by name
+2. **Hit play** — press Space or click the play button
+3. **Make it yours** — change key, scale, BPM, swap instruments
+4. **Edit patterns** — click rings on the canvas to add/remove beats
 5. **Export** — WAV for audio, MIDI for your DAW, or copy a share link
-
-## Tech stack
-
-- Pure JavaScript (ES modules)
-- Web Audio API for all synthesis
-- Canvas 2D for radial visualization
-- No framework, no bundler, no dependencies
-- `node --test` for unit tests (263 passing)
 
 ## Running tests
 
 ```bash
-node --test test/*.test.js
+npm test
 ```
+
+263 tests across 14 test files covering all pure modules.
+
+## Tech stack
+
+- Pure JavaScript (ES modules)
+- Web Audio API for synthesis
+- Canvas 2D for the radial visualisation
+- No framework, no bundler, no dependencies
+- Node.js only needed for local dev server and tests
 
 ## Project structure
 
 ```
+index.html       — the app (HTML + CSS + inline script)
+serve.js         — zero-dependency dev server
+package.json     — npm start/test scripts
+Dockerfile       — containerised deployment
 src/
-  audio/       — voices, scheduler, master chain, export, MIDI
-  ui/          — canvas renderer, interaction, controls
-  gen/         — Euclidean algorithm, scales, melody, RNG
-  state/       — patch creation, validation, presets, codec
-test/          — unit tests for all pure modules
-index.html     — single-file app (HTML + CSS + inline script)
-serve.js       — minimal dev server
+  audio/         — 30 voice synths, scheduler, master chain, WAV/MIDI export
+  ui/            — canvas renderer, interaction handlers, controls
+  gen/           — Euclidean algorithm, scales, melody generation
+  state/         — patch schema, validation, 75 presets, URL codec
+test/            — unit tests for all pure modules
 ```
 
 ## License
 
-All exports are yours to use however you want. The source code license is TBD.
+MIT. All audio you export is yours — no attribution required for the music you create.
 
 ---
 

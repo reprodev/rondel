@@ -2,18 +2,15 @@
   "name": "rondel",
   "version": "1.0.0",
   "type": "module",
-  "description": "A circular instrument that plays around with you",
-  "main": "index.html",
+  "description": "Generative Euclidean rhythm sequencer — make music in your browser to share, export or remix",
   "scripts": {
-    "test": "node --test"
+    "start": "node serve.js",
+    "test": "node --test test/*.test.js"
   },
-  "keywords": [
-    "generative",
-    "music",
-    "euclidean",
-    "web-audio",
-    "kiro"
-  ],
+  "keywords": ["music", "sequencer", "euclidean", "rhythm", "web-audio", "generative"],
   "author": "reprodev",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
