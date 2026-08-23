@@ -5,10 +5,10 @@
 import { createMaster } from './master.js';
 import { initNoise } from './noise.js';
 import { encodeWav } from './wav.js';
-import { kick, snare, hat, bass, poly, pluck, clap, tom, cowbell, rim, conga, bell, pad, kalimba, vibraphone, stringPad, gong, sitar, choir } from './voices/index.js';
+import { kick, snare, hat, bass, poly, pluck, clap, tom, cowbell, rim, conga, bell, pad, kalimba, vibraphone, stringPad, gong, sitar, choir, vocalPad, vocalStab, harmonies, whisper, vocalGlitch } from './voices/index.js';
 import { bjorklund, rotate } from '../gen/euclid.js';
 
-const voiceMap = { kick, snare, hat, bass, poly, pluck, clap, tom, cowbell, rim, conga, bell, pad, kalimba, vibraphone, stringPad, gong, sitar, choir };
+const voiceMap = { kick, snare, hat, bass, poly, pluck, clap, tom, cowbell, rim, conga, bell, pad, kalimba, vibraphone, stringPad, gong, sitar, choir, vocalPad, vocalStab, harmonies, whisper, vocalGlitch };
 
 /**
  * Export the current patch as a WAV file.

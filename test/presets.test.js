@@ -4,8 +4,8 @@ import { presets, getPresetByName, getPresetNames, getPresetsByCategory, CATEGOR
 import { validatePatch } from '../src/state/patch.js';
 
 describe('presets', () => {
-  it('has 44 presets', () => {
-    assert.strictEqual(presets.length, 44);
+  it('has 52 presets', () => {
+    assert.strictEqual(presets.length, 52);
   });
 
   it('each preset has a unique name', () => {
@@ -94,9 +94,9 @@ describe('getPresetByName', () => {
 });
 
 describe('getPresetNames', () => {
-  it('returns array of 44 strings', () => {
+  it('returns array of 52 strings', () => {
     const names = getPresetNames();
-    assert.strictEqual(names.length, 44);
+    assert.strictEqual(names.length, 52);
     for (const n of names) assert.strictEqual(typeof n, 'string');
   });
 });
@@ -114,7 +114,7 @@ describe('getPresetsByCategory', () => {
   it('Epic & Cinematic has 8 presets', () => {
     assert.strictEqual(getPresetsByCategory('Epic & Cinematic').length, 8);
   });
-  it('Vocal & Chorus has 6 presets', () => {
-    assert.strictEqual(getPresetsByCategory('Vocal & Chorus').length, 6);
+  it('Vocal & Chorus has 14 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Vocal & Chorus').length, 14);
   });
 });

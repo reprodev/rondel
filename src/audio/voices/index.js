@@ -19,3 +19,8 @@ export { play as stringPad } from './string-pad.js';
 export { play as gong } from './gong.js';
 export { play as sitar } from './sitar.js';
 export { play as choir } from './choir.js';
+export { play as vocalPad } from './vocalPad.js';
+export { play as vocalStab } from './vocalStab.js';
+export { play as harmonies } from './harmonies.js';
+export { play as whisper } from './whisper.js';
+export { play as vocalGlitch } from './vocalGlitch.js';

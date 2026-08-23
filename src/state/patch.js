@@ -2,7 +2,7 @@
 // Pure ES module, no side effects, no DOM.
 
 const VALID_SCALES = ['major', 'minor', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'pentatonic', 'blues', 'chromatic'];
-const VALID_VOICES = ['kick', 'snare', 'hat', 'bass', 'poly', 'pluck', 'clap', 'tom', 'cowbell', 'rim', 'conga', 'bell', 'pad', 'kalimba', 'vibraphone', 'stringPad', 'gong', 'sitar', 'choir'];
+const VALID_VOICES = ['kick', 'snare', 'hat', 'bass', 'poly', 'pluck', 'clap', 'tom', 'cowbell', 'rim', 'conga', 'bell', 'pad', 'kalimba', 'vibraphone', 'stringPad', 'gong', 'sitar', 'choir', 'vocalPad', 'vocalStab', 'harmonies', 'whisper', 'vocalGlitch'];
 
 export const patchDefaults = Object.freeze({
   bpm: 120,

@@ -542,6 +542,102 @@ export const presets = [
     ],
     arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
   },
+  {
+    name: 'Gospel Harmonies', bpm: 100, root: 55, scale: 'major', seed: 10100, masterGain: 0.45,
+    category: 'Vocal & Chorus', mood: ['uplifting', 'soulful', 'harmonic'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.7, delaySend: 0.05, reverbSend: 0.15 },
+      { voice: 'snare', steps: 16, pulses: 2, rotation: 4, probability: 1.0, gain: 0.55, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'vocalStab', steps: 8, pulses: 4, rotation: 0, probability: 0.85, gain: 0.5, delaySend: 0.2, reverbSend: 0.4 },
+      { voice: 'harmonies', steps: 16, pulses: 3, rotation: 2, probability: 0.9, gain: 0.45, delaySend: 0.3, reverbSend: 0.5 },
+      { voice: 'bass', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.5, delaySend: 0.1, reverbSend: 0.1 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Intimate Whispers', bpm: 75, root: 62, scale: 'lydian', seed: 75075, masterGain: 0.45,
+    category: 'Vocal & Chorus', mood: ['ethereal', 'intimate', 'gentle'],
+    rings: [
+      { voice: 'whisper', steps: 16, pulses: 4, rotation: 0, probability: 0.8, gain: 0.5, delaySend: 0.4, reverbSend: 0.7 },
+      { voice: 'vocalPad', steps: 8, pulses: 3, rotation: 0, probability: 0.9, gain: 0.5, delaySend: 0.3, reverbSend: 0.8 },
+      { voice: 'hat', steps: 16, pulses: 3, rotation: 5, probability: 0.5, gain: 0.2, delaySend: 0.2, reverbSend: 0.5 },
+      { voice: 'bell', steps: 16, pulses: 2, rotation: 3, probability: 0.6, gain: 0.3, delaySend: 0.5, reverbSend: 0.6 },
+      { voice: 'bass', steps: 16, pulses: 1, rotation: 0, probability: 1.0, gain: 0.35, delaySend: 0.3, reverbSend: 0.4 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Soul Vocal Drive', bpm: 110, root: 55, scale: 'dorian', seed: 11011, masterGain: 0.45,
+    category: 'Vocal & Chorus', mood: ['soulful', 'groovy', 'warm'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 5, rotation: 0, probability: 1.0, gain: 0.7, delaySend: 0.05, reverbSend: 0.1 },
+      { voice: 'vocalStab', steps: 16, pulses: 6, rotation: 2, probability: 0.85, gain: 0.45, delaySend: 0.15, reverbSend: 0.3 },
+      { voice: 'choir', steps: 8, pulses: 4, rotation: 0, probability: 0.9, gain: 0.5, delaySend: 0.3, reverbSend: 0.5 },
+      { voice: 'bass', steps: 16, pulses: 5, rotation: 1, probability: 1.0, gain: 0.5, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'snare', steps: 16, pulses: 4, rotation: 4, probability: 0.95, gain: 0.55, delaySend: 0.2, reverbSend: 0.2 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Vocal Glitch Pop', bpm: 125, root: 60, scale: 'minor', seed: 12512, masterGain: 0.45,
+    category: 'Vocal & Chorus', mood: ['modern', 'electronic', 'rhythmic'],
+    rings: [
+      { voice: 'vocalGlitch', steps: 16, pulses: 8, rotation: 1, probability: 0.8, gain: 0.45, delaySend: 0.3, reverbSend: 0.2 },
+      { voice: 'clap', steps: 16, pulses: 4, rotation: 4, probability: 0.9, gain: 0.5, delaySend: 0.2, reverbSend: 0.25 },
+      { voice: 'bass', steps: 16, pulses: 5, rotation: 0, probability: 1.0, gain: 0.5, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'hat', steps: 16, pulses: 12, rotation: 0, probability: 0.75, gain: 0.35, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'poly', steps: 16, pulses: 3, rotation: 6, probability: 0.85, gain: 0.4, delaySend: 0.4, reverbSend: 0.5 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Ethereal Vocals', bpm: 80, root: 62, scale: 'pentatonic', seed: 80808, masterGain: 0.45,
+    category: 'Vocal & Chorus', mood: ['dreamy', 'spacious', 'meditative'],
+    rings: [
+      { voice: 'whisper', steps: 16, pulses: 3, rotation: 0, probability: 0.7, gain: 0.45, delaySend: 0.5, reverbSend: 0.8 },
+      { voice: 'vocalPad', steps: 8, pulses: 4, rotation: 1, probability: 0.85, gain: 0.5, delaySend: 0.4, reverbSend: 0.7 },
+      { voice: 'bell', steps: 16, pulses: 2, rotation: 5, probability: 0.6, gain: 0.35, delaySend: 0.6, reverbSend: 0.8 },
+      { voice: 'kick', steps: 16, pulses: 1, rotation: 0, probability: 0.8, gain: 0.4, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'pad', steps: 16, pulses: 2, rotation: 8, probability: 0.7, gain: 0.4, delaySend: 0.5, reverbSend: 0.7 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Urban Vocal Loops', bpm: 95, root: 48, scale: 'minor', seed: 95095, masterGain: 0.45,
+    category: 'Vocal & Chorus', mood: ['urban', 'rhythmic', 'modern'],
+    rings: [
+      { voice: 'vocalGlitch', steps: 16, pulses: 6, rotation: 2, probability: 0.8, gain: 0.45, delaySend: 0.25, reverbSend: 0.2 },
+      { voice: 'snare', steps: 16, pulses: 4, rotation: 4, probability: 0.9, gain: 0.55, delaySend: 0.15, reverbSend: 0.2 },
+      { voice: 'bass', steps: 8, pulses: 5, rotation: 0, probability: 1.0, gain: 0.55, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'hat', steps: 16, pulses: 10, rotation: 0, probability: 0.8, gain: 0.35, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.7, delaySend: 0.05, reverbSend: 0.1 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Choir Swell', bpm: 90, root: 60, scale: 'lydian', seed: 90090, masterGain: 0.45,
+    category: 'Vocal & Chorus', mood: ['cinematic', 'orchestral', 'building'],
+    rings: [
+      { voice: 'choir', steps: 8, pulses: 5, rotation: 0, probability: 0.9, gain: 0.55, delaySend: 0.3, reverbSend: 0.7 },
+      { voice: 'vocalPad', steps: 16, pulses: 3, rotation: 4, probability: 0.85, gain: 0.45, delaySend: 0.4, reverbSend: 0.8 },
+      { voice: 'stringPad', steps: 8, pulses: 4, rotation: 0, probability: 0.9, gain: 0.5, delaySend: 0.4, reverbSend: 0.7 },
+      { voice: 'bell', steps: 16, pulses: 2, rotation: 0, probability: 0.7, gain: 0.35, delaySend: 0.5, reverbSend: 0.6 },
+      { voice: 'kick', steps: 16, pulses: 2, rotation: 0, probability: 0.8, gain: 0.5, delaySend: 0.1, reverbSend: 0.3 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Vocal Minimalist', bpm: 70, root: 60, scale: 'pentatonic', seed: 70070, masterGain: 0.45,
+    category: 'Vocal & Chorus', mood: ['meditative', 'sparse', 'calm'],
+    rings: [
+      { voice: 'vocalStab', steps: 16, pulses: 3, rotation: 0, probability: 0.7, gain: 0.4, delaySend: 0.4, reverbSend: 0.6 },
+      { voice: 'pad', steps: 16, pulses: 2, rotation: 5, probability: 0.8, gain: 0.45, delaySend: 0.5, reverbSend: 0.8 },
+      { voice: 'hat', steps: 16, pulses: 2, rotation: 8, probability: 0.4, gain: 0.2, delaySend: 0.3, reverbSend: 0.5 },
+      { voice: 'bass', steps: 16, pulses: 1, rotation: 0, probability: 1.0, gain: 0.4, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'whisper', steps: 16, pulses: 2, rotation: 3, probability: 0.6, gain: 0.35, delaySend: 0.5, reverbSend: 0.7 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
 ];
 
 /**
