@@ -19,6 +19,7 @@ import * as Controls from './ui/controls.js';
 import { createPatch } from './state/patch.js';
 import { encodePatch, syncHashWithPatch, loadPatchFromHash, loadPatchFromStorage, savePatchToStorage } from './state/codec.js';
 import { bjorklund, rotate } from './gen/euclid.js';
+import { midiToFreq } from './gen/scales.js';
 
 // --- Module state ---
 
@@ -28,6 +29,9 @@ let master = null;
 
 // Voice lookup by name — allows dynamic reassignment via ring.voice field.
 const voiceMap = { kick, snare, hat, bass, poly, pluck, clap, tom, cowbell, rim, conga, bell, pad, kalimba, vibraphone, stringPad, gong, sitar, choir, vocalPad, vocalStab, harmonies, whisper, vocalGlitch, shaker, subBass, metallic, marimba, tape, organ };
+
+// Percussive voices don't need a frequency parameter
+const PERCUSSIVE_VOICES = new Set(['kick','snare','hat','clap','tom','cowbell','rim','conga','shaker']);
 
 // Each ring's play function resolves the voice at play-time from ring.voice,
 // so reassigning ring.voice immediately changes what sound plays.
@@ -46,7 +50,7 @@ function playRing(ringIndex) {
     const voiceFn = voiceMap[ring.voice];
     if (!voiceFn) return;
 
-    voiceFn(ctx, destination, time, { ...params, velocity: ring.gain });
+    voiceFn(ctx, destination, time, { ...params, velocity: ring.gain, frequency: PERCUSSIVE_VOICES.has(ring.voice) ? undefined : midiToFreq(currentPatch.root) });
     pushEvent(ringIndex, params.step, time);
   };
 }

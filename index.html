@@ -300,6 +300,27 @@
       border-radius: 4px;
       text-align: center;
     }
+    .key-scale-control {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .key-select-group, .scale-select-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 1;
+    }
+    .key-scale-control label {
+      font-size: 0.75rem;
+      color: #888;
+    }
+    .key-scale-control select {
+      font-size: 0.85rem;
+      padding: 0.35rem 0.5rem;
+    }
     #btn-all {
       font-size: 0.85rem;
       padding: 0.4rem 0.8rem;
@@ -851,6 +872,42 @@
               <input type="number" id="bpm-input" min="40" max="200" value="120">
               <button class="bpm-btn" id="bpm-up">+</button>
             </div>
+            <div class="key-scale-control">
+              <div class="key-select-group">
+                <label>Key</label>
+                <select id="key-select">
+                  <option value="48">C</option>
+                  <option value="49">C#</option>
+                  <option value="50">D</option>
+                  <option value="51">D#</option>
+                  <option value="52">E</option>
+                  <option value="53">F</option>
+                  <option value="54">F#</option>
+                  <option value="55">G</option>
+                  <option value="56">G#</option>
+                  <option value="57">A</option>
+                  <option value="58">A#</option>
+                  <option value="59">B</option>
+                  <option value="60" selected>C (mid)</option>
+                  <option value="62">D (mid)</option>
+                  <option value="64">E (mid)</option>
+                </select>
+              </div>
+              <div class="scale-select-group">
+                <label>Scale</label>
+                <select id="scale-select">
+                  <option value="major">Major</option>
+                  <option value="minor">Minor</option>
+                  <option value="dorian">Dorian</option>
+                  <option value="phrygian">Phrygian</option>
+                  <option value="lydian">Lydian</option>
+                  <option value="mixolydian">Mixolydian</option>
+                  <option value="pentatonic">Pentatonic</option>
+                  <option value="blues">Blues</option>
+                  <option value="chromatic">Chromatic</option>
+                </select>
+              </div>
+            </div>
             <div class="ring-controls">
               <div class="ring-row" data-ring="0">
                 <input type="checkbox" data-voice="0" checked>
@@ -1225,6 +1282,8 @@
         }
       });
       if (bpmInput) bpmInput.value = patch.bpm || 120;
+      if (keySelect) keySelect.value = patch.root || 60;
+      if (scaleSelect) scaleSelect.value = patch.scale || 'major';
     }
     setTimeout(syncDropdowns, 50);
 
@@ -1291,6 +1350,20 @@
     bpmDown.addEventListener('click', () => setBpmValue(getPatch().bpm - 5));
     bpmUp.addEventListener('click', () => setBpmValue(getPatch().bpm + 5));
     bpmInput.addEventListener('change', () => setBpmValue(Number(bpmInput.value) || 120));
+
+    // --- Key & Scale control ---
+    const keySelect = document.getElementById('key-select');
+    const scaleSelect = document.getElementById('scale-select');
+
+    keySelect.addEventListener('change', () => {
+      const patch = getPatch();
+      patch.root = Number(keySelect.value);
+    });
+
+    scaleSelect.addEventListener('change', () => {
+      const patch = getPatch();
+      patch.scale = scaleSelect.value;
+    });
 
     // --- Export controls ---
     const durButtons = document.querySelectorAll('.dur-btn');
