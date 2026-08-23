@@ -8,10 +8,10 @@ export function play(ctx, destination, time, params) {
   osc.frequency.value = freq;
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.frequency.value = 1800;
-  filter.Q.value = 2;
+  filter.frequency.value = 1400;
+  filter.Q.value = 0.8;
   const gain = ctx.createGain();
-  const level = 0.11 * velocity;
+  const level = 0.08 * velocity;
   gain.gain.setValueAtTime(0, time);
   gain.gain.linearRampToValueAtTime(level, time + 0.002);
   gain.gain.exponentialRampToValueAtTime(floor(0), time + 0.002 + 0.200);

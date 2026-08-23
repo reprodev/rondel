@@ -21,15 +21,15 @@ export function play(ctx, destination, time, params) {
   // Lowpass filter with fast envelope — this is what makes it a pluck
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.Q.value = 2;
+  filter.Q.value = 1;
 
-  // Filter envelope: instant open to 4000 Hz, fast decay to 800 Hz
-  filter.frequency.setValueAtTime(4000, time);
-  filter.frequency.exponentialRampToValueAtTime(floor(800), time + 0.120);
+  // Filter envelope: open to 2800 Hz, fast decay to 600 Hz
+  filter.frequency.setValueAtTime(2800, time);
+  filter.frequency.exponentialRampToValueAtTime(floor(600), time + 0.100);
 
   // Amplitude envelope — fast attack, natural string decay
   const gain = ctx.createGain();
-  const level = 0.15 * velocity;
+  const level = 0.10 * velocity;
   gain.gain.setValueAtTime(0, time);
   gain.gain.linearRampToValueAtTime(level, time + 0.002);               // 2ms attack
   gain.gain.exponentialRampToValueAtTime(floor(0), time + 0.002 + 0.180); // 180ms decay

@@ -11,10 +11,10 @@ export function play(ctx, destination, time, params) {
   lfo.type = 'sine';
   lfo.frequency.value = 6;
   const lfoGain = ctx.createGain();
-  lfoGain.gain.value = 0.3 * velocity;
+  lfoGain.gain.value = 0.12 * velocity;
   lfo.connect(lfoGain);
   const gain = ctx.createGain();
-  const level = 0.12 * velocity;
+  const level = 0.08 * velocity;
   gain.gain.setValueAtTime(0, time);
   gain.gain.linearRampToValueAtTime(level, time + 0.020);
   gain.gain.exponentialRampToValueAtTime(floor(0), time + 0.020 + 0.600);
