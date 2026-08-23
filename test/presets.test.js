@@ -4,8 +4,8 @@ import { presets, getPresetByName, getPresetNames, getPresetsByCategory, CATEGOR
 import { validatePatch } from '../src/state/patch.js';
 
 describe('presets', () => {
-  it('has 30 presets', () => {
-    assert.strictEqual(presets.length, 30);
+  it('has 44 presets', () => {
+    assert.strictEqual(presets.length, 44);
   });
 
   it('each preset has a unique name', () => {
@@ -94,24 +94,27 @@ describe('getPresetByName', () => {
 });
 
 describe('getPresetNames', () => {
-  it('returns array of 30 strings', () => {
+  it('returns array of 44 strings', () => {
     const names = getPresetNames();
-    assert.strictEqual(names.length, 30);
+    assert.strictEqual(names.length, 44);
     for (const n of names) assert.strictEqual(typeof n, 'string');
   });
 });
 
 describe('getPresetsByCategory', () => {
-  it('Dancefloor has 6 presets', () => {
-    assert.strictEqual(getPresetsByCategory('Dancefloor').length, 6);
+  it('Dancefloor has 8 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Dancefloor').length, 8);
   });
-  it('World & Groove has 8 presets', () => {
-    assert.strictEqual(getPresetsByCategory('World & Groove').length, 8);
+  it('World & Groove has 10 presets', () => {
+    assert.strictEqual(getPresetsByCategory('World & Groove').length, 10);
   });
-  it('Ambient & Study has 10 presets', () => {
-    assert.strictEqual(getPresetsByCategory('Ambient & Study').length, 10);
+  it('Ambient & Study has 12 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Ambient & Study').length, 12);
   });
-  it('Epic & Cinematic has 6 presets', () => {
-    assert.strictEqual(getPresetsByCategory('Epic & Cinematic').length, 6);
+  it('Epic & Cinematic has 8 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Epic & Cinematic').length, 8);
+  });
+  it('Vocal & Chorus has 6 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Vocal & Chorus').length, 6);
   });
 });
