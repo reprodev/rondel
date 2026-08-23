@@ -2,7 +2,7 @@
 
 **Make music in your browser to share, export or remix. Presets so you don't need to know everything and just start creating.**
 
-Rondel is a generative Euclidean rhythm sequencer that runs entirely in your browser. No install, no account, no copyright worries — just pick a preset, tweak it, and export.
+Rondel is a browser-based music maker powered by Euclidean rhythms. No install, no account, no copyright worries — just pick a preset, tweak it, and export.
 
 ### What's a Euclidean rhythm?
 
