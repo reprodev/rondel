@@ -238,6 +238,73 @@ export async function exportCurrentPatch(durationSeconds) {
   downloadWAV(wavBlob, `rondel-${Date.now()}.wav`);
 }
 
+/**
+ * Export the current patch as a MIDI file and trigger download.
+ * Converts Euclidean patterns to MIDI note events (4 bars).
+ */
+export async function exportCurrentPatchMidi() {
+  const { encodeMidi } = await import('./audio/midi.js');
+  const { bjorklund, rotate } = await import('./gen/euclid.js');
+
+  const bpm = currentPatch.bpm || 120;
+  const stepsPerLoop = 16;
+  const bars = 4;
+  const totalSteps = stepsPerLoop * bars;
+
+  // Map ring voices to MIDI pitches (GM drum map for drums, pitched for melodic)
+  const voiceMidiMap = {
+    kick: 36, snare: 38, hat: 42, bass: 35, poly: 60,
+    pluck: 62, clap: 39, tom: 45, cowbell: 56, rim: 37,
+    conga: 63, bell: 67, pad: 64, kalimba: 69, vibraphone: 72,
+    stringPad: 55, gong: 52, sitar: 71, choir: 74
+  };
+
+  const tracks = [];
+
+  for (let ringIndex = 0; ringIndex < currentPatch.rings.length; ringIndex++) {
+    const ring = currentPatch.rings[ringIndex];
+    if (!ring) continue;
+
+    const pattern = rotate(bjorklund(ring.steps, ring.pulses), ring.rotation);
+    const pitch = voiceMidiMap[ring.voice] || 60;
+    const velocity = Math.round((ring.gain || 0.7) * 127);
+    const notes = [];
+
+    for (let step = 0; step < totalSteps; step++) {
+      const stepInPattern = step % ring.steps;
+      if (!pattern[stepInPattern]) continue;
+      if (ring.probability < 1.0 && Math.random() > ring.probability) continue;
+
+      notes.push({
+        pitch,
+        start: step / (stepsPerLoop / 4), // in beats (quarter notes)
+        duration: 0.25, // 16th note
+        velocity
+      });
+    }
+
+    tracks.push({ notes });
+  }
+
+  const midiBytes = encodeMidi({ bpm, tracks });
+  const blob = new Blob([midiBytes], { type: 'audio/midi' });
+  const url = URL.createObjectURL(blob);
+
+  // iOS Safari fallback
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  if (isIOS) {
+    window.open(url, '_blank');
+  } else {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `rondel-${Date.now()}.mid`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+
+  Controls.showCopyToast('MIDI exported');
+}
+
 export function getPatch() {
   return currentPatch;
 }
