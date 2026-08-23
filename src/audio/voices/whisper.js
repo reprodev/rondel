@@ -16,7 +16,7 @@ export function play(ctx, destination, time, params) {
   bp.Q.value = 2;
 
   const g = ctx.createGain();
-  const level = 0.08 * velocity;
+  const level = 0.05 * velocity;
   g.gain.setValueAtTime(0, time);
   g.gain.linearRampToValueAtTime(level, time + 0.200); // soft attack
   g.gain.setValueAtTime(level * 0.6, time + duration);

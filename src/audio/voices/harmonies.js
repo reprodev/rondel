@@ -25,7 +25,7 @@ export function play(ctx, destination, time, params) {
     filter.Q.value = 1;
 
     const g = ctx.createGain();
-    const level = 0.14 * velocity / 3;
+    const level = 0.06 * velocity / 3;
     g.gain.setValueAtTime(0, time);
     g.gain.linearRampToValueAtTime(level, time + 0.010); // 10ms attack
     g.gain.setValueAtTime(level * 0.9, time + 0.200); // sustain
@@ -50,7 +50,7 @@ export function play(ctx, destination, time, params) {
   nf.frequency.value = 3000;
   const ng = ctx.createGain();
   ng.gain.setValueAtTime(0, time);
-  ng.gain.linearRampToValueAtTime(0.02 * velocity, time + 0.020);
+  ng.gain.linearRampToValueAtTime(0.008 * velocity, time + 0.020);
   ng.gain.exponentialRampToValueAtTime(floor(0), releaseEnd);
   ng.gain.setValueAtTime(0, releaseEnd);
   noise.connect(nf).connect(ng).connect(destination);

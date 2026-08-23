@@ -8,7 +8,7 @@ export function play(ctx, destination, time, params) {
 
   // Formant-like oscillators (warm vowel "aah")
   const formants = [320, 800, 2500];
-  const gains = [0.12, 0.08, 0.03];
+  const gains = [0.05, 0.035, 0.015];
 
   formants.forEach((freq, i) => {
     const osc = ctx.createOscillator();
@@ -37,7 +37,7 @@ export function play(ctx, destination, time, params) {
   detune.type = 'triangle';
   detune.frequency.value = 315;
   const dg = ctx.createGain();
-  const dl = 0.04 * velocity;
+  const dl = 0.02 * velocity;
   dg.gain.setValueAtTime(0, time);
   dg.gain.linearRampToValueAtTime(dl, time + 0.300);
   dg.gain.setValueAtTime(dl * 0.7, time + duration);

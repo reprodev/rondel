@@ -25,7 +25,7 @@ export function play(ctx, destination, time, params) {
     filter.Q.value = 6;
 
     const g = ctx.createGain();
-    const level = 0.22 * velocity / 3;
+    const level = 0.08 * velocity / 3;
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(level, t + 0.002); // 2ms attack
     g.gain.exponentialRampToValueAtTime(floor(0), t + 0.080); // 80ms decay

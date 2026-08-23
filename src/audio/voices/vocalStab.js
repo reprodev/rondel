@@ -6,7 +6,7 @@ export function play(ctx, destination, time, params) {
 
   // Bright formant burst
   const formants = [700, 1200, 2800];
-  const gains = [0.28, 0.18, 0.08];
+  const gains = [0.09, 0.06, 0.03];
 
   formants.forEach((freq, i) => {
     const osc = ctx.createOscillator();
