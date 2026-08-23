@@ -97,7 +97,7 @@ npx serve .
 1. Push this repo to GitHub
 2. Go to **Settings → Pages**
 3. Source: **Deploy from a branch** → `main` → `/ (root)`
-4. Your app is live at `https://reprodev.github.io/rondel`
+4. Your app is live at `https://yourusername.github.io/rondel`
 
 All paths are relative so it works on any subpath. The Dockerfile, package.json, and test files don't affect the site — browsers only load what index.html references.
 
@@ -152,4 +152,6 @@ All audio you export is yours — no attribution required for the music you crea
 
 ---
 
-Built with Web Audio, Euclidean rhythms, and the belief that making music should be as easy as pressing play.
+Built with [Kiro](https://kiro.dev), Web Audio, Euclidean rhythms, and the belief that making music should be as easy as pressing play.
+
+Created for the [Kiro Hackathon](https://kiro.dev/hackathon).

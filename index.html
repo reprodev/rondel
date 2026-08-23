@@ -761,6 +761,22 @@
         left: 260px;
       }
     }
+    .app-footer {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.65rem;
+      color: #444;
+      z-index: 5;
+    }
+    .app-footer a {
+      color: #666;
+      text-decoration: none;
+    }
+    .app-footer a:hover {
+      color: #60d5ff;
+    }
   </style>
 </head>
 <body>
@@ -1209,6 +1225,10 @@
       </div>
     </div>
   </div>
+
+  <footer class="app-footer">
+    Built with <a href="https://kiro.dev" target="_blank" rel="noopener">Kiro</a> for the <a href="https://kiro.dev/hackathon" target="_blank" rel="noopener">Kiro Hackathon</a>
+  </footer>
 
   <script type="module">
     import { start, stop, playing, setActiveVoices, setRingVoice, getPatch, exportCurrentPatch } from './src/main.js';
