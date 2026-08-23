@@ -61,8 +61,8 @@ Open `index.html` in any modern browser. That's it.
 ### Option 2: Node.js
 
 ```bash
-git clone https://github.com/reprodev/Rondel.git
-cd Rondel
+git clone https://github.com/reprodev/rondel.git
+cd rondel
 npm start
 # → http://localhost:3000
 ```
@@ -97,7 +97,7 @@ npx serve .
 1. Push this repo to GitHub
 2. Go to **Settings → Pages**
 3. Source: **Deploy from a branch** → `main` → `/ (root)`
-4. Your app is live at `https://yourusername.github.io/Rondel`
+4. Your app is live at `https://reprodev.github.io/rondel`
 
 All paths are relative so it works on any subpath. The Dockerfile, package.json, and test files don't affect the site — browsers only load what index.html references.
 
