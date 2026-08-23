@@ -8,7 +8,7 @@ Rondel is a generative Euclidean rhythm sequencer that runs entirely in your bro
 
 Getting music for a project shouldn't be hard. Whether you need a background beat for a YouTube video, a loop to rap over, or a MIDI file to drop into your DAW for sampling — the usual path involves expensive software, subscription limits, or hours searching for something that fits.
 
-Rondel was built out of that frustration. The creator wanted a quick way to generate a beat as a MIDI and WAV file while working on sampling vocal tracks for an advert. Instead of spending hours in a full DAW just to get a rhythm bed, Rondel lets you have something usable in seconds — so you can focus on the creative work that actually matters.
+Rondel was built out of that frustration. The creator wanted a quick way to generate a beat as a MIDI and WAV file while working on sampling vocal tracks from an advert he remembered. Instead of spending hours in a full DAW just to get a rhythm bed, Rondel lets you have something usable in seconds — so you can focus on the creative work that actually matters.
 
 It's also designed for people who aren't musicians. You don't need to understand time signatures or synthesis. Pick a preset, change the key if you want, export, done. You made that. It's yours.
 
@@ -18,7 +18,7 @@ It's also designed for people who aren't musicians. You don't need to understand
 - **Rappers and producers** looking for quick beat ideas or loop material
 - **Non-musicians** who want to make something without music theory
 - **Students** exploring generative music and Euclidean rhythms
-- **Anyone** who wants a beat fast without opening a DAW
+- **Anyone** who wants a beat or background music fast without opening a DAW
 
 ## What makes it different
 
@@ -52,7 +52,7 @@ It's also designed for people who aren't musicians. You don't need to understand
 
 Open `index.html` in any modern browser. That's it.
 
-> Note: WAV/MIDI export requires serving over HTTP due to Web Worker restrictions.
+> Serving over HTTP gives the best timing accuracy (Web Worker clock). Opening the file directly still works — the app falls back to a standard timer automatically.
 
 ### Option 2: Node.js
 
