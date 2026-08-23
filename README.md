@@ -142,7 +142,9 @@ test/            — unit tests for all pure modules
 
 ## License
 
-MIT. All audio you export is yours — no attribution required for the music you create.
+MIT — this project is open-source. Fork it, remix it, build on it, make it your own.
+
+All audio you export is yours — no attribution required for the music you create.
 
 ---
 
