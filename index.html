@@ -1403,9 +1403,17 @@
         const matches = !query || name.includes(query) || bpm.includes(query);
         btn.style.display = matches ? '' : 'none';
       });
-      // Show all categories when searching (override accordion)
-      if (query) {
-        presetCategories.forEach(d => d.open = true);
+      // Show/hide categories based on whether they have matching presets
+      presetCategories.forEach(d => {
+        const btns = d.querySelectorAll('.preset-btn');
+        const hasVisible = [...btns].some(b => b.style.display !== 'none');
+        if (query) {
+          d.open = hasVisible;
+          d.style.display = hasVisible ? '' : 'none';
+        } else {
+          d.style.display = '';
+        }
+      });
       }
     });
 
