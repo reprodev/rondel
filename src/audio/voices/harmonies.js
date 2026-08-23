@@ -26,7 +26,7 @@ export function play(ctx, destination, time, params) {
     osc.frequency.value = v.freq;
 
     const g = ctx.createGain();
-    const level = 0.05 * velocity / 3;
+    const level = 0.08 * velocity / 3;
     g.gain.setValueAtTime(0, time);
     g.gain.linearRampToValueAtTime(level, time + 0.015);
     g.gain.setValueAtTime(level * 0.85, time + 0.180);

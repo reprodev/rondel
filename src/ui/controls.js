@@ -12,7 +12,7 @@ let tooltipEl = null;
 let volumeContainer = null;
 let volumeBtn = null;
 let volumeSlider = null;
-let currentVolume = 45;
+let currentVolume = 65;
 let isMuted = false;
 
 const STYLES = `
@@ -353,7 +353,7 @@ export function initControls() {
   volumeSlider.className = 'rondel-volume-slider';
   volumeSlider.min = '0';
   volumeSlider.max = '100';
-  volumeSlider.value = '45';
+  volumeSlider.value = '65';
   volumeSlider.setAttribute('aria-label', 'Volume');
   volumeSlider.addEventListener('input', onVolumeChange);
   volumeContainer.appendChild(volumeSlider);

@@ -1531,12 +1531,32 @@
       mobilePlay.addEventListener('click', async () => {
         if (playing()) {
           stop();
-          mobilePlay.innerHTML = '&#9654;';
         } else {
           await start();
-          mobilePlay.innerHTML = '&#9632;';
         }
+        syncMobilePlayBtn();
       });
+    }
+
+    // Keep mobile play button in sync with transport state
+    function syncMobilePlayBtn() {
+      if (!mobilePlay) return;
+      if (playing()) {
+        mobilePlay.innerHTML = '&#9632;';
+        mobilePlay.style.borderColor = '#4ec96e';
+        mobilePlay.style.color = '#4ec96e';
+      } else {
+        mobilePlay.innerHTML = '&#9654;';
+        mobilePlay.style.borderColor = '#4ec96e';
+        mobilePlay.style.color = '#4ec96e';
+      }
+    }
+
+    // Observe the header play button class to keep mobile bar in sync
+    const headerPlayBtn = document.querySelector('.rondel-play-btn');
+    if (headerPlayBtn) {
+      const playObserver = new MutationObserver(syncMobilePlayBtn);
+      playObserver.observe(headerPlayBtn, { attributes: true, attributeFilter: ['class'] });
     }
     if (mobileDrawerToggle) {
       mobileDrawerToggle.addEventListener('click', () => {

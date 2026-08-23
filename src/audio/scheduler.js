@@ -36,7 +36,7 @@ function onVisibilityChange() {
 export function scheduleStep() {
   for (let i = 0; i < voicePlayers.length; i++) {
     if (!activeVoices.has(i)) continue;
-    const t = Math.max(nextNoteTime, ctx.currentTime + 0.005);
+    const t = Math.max(nextNoteTime, ctx.currentTime + 0.01);
     voicePlayers[i](ctx, destination, t, { step: currentStep, voice: i });
   }
 }
