@@ -153,7 +153,7 @@ export async function start(patchData) {
     if (master) master.disconnect();
     master = createMaster(ctx);
     const vol = Controls.getVolume();
-    master.gain.gain.value = vol * (currentPatch.masterGain ?? 0.5);
+    master.gain.gain.value = vol * (currentPatch.masterGain ?? 0.45) * 0.75;
     master.connect(ctx.destination);
 
     const bpm = currentPatch.bpm || 120;
@@ -394,6 +394,25 @@ Controls.updateStatus(currentPatch, false, currentPatch.bpm);
 // Wire volume control
 Controls.onVolume((vol) => {
   if (master && master.gain) {
-    master.gain.gain.setValueAtTime(vol * (currentPatch.masterGain ?? 0.5), master.gain.context.currentTime);
+    master.gain.gain.setValueAtTime(vol * (currentPatch.masterGain ?? 0.45) * 0.75, master.gain.context.currentTime);
   }
 });
+
+// Initialize canvas immediately so the placeholder is replaced on load
+function initCanvas() {
+  getCanvas();
+  startDrawLoop({
+    bpm: currentPatch.bpm || 120,
+    stepsPerLoop: 16,
+    loopStartTime: performance.now() / 1000,
+    seed: currentPatch.seed || 12345,
+    activeVoices: currentPatch.activeVoices || [0, 1, 2, 3, 4],
+    rings: currentPatch.rings,
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCanvas);
+} else {
+  initCanvas();
+}

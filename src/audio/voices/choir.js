@@ -12,7 +12,7 @@ export function play(ctx, destination, time, params) {
   noiseFilter.type = 'lowpass';
   noiseFilter.frequency.value = 1000;
   const noiseGain = ctx.createGain();
-  const noiseLevel = 0.04 * velocity;
+  const noiseLevel = 0.03 * velocity;
   noiseGain.gain.setValueAtTime(0, time);
   noiseGain.gain.linearRampToValueAtTime(noiseLevel, time + 0.150);
   noiseGain.gain.setValueAtTime(noiseLevel * 0.6, time + duration);
@@ -27,7 +27,7 @@ export function play(ctx, destination, time, params) {
     o.type = 'sine';
     o.frequency.value = f;
     const g = ctx.createGain();
-    const l = 0.08 * velocity / 3;
+    const l = 0.07 * velocity / 3;
     g.gain.setValueAtTime(0, time);
     g.gain.linearRampToValueAtTime(l, time + 0.150);
     g.gain.setValueAtTime(l * 0.6, time + duration);

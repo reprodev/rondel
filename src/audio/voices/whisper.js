@@ -16,7 +16,7 @@ export function play(ctx, destination, time, params) {
   bp.Q.value = 2;
 
   const g = ctx.createGain();
-  const level = 0.07 * velocity;
+  const level = 0.05 * velocity;
   g.gain.setValueAtTime(0, time);
   g.gain.linearRampToValueAtTime(level, time + 0.200); // soft attack
   g.gain.setValueAtTime(level * 0.6, time + duration);
@@ -31,7 +31,7 @@ export function play(ctx, destination, time, params) {
   osc.type = 'sine';
   osc.frequency.value = 600;
   const og = ctx.createGain();
-  const ol = 0.02 * velocity;
+  const ol = 0.015 * velocity;
   og.gain.setValueAtTime(0, time);
   og.gain.linearRampToValueAtTime(ol, time + 0.300);
   og.gain.setValueAtTime(ol * 0.5, time + duration);

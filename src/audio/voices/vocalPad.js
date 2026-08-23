@@ -8,7 +8,7 @@ export function play(ctx, destination, time, params) {
 
   // Warm formants only in low-mid range; no exposed high frequencies
   const formants = [280, 700, 1400];
-  const gains = [0.055, 0.04, 0.015];
+  const gains = [0.045, 0.03, 0.01];
 
   // Damping lowpass to prevent brightness accumulation
   const lp = ctx.createBiquadFilter();
@@ -44,7 +44,7 @@ export function play(ctx, destination, time, params) {
   sub.type = 'sine';
   sub.frequency.value = 180;
   const sg = ctx.createGain();
-  const sl = 0.02 * velocity;
+  const sl = 0.015 * velocity;
   sg.gain.setValueAtTime(0, time);
   sg.gain.linearRampToValueAtTime(sl, time + 0.350);
   sg.gain.setValueAtTime(sl * 0.6, time + duration);

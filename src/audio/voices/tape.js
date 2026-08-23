@@ -27,7 +27,7 @@ export function play(ctx, destination, time, params) {
   lp.Q.value = 0.5;
 
   const g = ctx.createGain();
-  const level = 0.06 * velocity;
+  const level = 0.05 * velocity;
   g.gain.setValueAtTime(0, time);
   g.gain.linearRampToValueAtTime(level, time + 0.150);
   g.gain.setValueAtTime(level * 0.7, time + duration);

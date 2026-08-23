@@ -25,7 +25,7 @@ export function play(ctx, destination, time, params) {
     filter.Q.value = 3; // reduced from 6 to eliminate ringing
 
     const g = ctx.createGain();
-    const level = 0.08 * velocity / 3;
+    const level = 0.07 * velocity / 3;
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(level, t + 0.003);
     g.gain.exponentialRampToValueAtTime(floor(0), t + 0.065); // shorter decay
