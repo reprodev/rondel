@@ -19,6 +19,7 @@ export function getCanvas() {
   canvas.style.height = '100%';
   canvas.style.display = 'block';
   canvas.style.borderRadius = '8px';
+  canvas.style.touchAction = 'none';
 
   if (placeholder) {
     placeholder.replaceWith(canvas);
@@ -29,6 +30,9 @@ export function getCanvas() {
   ctx2d = canvas.getContext('2d');
   resizeCanvas();
   setupResizeObserver();
+
+  // Second resize after layout settles
+  requestAnimationFrame(() => requestAnimationFrame(resizeCanvas));
 
   return { canvas, ctx: ctx2d, size, dpr };
 }

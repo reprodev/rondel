@@ -127,64 +127,70 @@ function onPlayToggle() {
 // --- Public API ---
 
 export async function start(patchData) {
-  if (patchData && patchData !== currentPatch) {
-    if (patchData.bpm !== undefined) currentPatch.bpm = patchData.bpm;
-    if (patchData.root !== undefined) currentPatch.root = patchData.root;
-    if (patchData.scale !== undefined) currentPatch.scale = patchData.scale;
-    if (patchData.seed !== undefined) currentPatch.seed = patchData.seed;
-    if (patchData.masterGain !== undefined) currentPatch.masterGain = patchData.masterGain;
-    if (patchData.activeVoices !== undefined) currentPatch.activeVoices = patchData.activeVoices;
-    if (patchData.rings) currentPatch.rings = patchData.rings;
-    if (patchData.arrangement) currentPatch.arrangement = patchData.arrangement;
+  try {
+    if (patchData && patchData !== currentPatch) {
+      if (patchData.bpm !== undefined) currentPatch.bpm = patchData.bpm;
+      if (patchData.root !== undefined) currentPatch.root = patchData.root;
+      if (patchData.scale !== undefined) currentPatch.scale = patchData.scale;
+      if (patchData.seed !== undefined) currentPatch.seed = patchData.seed;
+      if (patchData.masterGain !== undefined) currentPatch.masterGain = patchData.masterGain;
+      if (patchData.activeVoices !== undefined) currentPatch.activeVoices = patchData.activeVoices;
+      if (patchData.rings) currentPatch.rings = patchData.rings;
+      if (patchData.arrangement) currentPatch.arrangement = patchData.arrangement;
+    }
+
+    const ctx = await ensureResumed();
+    initNoise(ctx);
+
+    // Create master bus: compressor + limiter + analyser
+    if (master) master.disconnect();
+    master = createMaster(ctx);
+    master.gain.gain.value = currentPatch.masterGain ?? 0.45;
+    master.connect(ctx.destination);
+
+    const bpm = currentPatch.bpm || 120;
+    const stepsPerLoop = 16;
+
+    startScheduler({
+      bpm,
+      stepsPerLoop,
+      voices: wrappedVoices,
+      dest: master.input,  // voices route through master chain
+      activeVoices: currentPatch.activeVoices,
+    });
+
+    const secondsPerStep = (60 / bpm) / (stepsPerLoop / 4);
+    const secondsPerLoop = secondsPerStep * stepsPerLoop;
+
+    startDrawLoop({
+      bpm,
+      stepsPerLoop,
+      loopStartTime: performance.now() / 1000,
+      seed: currentPatch.seed || 12345,
+      activeVoices: currentPatch.activeVoices || [0, 1, 2, 3, 4],
+      rings: currentPatch.rings,
+    });
+
+    syncTiming(performance.now() / 1000, secondsPerLoop, bpm);
+
+    const { canvas } = getCanvas();
+    startInteraction(canvas, {
+      onStepToggle,
+      onProbabilityDrag,
+      onPulsesDrag,
+      onRotationDrag,
+      onTempoTap,
+      onPlayToggle,
+      ringSteps: currentPatch.rings.map(r => r.steps),
+    });
+
+    Controls.setPlayingState(true);
+    Controls.updateStatus(currentPatch, true, bpm);
+  } catch (err) {
+    Controls.showCopyToast('Audio failed to start — tap to retry');
+    Controls.setPlayingState(false);
+    console.error('[rondel] start() failed:', err);
   }
-
-  const ctx = await ensureResumed();
-  initNoise(ctx);
-
-  // Create master bus: compressor + limiter + analyser
-  if (master) master.disconnect();
-  master = createMaster(ctx);
-  master.gain.gain.value = currentPatch.masterGain ?? 0.45;
-  master.connect(ctx.destination);
-
-  const bpm = currentPatch.bpm || 120;
-  const stepsPerLoop = 16;
-
-  startScheduler({
-    bpm,
-    stepsPerLoop,
-    voices: wrappedVoices,
-    dest: master.input,  // voices route through master chain
-    activeVoices: currentPatch.activeVoices,
-  });
-
-  const secondsPerStep = (60 / bpm) / (stepsPerLoop / 4);
-  const secondsPerLoop = secondsPerStep * stepsPerLoop;
-
-  startDrawLoop({
-    bpm,
-    stepsPerLoop,
-    loopStartTime: performance.now() / 1000,
-    seed: currentPatch.seed || 12345,
-    activeVoices: currentPatch.activeVoices || [0, 1, 2, 3, 4],
-    rings: currentPatch.rings,
-  });
-
-  syncTiming(performance.now() / 1000, secondsPerLoop, bpm);
-
-  const { canvas } = getCanvas();
-  startInteraction(canvas, {
-    onStepToggle,
-    onProbabilityDrag,
-    onPulsesDrag,
-    onRotationDrag,
-    onTempoTap,
-    onPlayToggle,
-    ringSteps: currentPatch.rings.map(r => r.steps),
-  });
-
-  Controls.setPlayingState(true);
-  Controls.updateStatus(currentPatch, true, bpm);
 }
 
 export function stop() {

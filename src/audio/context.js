@@ -11,7 +11,7 @@ let resumed = false;
  */
 export function getContext() {
   if (!ctx) {
-    ctx = new AudioContext({ sampleRate: 44100 });
+    ctx = new AudioContext();
   }
   return ctx;
 }

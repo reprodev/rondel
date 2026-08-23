@@ -5,6 +5,7 @@
 import { getContext } from './context.js';
 
 let worker = null;
+let fallbackIntervalId = null;
 let isRunning = false;
 let currentStep = 0;
 let nextNoteTime = 0;
@@ -62,17 +63,21 @@ export function start(options = {}) {
   nextNoteTime = ctx.currentTime + 0.1;
   currentStep = 0;
 
-  worker = new Worker(new URL('./clock.worker.js', import.meta.url));
-
-  worker.onmessage = (e) => {
-    if (e.data.type === 'tick') {
-      onTick();
-    } else if (e.data.type === 'config') {
-      lookahead = e.data.lookahead;
-    }
-  };
-
-  worker.postMessage({ command: 'start' });
+  try {
+    worker = new Worker(new URL('./clock.worker.js', import.meta.url));
+    worker.onmessage = (e) => {
+      if (e.data.type === 'tick') {
+        onTick();
+      } else if (e.data.type === 'config') {
+        lookahead = e.data.lookahead;
+      }
+    };
+    worker.postMessage({ command: 'start' });
+  } catch (e) {
+    // Fallback for browsers that don't support module workers or import.meta in workers
+    worker = null;
+    fallbackIntervalId = setInterval(onTick, 25);
+  }
   document.addEventListener('visibilitychange', onVisibilityChange);
   isRunning = true;
 }
@@ -80,9 +85,15 @@ export function start(options = {}) {
 export function stop() {
   if (!isRunning) return;
 
-  worker.postMessage({ command: 'stop' });
-  worker.terminate();
-  worker = null;
+  if (worker) {
+    worker.postMessage({ command: 'stop' });
+    worker.terminate();
+    worker = null;
+  }
+  if (fallbackIntervalId !== null) {
+    clearInterval(fallbackIntervalId);
+    fallbackIntervalId = null;
+  }
 
   document.removeEventListener('visibilitychange', onVisibilityChange);
   isRunning = false;

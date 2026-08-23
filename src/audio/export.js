@@ -91,6 +91,14 @@ export async function exportWAV(patch, durationSeconds, sampleRate = 44100) {
  */
 export function downloadWAV(wavBlob, filename = 'rondel-export.wav') {
   const url = URL.createObjectURL(wavBlob);
+
+  // iOS Safari doesn't support programmatic downloads via <a>.click()
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  if (isIOS) {
+    window.open(url, '_blank');
+    return;
+  }
+
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
