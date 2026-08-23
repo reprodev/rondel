@@ -1,4 +1,8 @@
-# 🎵 Rondel
+<div align="center">
+<img src="assets/rondel-logo.svg" alt="Rondel" width="320">
+</div>
+
+# Rondel
 
 <div align="center">
 
