@@ -57,6 +57,7 @@ const STYLES = `
   .rondel-play-btn.playing {
     animation: none;
     border-color: #4ec96e;
+    box-shadow: 0 0 10px rgba(78, 201, 110, 0.3), inset 0 0 6px rgba(78, 201, 110, 0.15);
   }
   @keyframes pulse-glow {
     0%, 100% { border-color: #666; box-shadow: 0 0 0 0 rgba(78, 201, 110, 0); }

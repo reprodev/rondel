@@ -30,14 +30,21 @@
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 0.5rem 1.2rem;
-      border-bottom: 1px solid #333;
+      padding: 0.6rem 1.2rem;
+      border-bottom: 1px solid #2a2a2a;
+      background: linear-gradient(180deg, #1f1f1f 0%, #1a1a1a 100%);
       flex-shrink: 0;
       z-index: 10;
     }
     .app-header h1 {
-      font-size: 1rem;
+      font-size: 1.05rem;
       white-space: nowrap;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      background: linear-gradient(135deg, #e0e0e0, #aaa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     /* --- Main Content (drawer + canvas) --- */
@@ -54,8 +61,9 @@
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      border-right: 1px solid #333;
+      border-right: 1px solid #2a2a2a;
       background: #1a1a1a;
+      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
       transition: margin-left 0.25s ease, opacity 0.2s ease;
       overflow: hidden;
     }
@@ -90,6 +98,7 @@
     .drawer-toggle:hover {
       background: #333;
       color: #fff;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.4);
     }
     .app-main:not(.drawer-closed) .drawer-toggle {
       left: 300px;
@@ -126,6 +135,7 @@
       background: #2a4a6a;
       color: #60d5ff;
       border-color: #60d5ff;
+      box-shadow: inset 0 -2px 0 #60d5ff, 0 2px 6px rgba(96, 213, 255, 0.15);
     }
 
     /* --- Tab Panes --- */
@@ -186,13 +196,14 @@
       min-width: 0;
       min-height: 0;
       overflow: hidden;
+      background: radial-gradient(ellipse at center, #1d1d1d 0%, #141414 100%);
     }
 
     #canvas-placeholder {
       width: 100%;
       height: 100%;
       background: #111;
-      border: 1px solid #333;
+      border: 1px solid #2a2a2a;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -376,6 +387,14 @@
     .category-header:hover {
       color: #fff;
     }
+    .preset-category.has-active > .category-header::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #60d5ff;
+      flex-shrink: 0;
+    }
     .preset-list {
       display: flex;
       flex-direction: column;
@@ -383,6 +402,11 @@
       padding: 0.5rem 0 0 0;
       max-height: 220px;
       overflow-y: auto;
+      animation: slideDown 0.2s ease;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .preset-btn {
       background: #222;
@@ -399,6 +423,7 @@
       background: #2a4a6a;
       color: #fff;
       border-color: #5a9fd4;
+      transform: translateX(2px);
     }
     .preset-btn[data-bpm]::after {
       content: attr(data-bpm) ' bpm';
@@ -430,6 +455,7 @@
       background: #2a5a3a;
       color: #fff;
       border-color: #6eee8e;
+      box-shadow: 0 2px 8px rgba(78, 201, 110, 0.2);
     }
     .onboarding-hint {
       font-size: 0.8rem;
@@ -441,21 +467,30 @@
     /* --- Drawer Hints --- */
     .drawer-hints {
       flex-shrink: 0;
-      padding: 0.75rem 1rem;
+      padding: 0.6rem 0.75rem;
       border-top: 1px solid #2a2a2a;
-      font-size: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.75rem;
+      font-size: 0.7rem;
       color: #666;
-      line-height: 2;
+      align-items: center;
     }
-    .drawer-hints span {
+    .drawer-hints .hint-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+    }
+    .drawer-hints kbd {
       display: inline-block;
       background: #2a2a2a;
       border: 1px solid #3a3a3a;
       border-radius: 3px;
-      padding: 0.1rem 0.4rem;
+      padding: 0.1rem 0.35rem;
       color: #999;
-      font-size: 0.7rem;
-      margin-right: 0.25rem;
+      font-family: inherit;
+      font-size: 0.65rem;
     }
 
     /* --- Tab Help Text --- */
@@ -915,10 +950,10 @@
         </div>
 
         <div class="drawer-hints">
-          <span>Space</span> play/stop
-          <span>&#8592; &#8594;</span> rotate
-          <span>+/-</span> tempo
-          <span>Click ring</span> edit pulses
+          <span class="hint-item"><kbd>Space</kbd> play/stop</span>
+          <span class="hint-item"><kbd>&#8592;&#8594;</kbd> rotate</span>
+          <span class="hint-item"><kbd>+/-</kbd> tempo</span>
+          <span class="hint-item"><kbd>Click</kbd> edit pulses</span>
         </div>
       </aside>
 
@@ -1072,6 +1107,10 @@
         if (preset) {
           presetButtons.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
+          // Mark parent category as having active preset
+          presetCategories.forEach(c => c.classList.remove('has-active'));
+          const parentCategory = btn.closest('.preset-category');
+          if (parentCategory) parentCategory.classList.add('has-active');
           hideOnboarding();
           await start(preset);
           syncDropdowns();
