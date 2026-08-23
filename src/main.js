@@ -142,6 +142,9 @@ export async function start(patchData) {
       if (patchData.rings) currentPatch.rings = patchData.rings;
       if (patchData.arrangement) currentPatch.arrangement = patchData.arrangement;
     }
+    // Track preset name for filename generation
+    if (patchData && patchData.name) currentPatch._presetName = patchData.name;
+    else if (!currentPatch._presetName) currentPatch._presetName = 'custom';
 
     const ctx = await ensureResumed();
     initNoise(ctx);
@@ -241,6 +244,20 @@ export function setRingVoice(ringIndex, voiceName) {
   persistPatch();
 }
 
+// Generate a descriptive filename from the current patch state
+function generateFilename(ext, durationSeconds) {
+  const NOTE_NAMES = ['C','Cs','D','Ds','E','F','Fs','G','Gs','A','As','B'];
+  const root = currentPatch.root || 60;
+  const key = NOTE_NAMES[root % 12];
+  const scale = (currentPatch.scale || 'major').slice(0, 3);
+  const bpm = currentPatch.bpm || 120;
+  // Try to find active preset name
+  const name = currentPatch._presetName || 'custom';
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const durStr = durationSeconds ? `-${durationSeconds}s` : '';
+  return `rondel-${slug}-${bpm}bpm-${key}${scale}${durStr}.${ext}`;
+}
+
 /**
  * Export the current patch as a WAV file and trigger download.
  * @param {number} durationSeconds — how long to render
@@ -248,7 +265,7 @@ export function setRingVoice(ringIndex, voiceName) {
 export async function exportCurrentPatch(durationSeconds) {
   const { exportWAV, downloadWAV } = await import('./audio/export.js');
   const { wavBlob } = await exportWAV(currentPatch, durationSeconds);
-  downloadWAV(wavBlob, `rondel-${Date.now()}.wav`);
+  downloadWAV(wavBlob, generateFilename('wav', durationSeconds));
 }
 
 /**
@@ -310,7 +327,7 @@ export async function exportCurrentPatchMidi() {
   } else {
     const a = document.createElement('a');
     a.href = url;
-    a.download = `rondel-${Date.now()}.mid`;
+    a.download = generateFilename('mid');
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
   }
