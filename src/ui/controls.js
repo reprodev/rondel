@@ -1,4 +1,4 @@
-// DOM overlay controls — status display, modals, tooltips, keyboard hints.
+// DOM overlay controls â€” status display, modals, tooltips, keyboard hints.
 // These float above the canvas and are managed independently from the
 // rAF draw loop so they don't cause layout thrashing every frame.
 
@@ -234,6 +234,24 @@ const STYLES = `
     white-space: nowrap;
   }
   .rondel-tooltip.visible { opacity: 1; }
+
+  @media (max-width: 699px) {
+    .rondel-controls {
+      gap: 0.6rem;
+      padding-left: 0.5rem;
+    }
+    .rondel-status {
+      display: none;
+    }
+    .rondel-volume-slider {
+      width: 50px;
+    }
+    .rondel-play-btn {
+      width: 32px;
+      height: 32px;
+      font-size: 0.9rem;
+    }
+  }
 `;
 
 /**
@@ -255,7 +273,7 @@ let onVolumeChangeCallback = null;
 function toggleMute() {
   isMuted = !isMuted;
   if (isMuted) {
-    volumeBtn.innerHTML = '\uD83D\uDD07'; // 🔇
+    volumeBtn.innerHTML = '\uD83D\uDD07'; // ðŸ”‡
     volumeBtn.classList.add('muted');
     if (onVolumeChangeCallback) onVolumeChangeCallback(0);
   } else {
@@ -279,11 +297,11 @@ function onVolumeChange() {
 
 function updateVolumeIcon(vol) {
   if (vol === 0) {
-    volumeBtn.innerHTML = '\uD83D\uDD07'; // 🔇
+    volumeBtn.innerHTML = '\uD83D\uDD07'; // ðŸ”‡
   } else if (vol < 40) {
-    volumeBtn.innerHTML = '\uD83D\uDD09'; // 🔉
+    volumeBtn.innerHTML = '\uD83D\uDD09'; // ðŸ”‰
   } else {
-    volumeBtn.innerHTML = '\uD83D\uDD0A'; // 🔊
+    volumeBtn.innerHTML = '\uD83D\uDD0A'; // ðŸ”Š
   }
 }
 
@@ -302,7 +320,7 @@ export function getVolume() {
 }
 
 /**
- * Create the full DOM structure for controls. Idempotent — calling
+ * Create the full DOM structure for controls. Idempotent â€” calling
  * multiple times returns the same elements.
  */
 export function initControls() {
@@ -325,7 +343,7 @@ export function initControls() {
 
   volumeBtn = document.createElement('button');
   volumeBtn.className = 'rondel-volume-btn';
-  volumeBtn.innerHTML = '\uD83D\uDD0A'; // 🔊
+  volumeBtn.innerHTML = '\uD83D\uDD0A'; // ðŸ”Š
   volumeBtn.setAttribute('aria-label', 'Mute');
   volumeBtn.addEventListener('click', toggleMute);
   volumeContainer.appendChild(volumeBtn);
@@ -345,7 +363,7 @@ export function initControls() {
   // Play/Stop button
   playBtn = document.createElement('button');
   playBtn.className = 'rondel-play-btn';
-  playBtn.textContent = '\u25B6'; // ▶
+  playBtn.textContent = '\u25B6'; // â–¶
   playBtn.setAttribute('aria-label', 'Play');
   root.appendChild(playBtn);
 
@@ -372,7 +390,7 @@ export function initControls() {
  */
 export function updateStatus(patch, isPlaying, bpm) {
   if (!statusEl) return;
-  const icon = isPlaying ? '\u25B6' : '\u23F8'; // ▶ or ⏸
+  const icon = isPlaying ? '\u25B6' : '\u23F8'; // â–¶ or â¸
   statusEl.textContent = `${icon} ${bpm} BPM`;
 }
 
@@ -382,11 +400,11 @@ export function updateStatus(patch, isPlaying, bpm) {
 export function setPlayingState(isPlaying) {
   if (!playBtn) return;
   if (isPlaying) {
-    playBtn.textContent = '\u25A0'; // ■
+    playBtn.textContent = '\u25A0'; // â– 
     playBtn.classList.add('playing');
     playBtn.setAttribute('aria-label', 'Stop');
   } else {
-    playBtn.textContent = '\u25B6'; // ▶
+    playBtn.textContent = '\u25B6'; // â–¶
     playBtn.classList.remove('playing');
     playBtn.setAttribute('aria-label', 'Play');
   }
