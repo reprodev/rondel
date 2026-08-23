@@ -1,11 +1,11 @@
-// 40 curated presets organized by category.
+// 75 curated presets organized by category (15 per category).
 // All gain-staged for release-ready output (~-14 LUFS through the master chain).
 // Pure ES module, no side effects, no DOM.
 
 export const CATEGORIES = ['Dancefloor', 'World & Groove', 'Ambient & Study', 'Epic & Cinematic', 'Vocal & Chorus'];
 
 export const presets = [
-  // ═══ DANCEFLOOR (8) — multiplier 0.85x ═══
+  // ═══ DANCEFLOOR (15) — multiplier 0.85x ═══
   {
     name: 'Techno Kick Drive', bpm: 128, root: 48, scale: 'minor', seed: 77707, masterGain: 0.45,
     category: 'Dancefloor', mood: ['driving', 'hypnotic', 'dark'],
@@ -102,8 +102,92 @@ export const presets = [
     ],
     arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
   },
+  {
+    name: 'Minimal Techno', bpm: 130, root: 48, scale: 'minor', seed: 13013, masterGain: 0.45,
+    category: 'Dancefloor', mood: ['minimal', 'hypnotic', 'deep'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.68, delaySend: 0.0, reverbSend: 0.1 },
+      { voice: 'shaker', steps: 16, pulses: 12, rotation: 0, probability: 0.85, gain: 0.34, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'subBass', steps: 16, pulses: 3, rotation: 2, probability: 1.0, gain: 0.43, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'clap', steps: 16, pulses: 2, rotation: 4, probability: 0.9, gain: 0.47, delaySend: 0.2, reverbSend: 0.2 },
+      { voice: 'metallic', steps: 16, pulses: 2, rotation: 8, probability: 0.7, gain: 0.30, delaySend: 0.4, reverbSend: 0.5 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Peak Hour', bpm: 135, root: 50, scale: 'minor', seed: 13513, masterGain: 0.45,
+    category: 'Dancefloor', mood: ['energetic', 'peak-time', 'rolling'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.68, delaySend: 0.0, reverbSend: 0.1 },
+      { voice: 'hat', steps: 16, pulses: 14, rotation: 0, probability: 0.9, gain: 0.34, delaySend: 0.1, reverbSend: 0.05 },
+      { voice: 'snare', steps: 16, pulses: 2, rotation: 4, probability: 1.0, gain: 0.51, delaySend: 0.15, reverbSend: 0.2 },
+      { voice: 'organ', steps: 16, pulses: 4, rotation: 2, probability: 0.85, gain: 0.38, delaySend: 0.3, reverbSend: 0.4 },
+      { voice: 'subBass', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.43, delaySend: 0.1, reverbSend: 0.1 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Garage 2-Step', bpm: 130, root: 52, scale: 'minor', seed: 20020, masterGain: 0.45,
+    category: 'Dancefloor', mood: ['shuffled', 'bouncy', 'UK'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 3, rotation: 0, probability: 1.0, gain: 0.64, delaySend: 0.05, reverbSend: 0.15 },
+      { voice: 'snare', steps: 16, pulses: 4, rotation: 3, probability: 0.9, gain: 0.51, delaySend: 0.2, reverbSend: 0.25 },
+      { voice: 'shaker', steps: 16, pulses: 10, rotation: 1, probability: 0.8, gain: 0.30, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'bass', steps: 16, pulses: 5, rotation: 1, probability: 1.0, gain: 0.43, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'pluck', steps: 16, pulses: 3, rotation: 6, probability: 0.8, gain: 0.34, delaySend: 0.4, reverbSend: 0.5 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Electro Bounce', bpm: 125, root: 48, scale: 'chromatic', seed: 12512, masterGain: 0.45,
+    category: 'Dancefloor', mood: ['bouncy', 'electro', 'punchy'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.68, delaySend: 0.0, reverbSend: 0.1 },
+      { voice: 'clap', steps: 16, pulses: 2, rotation: 4, probability: 1.0, gain: 0.51, delaySend: 0.2, reverbSend: 0.2 },
+      { voice: 'hat', steps: 16, pulses: 8, rotation: 0, probability: 0.85, gain: 0.30, delaySend: 0.1, reverbSend: 0.05 },
+      { voice: 'metallic', steps: 16, pulses: 4, rotation: 5, probability: 0.75, gain: 0.34, delaySend: 0.3, reverbSend: 0.4 },
+      { voice: 'subBass', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.43, delaySend: 0.1, reverbSend: 0.1 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Dark Warehouse', bpm: 138, root: 45, scale: 'phrygian', seed: 13813, masterGain: 0.45,
+    category: 'Dancefloor', mood: ['dark', 'industrial', 'relentless'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 8, rotation: 0, probability: 0.95, gain: 0.68, delaySend: 0.05, reverbSend: 0.1 },
+      { voice: 'hat', steps: 16, pulses: 16, rotation: 0, probability: 0.8, gain: 0.30, delaySend: 0.05, reverbSend: 0.05 },
+      { voice: 'snare', steps: 16, pulses: 4, rotation: 4, probability: 0.9, gain: 0.47, delaySend: 0.15, reverbSend: 0.15 },
+      { voice: 'subBass', steps: 16, pulses: 3, rotation: 0, probability: 1.0, gain: 0.43, delaySend: 0.1, reverbSend: 0.05 },
+      { voice: 'metallic', steps: 16, pulses: 2, rotation: 10, probability: 0.6, gain: 0.26, delaySend: 0.5, reverbSend: 0.6 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Trance Anthem', bpm: 140, root: 55, scale: 'minor', seed: 14014, masterGain: 0.45,
+    category: 'Dancefloor', mood: ['euphoric', 'building', 'epic'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.68, delaySend: 0.0, reverbSend: 0.1 },
+      { voice: 'hat', steps: 16, pulses: 8, rotation: 0, probability: 0.9, gain: 0.30, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'organ', steps: 16, pulses: 6, rotation: 2, probability: 0.85, gain: 0.38, delaySend: 0.3, reverbSend: 0.5 },
+      { voice: 'subBass', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.43, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'clap', steps: 16, pulses: 2, rotation: 4, probability: 1.0, gain: 0.47, delaySend: 0.2, reverbSend: 0.3 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Breakbeat Science', bpm: 145, root: 50, scale: 'dorian', seed: 14514, masterGain: 0.45,
+    category: 'Dancefloor', mood: ['complex', 'broken', 'scientific'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 5, rotation: 1, probability: 0.9, gain: 0.60, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'snare', steps: 16, pulses: 7, rotation: 3, probability: 0.8, gain: 0.47, delaySend: 0.2, reverbSend: 0.2 },
+      { voice: 'shaker', steps: 16, pulses: 12, rotation: 0, probability: 0.75, gain: 0.30, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'bass', steps: 16, pulses: 4, rotation: 2, probability: 1.0, gain: 0.43, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'marimba', steps: 16, pulses: 3, rotation: 7, probability: 0.7, gain: 0.34, delaySend: 0.4, reverbSend: 0.5 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
 
-  // ═══ WORLD & GROOVE (10) — multiplier 0.9x ═══
+  // ═══ WORLD & GROOVE (15) — multiplier 0.9x ═══
   {
     name: 'Afro Polyrhythm', bpm: 110, root: 52, scale: 'mixolydian', seed: 42042, masterGain: 0.45,
     category: 'World & Groove', mood: ['rhythmic', 'warm', 'polymetric'],
@@ -224,8 +308,68 @@ export const presets = [
     ],
     arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
   },
+  {
+    name: 'Highlife Groove', bpm: 115, root: 55, scale: 'major', seed: 11511, masterGain: 0.45,
+    category: 'World & Groove', mood: ['joyful', 'bright', 'african'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.63, delaySend: 0.05, reverbSend: 0.15 },
+      { voice: 'shaker', steps: 16, pulses: 10, rotation: 0, probability: 0.9, gain: 0.32, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'marimba', steps: 8, pulses: 5, rotation: 1, probability: 0.85, gain: 0.41, delaySend: 0.3, reverbSend: 0.4 },
+      { voice: 'bass', steps: 16, pulses: 5, rotation: 0, probability: 1.0, gain: 0.45, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'organ', steps: 16, pulses: 3, rotation: 4, probability: 0.8, gain: 0.36, delaySend: 0.3, reverbSend: 0.4 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Cumbia Digital', bpm: 100, root: 52, scale: 'major', seed: 10010, masterGain: 0.45,
+    category: 'World & Groove', mood: ['latin', 'bouncy', 'digital'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.63, delaySend: 0.05, reverbSend: 0.1 },
+      { voice: 'conga', steps: 16, pulses: 6, rotation: 2, probability: 0.9, gain: 0.41, delaySend: 0.15, reverbSend: 0.2 },
+      { voice: 'shaker', steps: 16, pulses: 8, rotation: 0, probability: 0.85, gain: 0.27, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'organ', steps: 8, pulses: 4, rotation: 0, probability: 0.9, gain: 0.41, delaySend: 0.3, reverbSend: 0.4 },
+      { voice: 'bass', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.45, delaySend: 0.1, reverbSend: 0.1 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Middle Eastern', bpm: 105, root: 48, scale: 'phrygian', seed: 10510, masterGain: 0.45,
+    category: 'World & Groove', mood: ['exotic', 'hypnotic', 'modal'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 3, rotation: 0, probability: 1.0, gain: 0.63, delaySend: 0.1, reverbSend: 0.2 },
+      { voice: 'rim', steps: 16, pulses: 7, rotation: 1, probability: 0.85, gain: 0.36, delaySend: 0.15, reverbSend: 0.2 },
+      { voice: 'sitar', steps: 8, pulses: 5, rotation: 0, probability: 0.9, gain: 0.45, delaySend: 0.4, reverbSend: 0.5 },
+      { voice: 'conga', steps: 16, pulses: 4, rotation: 3, probability: 0.8, gain: 0.36, delaySend: 0.2, reverbSend: 0.25 },
+      { voice: 'subBass', steps: 16, pulses: 2, rotation: 0, probability: 1.0, gain: 0.45, delaySend: 0.1, reverbSend: 0.1 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Ska Upbeat', bpm: 120, root: 55, scale: 'major', seed: 12012, masterGain: 0.45,
+    category: 'World & Groove', mood: ['upbeat', 'punchy', 'jamaican'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.63, delaySend: 0.05, reverbSend: 0.1 },
+      { voice: 'snare', steps: 16, pulses: 4, rotation: 2, probability: 0.95, gain: 0.50, delaySend: 0.15, reverbSend: 0.2 },
+      { voice: 'organ', steps: 16, pulses: 8, rotation: 1, probability: 0.9, gain: 0.36, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'bass', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.45, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'hat', steps: 16, pulses: 12, rotation: 0, probability: 0.85, gain: 0.27, delaySend: 0.05, reverbSend: 0.05 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Tribal Minimal', bpm: 125, root: 50, scale: 'pentatonic', seed: 12512, masterGain: 0.45,
+    category: 'World & Groove', mood: ['tribal', 'minimal', 'percussive'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.63, delaySend: 0.05, reverbSend: 0.15 },
+      { voice: 'conga', steps: 12, pulses: 7, rotation: 2, probability: 0.9, gain: 0.41, delaySend: 0.15, reverbSend: 0.2 },
+      { voice: 'shaker', steps: 16, pulses: 14, rotation: 0, probability: 0.8, gain: 0.27, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'tom', steps: 8, pulses: 3, rotation: 0, probability: 0.85, gain: 0.41, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'subBass', steps: 16, pulses: 2, rotation: 0, probability: 1.0, gain: 0.45, delaySend: 0.1, reverbSend: 0.1 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
 
-  // ═══ AMBIENT & STUDY (12) — multiplier 1.15x (cap 0.85) ═══
+  // ═══ AMBIENT & STUDY (15) — multiplier 1.15x (cap 0.85) ═══
   {
     name: 'Ambient Floating', bpm: 88, root: 60, scale: 'pentatonic', seed: 31415, masterGain: 0.45,
     category: 'Ambient & Study', mood: ['ethereal', 'spacious', 'calm'],
@@ -370,8 +514,44 @@ export const presets = [
     ],
     arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
   },
+  {
+    name: 'Tape Loop Ambient', bpm: 72, root: 60, scale: 'lydian', seed: 72072, masterGain: 0.45,
+    category: 'Ambient & Study', mood: ['lo-fi', 'warped', 'nostalgic'],
+    rings: [
+      { voice: 'tape', steps: 8, pulses: 4, rotation: 0, probability: 0.9, gain: 0.52, delaySend: 0.4, reverbSend: 0.7 },
+      { voice: 'bell', steps: 16, pulses: 2, rotation: 5, probability: 0.7, gain: 0.46, delaySend: 0.5, reverbSend: 0.6 },
+      { voice: 'kick', steps: 16, pulses: 1, rotation: 0, probability: 0.6, gain: 0.40, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'pad', steps: 16, pulses: 2, rotation: 8, probability: 0.8, gain: 0.52, delaySend: 0.5, reverbSend: 0.8 },
+      { voice: 'hat', steps: 16, pulses: 3, rotation: 3, probability: 0.4, gain: 0.23, delaySend: 0.3, reverbSend: 0.5 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Crystal Caves', bpm: 68, root: 64, scale: 'pentatonic', seed: 68068, masterGain: 0.45,
+    category: 'Ambient & Study', mood: ['crystalline', 'spacious', 'meditative'],
+    rings: [
+      { voice: 'metallic', steps: 16, pulses: 3, rotation: 0, probability: 0.7, gain: 0.40, delaySend: 0.6, reverbSend: 0.8 },
+      { voice: 'marimba', steps: 16, pulses: 2, rotation: 5, probability: 0.8, gain: 0.46, delaySend: 0.5, reverbSend: 0.6 },
+      { voice: 'pad', steps: 8, pulses: 3, rotation: 0, probability: 0.9, gain: 0.52, delaySend: 0.4, reverbSend: 0.8 },
+      { voice: 'subBass', steps: 16, pulses: 1, rotation: 0, probability: 1.0, gain: 0.46, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'whisper', steps: 16, pulses: 2, rotation: 8, probability: 0.5, gain: 0.35, delaySend: 0.5, reverbSend: 0.7 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Organ Meditation', bpm: 65, root: 58, scale: 'lydian', seed: 65065, masterGain: 0.45,
+    category: 'Ambient & Study', mood: ['sacred', 'warm', 'contemplative'],
+    rings: [
+      { voice: 'organ', steps: 8, pulses: 4, rotation: 0, probability: 0.9, gain: 0.52, delaySend: 0.3, reverbSend: 0.7 },
+      { voice: 'bell', steps: 16, pulses: 2, rotation: 3, probability: 0.7, gain: 0.40, delaySend: 0.5, reverbSend: 0.6 },
+      { voice: 'pad', steps: 16, pulses: 2, rotation: 5, probability: 0.8, gain: 0.46, delaySend: 0.4, reverbSend: 0.8 },
+      { voice: 'kick', steps: 16, pulses: 1, rotation: 0, probability: 0.6, gain: 0.35, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'tape', steps: 16, pulses: 1, rotation: 0, probability: 0.5, gain: 0.35, delaySend: 0.6, reverbSend: 0.7 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
 
-  // ═══ EPIC & CINEMATIC (8) — multiplier 0.88x ═══
+  // ═══ EPIC & CINEMATIC (15) — multiplier 0.88x ═══
   {
     name: 'Synthwave Retro', bpm: 115, root: 53, scale: 'major', seed: 19851, masterGain: 0.45,
     category: 'Epic & Cinematic', mood: ['nostalgic', 'driving', '80s'],
@@ -468,8 +648,92 @@ export const presets = [
     ],
     arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
   },
+  {
+    name: 'Cyberpunk Neon', bpm: 120, root: 48, scale: 'chromatic', seed: 20820, masterGain: 0.45,
+    category: 'Epic & Cinematic', mood: ['cyberpunk', 'neon', 'futuristic'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.62, delaySend: 0.05, reverbSend: 0.15 },
+      { voice: 'metallic', steps: 16, pulses: 5, rotation: 3, probability: 0.8, gain: 0.40, delaySend: 0.4, reverbSend: 0.5 },
+      { voice: 'subBass', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.44, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'hat', steps: 16, pulses: 10, rotation: 0, probability: 0.75, gain: 0.31, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'pluck', steps: 16, pulses: 3, rotation: 6, probability: 0.8, gain: 0.35, delaySend: 0.5, reverbSend: 0.5 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Epic Drums', bpm: 100, root: 45, scale: 'minor', seed: 10010, masterGain: 0.45,
+    category: 'Epic & Cinematic', mood: ['powerful', 'cinematic', 'percussive'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 3, rotation: 0, probability: 1.0, gain: 0.66, delaySend: 0.1, reverbSend: 0.3 },
+      { voice: 'tom', steps: 16, pulses: 5, rotation: 2, probability: 0.9, gain: 0.48, delaySend: 0.2, reverbSend: 0.4 },
+      { voice: 'snare', steps: 16, pulses: 2, rotation: 8, probability: 0.85, gain: 0.48, delaySend: 0.25, reverbSend: 0.35 },
+      { voice: 'gong', steps: 16, pulses: 1, rotation: 0, probability: 0.7, gain: 0.35, delaySend: 0.5, reverbSend: 0.7 },
+      { voice: 'subBass', steps: 16, pulses: 2, rotation: 0, probability: 1.0, gain: 0.44, delaySend: 0.1, reverbSend: 0.2 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Blade Runner', bpm: 85, root: 50, scale: 'phrygian', seed: 85085, masterGain: 0.45,
+    category: 'Epic & Cinematic', mood: ['noir', 'atmospheric', 'dystopian'],
+    rings: [
+      { voice: 'tape', steps: 8, pulses: 4, rotation: 0, probability: 0.9, gain: 0.40, delaySend: 0.5, reverbSend: 0.7 },
+      { voice: 'pad', steps: 16, pulses: 2, rotation: 5, probability: 0.8, gain: 0.40, delaySend: 0.4, reverbSend: 0.8 },
+      { voice: 'metallic', steps: 16, pulses: 3, rotation: 7, probability: 0.6, gain: 0.31, delaySend: 0.6, reverbSend: 0.6 },
+      { voice: 'kick', steps: 16, pulses: 2, rotation: 0, probability: 0.8, gain: 0.48, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'subBass', steps: 16, pulses: 1, rotation: 0, probability: 1.0, gain: 0.44, delaySend: 0.2, reverbSend: 0.3 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Battle March', bpm: 110, root: 48, scale: 'minor', seed: 11011, masterGain: 0.45,
+    category: 'Epic & Cinematic', mood: ['martial', 'intense', 'rhythmic'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.66, delaySend: 0.05, reverbSend: 0.2 },
+      { voice: 'tom', steps: 16, pulses: 6, rotation: 2, probability: 0.9, gain: 0.48, delaySend: 0.15, reverbSend: 0.3 },
+      { voice: 'snare', steps: 16, pulses: 4, rotation: 4, probability: 0.95, gain: 0.48, delaySend: 0.2, reverbSend: 0.25 },
+      { voice: 'stringPad', steps: 8, pulses: 4, rotation: 0, probability: 0.85, gain: 0.40, delaySend: 0.3, reverbSend: 0.6 },
+      { voice: 'subBass', steps: 16, pulses: 3, rotation: 0, probability: 1.0, gain: 0.44, delaySend: 0.1, reverbSend: 0.15 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Aurora Borealis', bpm: 75, root: 62, scale: 'lydian', seed: 75075, masterGain: 0.45,
+    category: 'Epic & Cinematic', mood: ['ethereal', 'majestic', 'natural'],
+    rings: [
+      { voice: 'pad', steps: 8, pulses: 5, rotation: 0, probability: 0.9, gain: 0.44, delaySend: 0.4, reverbSend: 0.8 },
+      { voice: 'bell', steps: 16, pulses: 3, rotation: 3, probability: 0.7, gain: 0.35, delaySend: 0.5, reverbSend: 0.7 },
+      { voice: 'tape', steps: 16, pulses: 2, rotation: 6, probability: 0.8, gain: 0.35, delaySend: 0.6, reverbSend: 0.7 },
+      { voice: 'marimba', steps: 16, pulses: 2, rotation: 0, probability: 0.6, gain: 0.35, delaySend: 0.5, reverbSend: 0.6 },
+      { voice: 'subBass', steps: 16, pulses: 1, rotation: 0, probability: 1.0, gain: 0.40, delaySend: 0.2, reverbSend: 0.4 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Titan Rising', bpm: 130, root: 48, scale: 'minor', seed: 13013, masterGain: 0.45,
+    category: 'Epic & Cinematic', mood: ['massive', 'epic', 'building'],
+    rings: [
+      { voice: 'kick', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.66, delaySend: 0.05, reverbSend: 0.2 },
+      { voice: 'snare', steps: 16, pulses: 2, rotation: 4, probability: 1.0, gain: 0.48, delaySend: 0.2, reverbSend: 0.3 },
+      { voice: 'organ', steps: 16, pulses: 6, rotation: 0, probability: 0.9, gain: 0.40, delaySend: 0.3, reverbSend: 0.5 },
+      { voice: 'subBass', steps: 16, pulses: 4, rotation: 0, probability: 1.0, gain: 0.44, delaySend: 0.1, reverbSend: 0.1 },
+      { voice: 'choir', steps: 16, pulses: 2, rotation: 8, probability: 0.8, gain: 0.35, delaySend: 0.4, reverbSend: 0.7 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Frozen Tundra', bpm: 65, root: 55, scale: 'pentatonic', seed: 65065, masterGain: 0.45,
+    category: 'Epic & Cinematic', mood: ['frozen', 'vast', 'isolated'],
+    rings: [
+      { voice: 'metallic', steps: 16, pulses: 2, rotation: 5, probability: 0.6, gain: 0.31, delaySend: 0.7, reverbSend: 0.8 },
+      { voice: 'pad', steps: 16, pulses: 2, rotation: 0, probability: 0.8, gain: 0.40, delaySend: 0.5, reverbSend: 0.9 },
+      { voice: 'bell', steps: 16, pulses: 1, rotation: 0, probability: 0.7, gain: 0.31, delaySend: 0.6, reverbSend: 0.7 },
+      { voice: 'gong', steps: 16, pulses: 1, rotation: 10, probability: 0.5, gain: 0.26, delaySend: 0.6, reverbSend: 0.8 },
+      { voice: 'whisper', steps: 16, pulses: 2, rotation: 3, probability: 0.4, gain: 0.26, delaySend: 0.5, reverbSend: 0.7 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
 
-  // ═══ VOCAL & CHORUS (14) — multiplier 0.92x ═══
+  // ═══ VOCAL & CHORUS (15) — multiplier 0.92x ═══
   {
     name: 'Gospel Choir Drive', bpm: 100, root: 55, scale: 'major', seed: 10010, masterGain: 0.45,
     category: 'Vocal & Chorus', mood: ['uplifting', 'warm', 'soulful'],
@@ -635,6 +899,18 @@ export const presets = [
       { voice: 'hat', steps: 16, pulses: 2, rotation: 8, probability: 0.4, gain: 0.18, delaySend: 0.3, reverbSend: 0.5 },
       { voice: 'bass', steps: 16, pulses: 1, rotation: 0, probability: 1.0, gain: 0.37, delaySend: 0.2, reverbSend: 0.3 },
       { voice: 'whisper', steps: 16, pulses: 2, rotation: 3, probability: 0.6, gain: 0.32, delaySend: 0.5, reverbSend: 0.7 },
+    ],
+    arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
+  },
+  {
+    name: 'Choir & Organ', bpm: 95, root: 55, scale: 'major', seed: 95095, masterGain: 0.45,
+    category: 'Vocal & Chorus', mood: ['sacred', 'rich', 'harmonic'],
+    rings: [
+      { voice: 'choir', steps: 8, pulses: 5, rotation: 0, probability: 0.9, gain: 0.51, delaySend: 0.3, reverbSend: 0.7 },
+      { voice: 'organ', steps: 16, pulses: 4, rotation: 2, probability: 0.85, gain: 0.41, delaySend: 0.3, reverbSend: 0.5 },
+      { voice: 'kick', steps: 16, pulses: 2, rotation: 0, probability: 0.9, gain: 0.55, delaySend: 0.1, reverbSend: 0.2 },
+      { voice: 'bell', steps: 16, pulses: 2, rotation: 5, probability: 0.7, gain: 0.32, delaySend: 0.5, reverbSend: 0.6 },
+      { voice: 'subBass', steps: 16, pulses: 2, rotation: 0, probability: 1.0, gain: 0.41, delaySend: 0.1, reverbSend: 0.2 },
     ],
     arrangement: { scenes: [{ name: 'A', rings: null }], currentScene: 0, loop: true },
   },

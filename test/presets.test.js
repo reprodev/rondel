@@ -4,8 +4,8 @@ import { presets, getPresetByName, getPresetNames, getPresetsByCategory, CATEGOR
 import { validatePatch } from '../src/state/patch.js';
 
 describe('presets', () => {
-  it('has 52 presets', () => {
-    assert.strictEqual(presets.length, 52);
+  it('has 75 presets', () => {
+    assert.strictEqual(presets.length, 75);
   });
 
   it('each preset has a unique name', () => {
@@ -94,27 +94,27 @@ describe('getPresetByName', () => {
 });
 
 describe('getPresetNames', () => {
-  it('returns array of 52 strings', () => {
+  it('returns array of 75 strings', () => {
     const names = getPresetNames();
-    assert.strictEqual(names.length, 52);
+    assert.strictEqual(names.length, 75);
     for (const n of names) assert.strictEqual(typeof n, 'string');
   });
 });
 
 describe('getPresetsByCategory', () => {
-  it('Dancefloor has 8 presets', () => {
-    assert.strictEqual(getPresetsByCategory('Dancefloor').length, 8);
+  it('Dancefloor has 15 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Dancefloor').length, 15);
   });
-  it('World & Groove has 10 presets', () => {
-    assert.strictEqual(getPresetsByCategory('World & Groove').length, 10);
+  it('World & Groove has 15 presets', () => {
+    assert.strictEqual(getPresetsByCategory('World & Groove').length, 15);
   });
-  it('Ambient & Study has 12 presets', () => {
-    assert.strictEqual(getPresetsByCategory('Ambient & Study').length, 12);
+  it('Ambient & Study has 15 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Ambient & Study').length, 15);
   });
-  it('Epic & Cinematic has 8 presets', () => {
-    assert.strictEqual(getPresetsByCategory('Epic & Cinematic').length, 8);
+  it('Epic & Cinematic has 15 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Epic & Cinematic').length, 15);
   });
-  it('Vocal & Chorus has 14 presets', () => {
-    assert.strictEqual(getPresetsByCategory('Vocal & Chorus').length, 14);
+  it('Vocal & Chorus has 15 presets', () => {
+    assert.strictEqual(getPresetsByCategory('Vocal & Chorus').length, 15);
   });
 });
